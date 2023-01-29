@@ -1,8 +1,16 @@
-import * as React from 'react';
+import React, { useState } from "react";
 import { Button, View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, TextInput } from 'react-native';
+import { useDispatch } from "react-redux";
 import { navigation } from "../../rootNavigation"
+import { addDate } from "../../store/user";
 
 const DateScreen = () => {
+    const dispatch = useDispatch()
+    const [date, setDate] = useState(0)
+    const handleAddDate = () => {
+        dispatch(addDate(date))
+        navigation.navigate('rules')
+    }
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 
@@ -10,10 +18,19 @@ const DateScreen = () => {
                 Ngày sinh của bạn khi nào?{' '}
             </Text>
 
+            <TextInput
+                    // style={[styles.input, styles.inputPassword]}
+                    // secureTextEntry={true}
+                    placeholder="Ngày sinh"
+                    placeholderTextColor="#cdcdcf"
+                    value={date}
+                    onChangeText={(text)=>setDate(text)}
+                />
+
             <View style={{ textAlign: "center" }}>
                 <TouchableOpacity
                     style={[styles.button, { width: 250 }]}
-                    onPress={() => navigation.navigate('rules')}
+                    onPress={handleAddDate}
                 >
                     <Text style={styles.buttonText}>Tiếp</Text>
                 </TouchableOpacity>

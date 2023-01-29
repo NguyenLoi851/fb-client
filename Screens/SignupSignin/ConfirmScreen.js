@@ -1,14 +1,27 @@
-import * as React from 'react';
+import React, { useState } from "react";
 import { Button, View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, TextInput } from 'react-native';
+import { useSelector } from 'react-redux';
+import { navigation } from '../../rootNavigation';
 
 const ConfirmScreen = () => {
+    const store = useSelector((state) => state)
+    // console.log(JSON.stringify(store,0,2))
+    const [verifyCode, setVerifyCode] = useState("")
+    const handleVerify = () => {
+        if(verifyCode == "686868"){
+            navigation.navigate("login")
+        }
+        else{
+            navigation.navigate("login")
+        }
+    }
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 
             <View style={{ marginTop: 50 }}>
 
                 <Text style={{ textAlign: "center" }}> Chúng tôi đã gửi SMS kèm mã tới
-                    <Text style={{ fontWeight: "bold" }}> 000000000  </Text>
+                    <Text style={{ fontWeight: "bold" }}> {store.user.register.phone}  </Text>
                 </Text>
 
                 <Text style={{ fontWeight: "bold", textAlign: "center" }}>Nhập mã gồm 5 chữ số từ SMS của bạn.</Text>
@@ -17,18 +30,20 @@ const ConfirmScreen = () => {
 
             <View style={styles.content}>
 
-                <Text>
-                    FB-
+                <View>
+                    <Text> FB-</Text>
                     <TextInput
                         style={[styles.input, styles.inputPassword]}
-                        secureTextEntry={true}
-                        placeholder="Địa chỉ email"
+                        // secureTextEntry={true}
+                        placeholder="Mã xác thực (686868)"
                         placeholderTextColor="#cdcdcf"
+                        value={verifyCode}
+                        onChangeText={(text)=> setVerifyCode(text)}
                     />
-                </Text>
+                </View>
 
                 <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>Xác nhận</Text>
+                    <Text style={styles.buttonText} onPress={handleVerify}>Xác nhận</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={{

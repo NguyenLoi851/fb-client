@@ -15,7 +15,13 @@ const userSlice = createSlice({
     },
     addDate(state, action) {
       state.register = { ...state.register, date: action.payload }
-    }    
+    },
+    addEmail(state, action) {
+      state.register = { ...state.register, email: action.payload }
+    },
+    addPhone(state, action) {
+      state.register = { ...state.register, phone: action.payload }
+    }
   },
 });
 
@@ -35,5 +41,5 @@ const userSlice = createSlice({
 // })
 
 export default userSlice.reducer;
-export const { addUser, addDate, addName } = userSlice.actions;
+export const { addUser, addDate, addName, addEmail, addPhone } = userSlice.actions;
 // export const { addDate, addName } = registerInfoSlice.actions;

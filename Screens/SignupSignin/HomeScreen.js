@@ -1,10 +1,32 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import { Button, View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, TextInput } from 'react-native';
 import { StatusBar } from "expo-status-bar";
 import FacebookBannerImage from "../../assets/imgs/facebook-banner.jpg";
 import { navigation } from "../../rootNavigation";
+import { loginApi } from '../../apis/Auth/loginApi';
+import { useDispatch } from 'react-redux';
+import { addUser } from '../../store/user';
 
 const HomeScreen = () => {
+    const dispatch = useDispatch()
+    const [phonenumber, setPhonenumber] = useState("")
+    const [password, setPassword] = useState("")
+    const handleLogin = async() => {
+        const data = {
+            phonenumber,
+            password
+        }
+        try {
+            const res = await loginApi.login(data)
+            if(res.data){
+                dispatch(addUser(res.data))
+                navigation.navigate("facebook")
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        // navigation.navigate("facebook")
+    }
     return (
         <>
             <StatusBar style="light" />
@@ -18,6 +40,8 @@ const HomeScreen = () => {
                         style={[styles.input, styles.inputUsername]}
                         placeholder="Phone or email"
                         placeholderTextColor="#cdcdcf"
+                        value={phonenumber}
+                        onChangeText={(text)=>setPhonenumber(text)}
                     />
 
                     <TextInput
@@ -25,10 +49,12 @@ const HomeScreen = () => {
                         secureTextEntry={true}
                         placeholder="Password"
                         placeholderTextColor="#cdcdcf"
+                        value={password}
+                        onChangeText={(text)=>setPassword(text)}
                     />
 
                     <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Login</Text>
+                        <Text style={styles.buttonText} onPress={handleLogin}>Login</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.link}>

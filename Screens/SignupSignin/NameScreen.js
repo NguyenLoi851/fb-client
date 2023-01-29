@@ -1,29 +1,48 @@
-import * as React from 'react';
+import React, { useState } from "react";
 import { Button, View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, TextInput } from 'react-native';
 import { navigation } from "../../rootNavigation"
+import { Icon, Input } from "react-native-elements";
+import { useDispatch } from 'react-redux';
+import { addName } from '../../store/user';
 
 const NameScreen = () => {
+    const dispatch = useDispatch()
+
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
+    const handleSubmitName = () => {
+        const name = firstName + " " + lastName;
+        dispatch(addName(name))
+        navigation.navigate('date')
+    }
+
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 
             <Text style={{ fontWeight: "bold", textAlign: "center", fontSize: 18 }}> Bạn Tên gì? </Text>
 
-            <Text style={{ marginTop: 25 }}>
-                <TextInput style={styles.input}
+            <View style={{ marginTop: 25 }}>
+                <TextInput 
+                    style={styles.input}
                     placeholder="Họ"
                     placeholderTextColor="#cdcdcf"
+                    value={firstName}
+                    onChangeText={(text)=>setFirstName(text)}
                 />
 
-                <TextInput style={styles.input}
+                <TextInput 
+                    style={styles.input}
                     placeholder="Tên"
                     placeholderTextColor="#cdcdcf"
+                    value={lastName}
+                    onChangeText={(text)=>setLastName(text)}
                 />
-            </Text>
+            </View>
 
             <View style={{ textAlign: "center" }}>
                 <TouchableOpacity
                     style={[styles.button, { width: 250 }]}
-                    onPress={() => navigation.navigate('date')}
+                    onPress={handleSubmitName}
                 >
                     <Text style={styles.buttonText}>Tiếp</Text>
                 </TouchableOpacity>

@@ -1,22 +1,65 @@
 import React, { useState } from "react";
 import { Button, View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, TextInput } from 'react-native';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import uuid from "react-uuid";
+import { signupApi } from "../../apis/Auth/signupApi";
 import { navigation } from "../../rootNavigation"
-import { addEmail } from "../../store/user";
+import { addPhone, addphone } from "../../store/user";
 
-const EmailScreen = () => {
+const PhoneAndPasswordScreen = () => {
     const dispatch = useDispatch()
-    const [email, setEmail] = useState("")
+    const store = useSelector((state) => state)
+    const [phone, setPhone] = useState("")
+    const [password, setPassword] = useState("")
 
-    const handleAddEmail = () => {
-        dispatch(addEmail(email))
-        navigation.navigate('phone-password')
+    const handleAddPhoneAndPassword = async () => {
+        try {
+            const data = {
+                username: store.user.register.name,
+                birthday: store.user.register.date,
+                email: store.user.register.email,
+                phonenumber: phone,
+                password: password,
+                uuid: uuid()
+            }
+
+            try {
+                const res = await signupApi.post(data);
+                dispatch(addPhone(phone))
+                navigation.navigate('confirm')
+            } catch (error) {
+                console.log(error)
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+
     }
+
+    // setActiveSignup(true);
+    //   const name = firstName + " " + lastName;
+    //   const data = {
+    //     phonenumber: phoneNumber,
+    //     username: name,
+    //     // name: name,
+    //     password: password,
+    //     uuid: uuid()
+    //   };
+    //   // console.log(data);
+    //   try {
+    //     const res = await signupApi.post(data);
+    //     console.log("res:", res.data);
+    //     navigation.navigate("login");
+    //   } catch (error) {
+    //     setActiveSignup(false);
+    //     console.log(error)
+    //   }
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 
-            <Text style={{ fontWeight: "bold", textAlign: "center", fontSize: 18 }}> Nhập địa chỉ email của bạn?
+            <Text style={{ fontWeight: "bold", textAlign: "center", fontSize: 18 }}> Nhập số điện thoại của bạn?
             </Text>
 
 
@@ -24,15 +67,24 @@ const EmailScreen = () => {
                 <TextInput
                     style={[styles.input, styles.inputPassword]}
                     secureTextEntry={true}
-                    placeholder="Địa chỉ email"
+                    placeholder="Số điện thoại"
                     placeholderTextColor="#cdcdcf"
-                    value={email}
-                    onChangeText={(text) => setEmail(text)}
+                    value={phone}
+                    onChangeText={(text) => setPhone(text)}
+                />
+
+                <TextInput
+                    style={[styles.input, styles.inputPassword]}
+                    secureTextEntry={true}
+                    placeholder="Mật khẩu"
+                    placeholderTextColor="#cdcdcf"
+                    value={password}
+                    onChangeText={(text) => setPassword(text)}
                 />
 
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={handleAddEmail}
+                    onPress={handleAddPhoneAndPassword}
                 >
                     <Text style={styles.buttonText}>Tiếp</Text>
                 </TouchableOpacity>
@@ -43,7 +95,7 @@ const EmailScreen = () => {
     )
 }
 
-export default EmailScreen;
+export default PhoneAndPasswordScreen;
 
 const styles = StyleSheet.create({
     banner: {

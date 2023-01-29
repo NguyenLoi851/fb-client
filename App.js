@@ -29,6 +29,7 @@ import DateScreen from "./Screens/SignupSignin/DateScreen.js";
 import EmailScreen from "./Screens/SignupSignin/EmailScreen.js";
 import NameScreen from "./Screens/SignupSignin/NameScreen.js";
 import RulesScreen from "./Screens/SignupSignin/RulesScreen.js";
+import PhoneAndPasswordScreen from "./Screens/SignupSignin/PhoneAndPasswordScreen.js";
 const Stack = createStackNavigator();
 const rootStack = createStackNavigator();
 
@@ -204,7 +205,7 @@ export default function App() {
           <rootStack.Screen component={EmailScreen} name="email" />
           <rootStack.Screen component={NameScreen} name="name" />
           <rootStack.Screen component={RulesScreen} name="rules" />
-          
+          <rootStack.Screen component={PhoneAndPasswordScreen} name="phone-password" />
           <rootStack.Screen component={MainTab} name="facebook" />
           <rootStack.Screen component={ProfileTab} name="profile" />
           <rootStack.Screen component={SignupPage} name="signup" />
