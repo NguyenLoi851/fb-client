@@ -16,9 +16,11 @@ import { getToken } from "../utils/getToken";
 import { navigation } from "../rootNavigation";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { addUser } from "../store/user";
+import { addDate, addName, addUser } from "../store/user";
+import uuid from "react-uuid";
 
 const LoginPage = () => {
+  const [phoneNumber, setPhoneNumber] = useState("")
   const [email, setEmail] = useState("");
   const [width, setWidth] = useState(null);
   const [password, setPassword] = useState("");
@@ -33,42 +35,59 @@ const LoginPage = () => {
   }, []);
 
   const validate = () => {
-    if (email === "") {
-      setErrMail("Required");
-      if (password === "") {
-        setErrPass("Required");
-        return false;
-      } else setErrPass(null);
-      return false;
-    } else setErrMail(null);
-    if (!EMAIL_REGEX.test(email)) {
-      setErrMail("Invalid Email");
-      return false;
-    }
+    // if (email === "") {
+    //   setErrMail("Required");
+    //   if (password === "") {
+    //     setErrPass("Required");
+    //     return false;
+    //   } else setErrPass(null);
+    //   return false;
+    // } else setErrMail(null);
+    // if (!EMAIL_REGEX.test(email)) {
+    //   setErrMail("Invalid Email");
+    //   return false;
+    // }
     return true;
   };
   const handleSubmit = async () => {
     if (validate()) {
       setIsSubmitting(true);
       const data = {
-        email: email,
+        phonenumber: phoneNumber,
         password: password,
-        uuid: "12312313",
+        uuid: uuid(),
       };
-      const res = loginApi.login(data);
-      res.then(async (res) => {
-        const token = getToken(res.headers["set-cookie"][0]);
-        await SecureStore.setItemAsync("access_token", token.access_token);
-        await SecureStore.setItemAsync("refresh_token", token.refresh_token);
-        dispatch(addUser(res.data.data.user));
+      console.log("data", data)
+      try {
+        const res = await loginApi.login(data);
+        console.log(res.data)
+        // const token = getToken(res.headers["set-cookie"][0]);
+        // await SecureStore.setItemAsync("access_token", token.access_token);
+        // await SecureStore.setItemAsync("refresh_token", token.refresh_token);
+        dispatch(addUser(res.data));
+        dispatch(addName("add name test"))
+        dispatch(addDate("add date test"))
         setIsSubmitting(false);
         navigation.navigate("facebook");
-      });
-      res.catch((err) => {
-        console.log("err", err);
+      } catch (error) {
+        console.log("err70", err);
         setErrMail(err.message);
         setIsSubmitting(false);
-      });
+      }
+      // const res = loginApi.login(data);
+      // res.then(async (res) => {
+      //   const token = getToken(res.headers["set-cookie"][0]);
+      //   await SecureStore.setItemAsync("access_token", token.access_token);
+      //   await SecureStore.setItemAsync("refresh_token", token.refresh_token);
+      //   dispatch(addUser(res.data.data.user));
+      //   setIsSubmitting(false);
+      //   navigation.navigate("facebook");
+      // });
+      // res.catch((err) => {
+      //   console.log("err", err);
+      //   setErrMail(err.message);
+      //   setIsSubmitting(false);
+      // });
     }
   };
 
@@ -84,9 +103,9 @@ const LoginPage = () => {
         <View style={styles.form_item}>
           <Input
             style={styles.input}
-            placeholder="Nhập email"
-            value={email}
-            onChangeText={(text) => setEmail(text)}
+            placeholder="Nhập số điện thoại"
+            value={phoneNumber}
+            onChangeText={(text) => setPhoneNumber(text)}
             errorMessage={errMail}
           ></Input>
         </View>

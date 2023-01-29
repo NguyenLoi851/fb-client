@@ -22,6 +22,13 @@ import { Provider } from "react-redux";
 import { store } from "./store/store.js";
 
 import Menu from "./Screens/Menu.js";
+import HomeScreen from "./Screens/SignupSignin/HomeScreen.js";
+import ConfirmScreen from "./Screens/SignupSignin/ConfirmScreen.js";
+import CreateAccountScreen from "./Screens/SignupSignin/CreateAccountScreen.js";
+import DateScreen from "./Screens/SignupSignin/DateScreen.js";
+import EmailScreen from "./Screens/SignupSignin/EmailScreen.js";
+import NameScreen from "./Screens/SignupSignin/NameScreen.js";
+import RulesScreen from "./Screens/SignupSignin/RulesScreen.js";
 const Stack = createStackNavigator();
 const rootStack = createStackNavigator();
 
@@ -188,8 +195,16 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer ref={navigationRef}>
         <rootStack.Navigator screenOptions={navigationOptions}>
-          <rootStack.Screen component={LoginPage} name="login" />
+        <rootStack.Screen component={HomeScreen} name="login" />
+          {/* <rootStack.Screen component={LoginPage} name="login" /> */}
           <rootStack.Screen component={VerifyEmail} name="verify" />
+          <rootStack.Screen component={ConfirmScreen} name="confirm" />
+          <rootStack.Screen component={CreateAccountScreen} name="create-account" />
+          <rootStack.Screen component={DateScreen} name="date" />
+          <rootStack.Screen component={EmailScreen} name="email" />
+          <rootStack.Screen component={NameScreen} name="name" />
+          <rootStack.Screen component={RulesScreen} name="rules" />
+          
           <rootStack.Screen component={MainTab} name="facebook" />
           <rootStack.Screen component={ProfileTab} name="profile" />
           <rootStack.Screen component={SignupPage} name="signup" />

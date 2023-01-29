@@ -1,9 +1,9 @@
 import axiosClient from "../axiosClient";
 
 export const signupApi = {
-  post: (data) => {
+  post: async (data) => {
     console.log("api", data);
-    const url = "/auth/signup";
-    return axiosClient.post(url, data);
+    const url = "/users/register";
+    return await axiosClient.post(url, data);
   },
 };

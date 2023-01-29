@@ -11,8 +11,10 @@ import { EMAIL_REGEX } from "../common/regex";
 import { signupApi } from "../apis/Auth/signupApi";
 import axios from "axios";
 import { navigation } from "../rootNavigation";
+import uuid from "react-uuid";
 
 const LoginPage = () => {
+  const [phoneNumber, setPhoneNumber] = useState("")
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -48,65 +50,74 @@ const LoginPage = () => {
     );
   };
   const isValid = () => {
-    if (!firstName) {
-      setErrFirstName("Required");
-    } else {
-      setErrFirstName("");
-    }
-    if (!lastName) {
-      setErrLastName("Required");
-    } else {
-      setErrLastName("");
-    }
-    if (!email) {
-      setErrEmail("Required");
-    } else {
-      setErrEmail("");
-    }
-    if (!password) {
-      setErrPassword("Required");
-    } else {
-      setErrPassword("");
-    }
-    if (!confirmPassword) {
-      setErrConfirmPassword("Required");
-    } else {
-      if (password !== confirmPassword) {
-        setErrConfirmPassword("Do not match password");
-      } else {
-        setErrConfirmPassword("");
-      }
-    }
-    if (!EMAIL_REGEX.test(email)) {
-      setErrEmail("Invalid Email");
-      return false;
-    }
-    if (firstName && lastName && email && password && confirmPassword)
-      return true;
-    else return false;
+    // if (!firstName) {
+    //   setErrFirstName("Required");
+    // } else {
+    //   setErrFirstName("");
+    // }
+    // if (!lastName) {
+    //   setErrLastName("Required");
+    // } else {
+    //   setErrLastName("");
+    // }
+    // if (!email) {
+    //   setErrEmail("Required");
+    // } else {
+    //   setErrEmail("");
+    // }
+    // if (!password) {
+    //   setErrPassword("Required");
+    // } else {
+    //   setErrPassword("");
+    // }
+    // if (!confirmPassword) {
+    //   setErrConfirmPassword("Required");
+    // } else {
+    //   if (password !== confirmPassword) {
+    //     setErrConfirmPassword("Do not match password");
+    //   } else {
+    //     setErrConfirmPassword("");
+    //   }
+    // }
+    // if (!EMAIL_REGEX.test(email)) {
+    //   setErrEmail("Invalid Email");
+    //   return false;
+    // }
+    // if (firstName && lastName && email && password && confirmPassword)
+    //   return true;
+    // else return false;
+    return true;
   };
   const handleSignup = async () => {
     if (isValid()) {
       setActiveSignup(true);
       const name = firstName + " " + lastName;
       const data = {
-        email: email,
-        name: name,
+        phonenumber: phoneNumber,
+        username: name,
+        // name: name,
         password: password,
+        uuid: uuid()
       };
-      console.log(data);
-      const res = signupApi.post(data);
-      res
-        .then((response) => {
-          console.log("res:", response.data);
-          navigation.navigate("verify");
-          setActiveSignup(false);
-        })
-        .catch((err) => {
-          console.log("err:", err);
-          setErrConfirmPassword("err network");
-          setActiveSignup(false);
-        });
+      // console.log(data);
+      try {
+        const res = await signupApi.post(data);
+        console.log("res:", res.data);
+        navigation.navigate("login");
+      } catch (error) {
+        setActiveSignup(false);
+        console.log(error)
+      }
+
+      // res
+      //   .then((response) => {
+
+      //   })
+      //   .catch((err) => {
+      //     console.log("err:", err);
+      //     setErrConfirmPassword("err network");
+      //     setActiveSignup(false);
+      //   });
     }
   };
   return (
@@ -136,10 +147,10 @@ const LoginPage = () => {
         <View style={styles.form_item}>
           <Input
             style={styles.input}
-            placeholder="Email"
-            value={email}
+            placeholder="Số điện thoại"
+            value={phoneNumber}
             errorMessage={errEmail}
-            onChangeText={(text) => setEmail(text)}
+            onChangeText={(text) => setPhoneNumber(text)}
           ></Input>
         </View>
         <View style={styles.form_item}>
