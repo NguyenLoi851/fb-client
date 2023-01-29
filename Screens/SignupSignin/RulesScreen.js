@@ -4,19 +4,19 @@ import { navigation } from "../../rootNavigation"
 
 const RulesScreen = () => {
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 18 }}>
+        <View>
+            <Text style={{ fontWeight: "bold", textAlign: "center", fontSize: 18, marginTop: 90 }}>
                 Hoàn tất đăng ký
             </Text>
 
-            <View style={{ textAlign: "center" }}>
+
+            <View style={{ textAlign: "center", alignItems: 'center', justifyContent: 'center', marginTop: 50 }}>
                 <TouchableOpacity
-                    style={[styles.button, { width: 250 }]}
+                    style={[styles.button, { width: 300 }]}
                     onPress={() => navigation.navigate('email')}
                 >
-                    <Text style={styles.buttonText}>Đăng ký</Text>
+                    <Text style={styles.buttonText}>Tiếp</Text>
                 </TouchableOpacity>
-
             </View>
 
         </View>

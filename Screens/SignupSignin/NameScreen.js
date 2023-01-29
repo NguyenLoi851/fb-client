@@ -4,25 +4,28 @@ import { navigation } from "../../rootNavigation"
 
 const NameScreen = () => {
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View>
 
-            <Text style={{ fontWeight: "bold", textAlign: "center", fontSize: 18 }}> Bạn Tên gì? </Text>
+            <Text style={{ fontWeight: "bold", textAlign: "center", fontSize: 18, marginTop: 90 }}> Bạn tên gì?</Text>
 
-            <Text style={{ marginTop: 25 }}>
-                <TextInput style={styles.input}
-                    placeholder="Họ"
-                    placeholderTextColor="#cdcdcf"
-                />
 
-                <TextInput style={styles.input}
+            <View style={[styles.row, {marginTop: 50}]}>
+                <TextInput 
+                    style={[styles.input, styles.inputWrap]}
                     placeholder="Tên"
                     placeholderTextColor="#cdcdcf"
                 />
-            </Text>
+                <TextInput 
+                    style={[styles.input, styles.inputWrap]}
+                    placeholder="Họ"
+                    placeholderTextColor="#cdcdcf"
+                />
+            </View>
 
-            <View style={{ textAlign: "center" }}>
+
+            <View style={{ textAlign: "center", alignItems: 'center', justifyContent: 'center', marginTop: 50 }}>
                 <TouchableOpacity
-                    style={[styles.button, { width: 250 }]}
+                    style={[styles.button, { width: 300 }]}
                     onPress={() => navigation.navigate('date')}
                 >
                     <Text style={styles.buttonText}>Tiếp</Text>
@@ -58,15 +61,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         height: 44,
         paddingHorizontal: 15,
-    },
-    inputUsername: {
-        borderBottomWidth: 0,
-        borderTopLeftRadius: 3,
-        borderTopRightRadius: 3,
-    },
-    inputPassword: {
-        borderBottomLeftRadius: 3,
-        borderBottomRightRadius: 3,
     },
     button: {
         height: 42,
@@ -116,4 +110,12 @@ const styles = StyleSheet.create({
     buttonRegisterText: {
         color: "#1077f7",
     },
+    row: {
+        flex: 1,
+        flexDirection: "row"
+      },
+      inputWrap: {
+        flex: 1,
+        borderColor: "#cccccc",
+      },
 });

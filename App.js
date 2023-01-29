@@ -194,16 +194,17 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer ref={navigationRef}>
-        <rootStack.Navigator screenOptions={navigationOptions}>
-        <rootStack.Screen component={HomeScreen} name="login" />
+        <rootStack.Navigator>
+        <rootStack.Screen component={HomeScreen} name="login" options={{headerShown: false}}/>
           {/* <rootStack.Screen component={LoginPage} name="login" /> */}
-          <rootStack.Screen component={VerifyEmail} name="verify" />
-          <rootStack.Screen component={ConfirmScreen} name="confirm" />
-          <rootStack.Screen component={CreateAccountScreen} name="create-account" />
-          <rootStack.Screen component={DateScreen} name="date" />
-          <rootStack.Screen component={EmailScreen} name="email" />
-          <rootStack.Screen component={NameScreen} name="name" />
-          <rootStack.Screen component={RulesScreen} name="rules" />
+          <rootStack.Screen component={VerifyEmail} name="verify"/>
+          <rootStack.Screen component={CreateAccountScreen} name="create-account" options={{ title: 'Tạo tài khoản' }}/>
+          <rootStack.Screen component={NameScreen} name="name" options={{ title: 'Tên' }}/>
+          <rootStack.Screen component={DateScreen} name="date" options={{ title: 'Ngày sinh' }}/>
+          <rootStack.Screen component={RulesScreen} name="rules" options={{ title: 'Điều khoản & quyền riêng tư' }}/>
+          <rootStack.Screen component={EmailScreen} name="email" options={{ title: 'Địa chỉ email' }}/>
+          <rootStack.Screen component={ConfirmScreen} name="confirm" options={{ title: 'Xác nhận tài khoản' }}/>
+
           
           <rootStack.Screen component={MainTab} name="facebook" />
           <rootStack.Screen component={ProfileTab} name="profile" />

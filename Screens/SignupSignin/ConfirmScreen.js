@@ -3,10 +3,9 @@ import { Button, View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, 
 
 const ConfirmScreen = () => {
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View>
 
             <View style={{ marginTop: 50 }}>
-
                 <Text style={{ textAlign: "center" }}> Chúng tôi đã gửi SMS kèm mã tới
                     <Text style={{ fontWeight: "bold" }}> 000000000  </Text>
                 </Text>
@@ -19,12 +18,13 @@ const ConfirmScreen = () => {
 
                 <Text>
                     FB-
+                    <View>
                     <TextInput
-                        style={[styles.input, styles.inputPassword]}
+                        style={[styles.input, {marginLeft: 10, width: 150}]}
                         secureTextEntry={true}
-                        placeholder="Địa chỉ email"
-                        placeholderTextColor="#cdcdcf"
                     />
+                    </View>
+
                 </Text>
 
                 <TouchableOpacity style={styles.button}>

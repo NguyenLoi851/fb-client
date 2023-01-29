@@ -1,18 +1,21 @@
 import * as React from 'react';
 import { Button, View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, TextInput } from 'react-native';
+
+
 import { navigation } from "../../rootNavigation"
 
 const DateScreen = () => {
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View>
 
-            <Text style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 18 }}>
-                Ngày sinh của bạn khi nào?{' '}
+            <Text style={{ fontWeight: "bold", textAlign: "center", fontSize: 18, marginTop: 90 }}>
+                Sinh nhật của bạn khi nào?{' '}
             </Text>
 
-            <View style={{ textAlign: "center" }}>
+
+            <View style={{ textAlign: "center", alignItems: 'center', justifyContent: 'center', marginTop: 50 }}>
                 <TouchableOpacity
-                    style={[styles.button, { width: 250 }]}
+                    style={[styles.button, { width: 300 }]}
                     onPress={() => navigation.navigate('rules')}
                 >
                     <Text style={styles.buttonText}>Tiếp</Text>
