@@ -205,7 +205,7 @@ export default function App() {
           <rootStack.Screen component={RulesScreen} name="rules" options={{ title: 'Điều khoản & quyền riêng tư' }}/>
           <rootStack.Screen component={EmailScreen} name="email" options={{ title: 'Địa chỉ email' }}/>
           <rootStack.Screen component={ConfirmScreen} name="confirm" options={{ title: 'Xác nhận tài khoản' }}/>
-
+          <rootStack.Screen component={PhoneAndPasswordScreen} name="phone-password" options={{title: 'Điện thoại và mật khẩu'}}/>
           
           <rootStack.Screen component={MainTab} name="facebook" />
           <rootStack.Screen component={ProfileTab} name="profile" />

@@ -29,7 +29,7 @@ const ConfirmScreen = () => {
 
             <View style={styles.content}>
 
-                <View>
+                {/* <View>
                     <Text> FB-</Text>
                     <TextInput
                         style={[styles.input, styles.inputPassword]}
@@ -39,13 +39,17 @@ const ConfirmScreen = () => {
                         value={verifyCode}
                         onChangeText={(text)=> setVerifyCode(text)}
                     />
-                </View>
+                </View> */}
                 <Text>
                     FB-
                     <View>
                     <TextInput
                         style={[styles.input, {marginLeft: 10, width: 150}]}
                         secureTextEntry={true}
+                        placeholder="Mã xác thực (686868)"
+                        placeholderTextColor="#cdcdcf"
+                        value={verifyCode}
+                        onChangeText={(text)=> setVerifyCode(text)}
                     />
                     </View>
 
