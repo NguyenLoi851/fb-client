@@ -19,13 +19,27 @@ const DateScreen = () => {
             </Text>
 
             <TextInput
-                    // style={[styles.input, styles.inputPassword]}
-                    // secureTextEntry={true}
-                    placeholder="Ngày sinh"
-                    placeholderTextColor="#cdcdcf"
-                    value={date}
-                    onChangeText={(text)=>setDate(text)}
-                />
+                placeholder="Ngày"
+                placeholderTextColor="#cdcdcf"
+                value={date}
+                onChangeText={(text) => setDate(text)}
+            />
+
+            <TextInput
+                placeholder="Tháng"
+                placeholderTextColor="#cdcdcf"
+                value={date}
+                onChangeText={(text) => setDate(text)}
+            />
+
+            <TextInput
+                placeholder="Năm"
+                placeholderTextColor="#cdcdcf"
+                value={date}
+                onChangeText={(text) => setDate(text)}
+            />
+
+
 
             <View style={{ textAlign: "center", alignItems: 'center', justifyContent: 'center', marginTop: 50 }}>
                 <TouchableOpacity
