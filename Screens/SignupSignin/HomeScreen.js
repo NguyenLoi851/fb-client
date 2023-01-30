@@ -74,7 +74,7 @@ const HomeScreen = () => {
                     <TouchableOpacity style={[styles.button, styles.buttonRegister]}
 
                     // NOTE 
-                        onPress={() => navigation.navigate('facebook')}>
+                        onPress={() => navigation.navigate('create-account')}>
 
                         <Text style={[styles.buttonText, styles.buttonRegisterText]}>
                         Đăng ký tài khoản mới

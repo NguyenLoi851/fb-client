@@ -118,7 +118,7 @@ const CreatePost = () => {
             fontWeight: "600",
           }}
         >
-          Tạo bài viết
+        Tạo bài viết
         </Text>
         <TouchableOpacity
           onPress={handleSubmit}
@@ -165,7 +165,7 @@ const CreatePost = () => {
           <TextInput
             value={content}
             onChangeText={(text) => setContent(text)}
-            placeholder="Bạn đang nghĩ gì..."
+            placeholder="Bạn đang nghĩ gì?"
             multiline={true}
             style={{ padding: 15, fontSize: 20 }}
           ></TextInput>

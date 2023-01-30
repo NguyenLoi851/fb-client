@@ -207,12 +207,13 @@ export default function App() {
           <rootStack.Screen component={ConfirmScreen} name="confirm" options={{ title: 'Xác nhận tài khoản' }}/>
           <rootStack.Screen component={PhoneAndPasswordScreen} name="phone-password" options={{title: 'Điện thoại và mật khẩu'}}/>
           
-          <rootStack.Screen component={MainTab} name="facebook" />
-          <rootStack.Screen component={ProfileTab} name="profile" />
-          <rootStack.Screen component={SignupPage} name="signup" />
-          <rootStack.Screen component={CreatePost} name="createPost" />
-          <rootStack.Screen component={BlockList} name="blockList" />
-          <rootStack.Screen component={UpdateProfile} name="updateProfile" />
+          
+          <rootStack.Screen component={MainTab} name="facebook" options={{headerShown: false}}/>
+          <rootStack.Screen component={ProfileTab} name="profile" options={{headerShown: false}}/>
+          <rootStack.Screen component={SignupPage} name="signup" options={{headerShown: false}}/>
+          <rootStack.Screen component={CreatePost} name="createPost" options={{headerShown: false}}/>
+          <rootStack.Screen component={BlockList} name="blockList" options={{headerShown: false}}/>
+          <rootStack.Screen component={UpdateProfile} name="updateProfile" options={{headerShown: false}}/>
         </rootStack.Navigator>
       </NavigationContainer>
     </Provider>
