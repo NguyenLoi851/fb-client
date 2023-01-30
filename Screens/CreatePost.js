@@ -7,14 +7,27 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Dimensions,
+  Alert
 } from "react-native";
 import React from "react";
 import { Icon, Image } from "react-native-elements";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 import { upPostApi } from "../apis/Post/upPostApi";
+import { useSelector } from "react-redux";
+import DefaultAvatar from "../assets/imgs/default_avatar.png"
+import * as MediaLibrary from "expo-media-library";
+import * as FileSystem from "expo-file-system";
+import { navigation } from "../rootNavigation";
 
+const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
+const MAX_VIDEO_SIZE = 10 * 1024 * 1024;
+const MAX_VIDEO_DURATION = 10;
+const MIN_VIDEO_DURATION = 1;
 const CreatePost = () => {
+  const store = useSelector((state) => state)
+  console.log(JSON.stringify(store,0,2))
+  const token = store.user.user.token;
   const [content, setContent] = useState(null);
   const [image, setImage] = useState([]);
   const [video, setVideo] = useState(null);
@@ -62,7 +75,9 @@ const CreatePost = () => {
   };
   const handleSubmit = async () => {
     const data = new FormData();
-    data.append("content", content);
+    const data2 = {}
+    data.append("described", content);
+    data2.described = content
     for (let i = 0; i < image.length; i++) {
       const upload_body = {
         uri: image[i]["uri"],
@@ -75,9 +90,11 @@ const CreatePost = () => {
               }`,
       };
       data.append("images", upload_body);
+      data2.images = [upload_body]
     }
-    if (video["uri"]) {
-      data.append("video", {
+    try {
+      if (video["uri"]) {
+      data.append("videos", {
         uri: video["uri"],
         type: "video/mp4",
         name:
@@ -85,13 +102,166 @@ const CreatePost = () => {
             ? image[i]["filename"]
             : `my_profile${Date.now()}.mp4`,
       });
+      data2.videos = [{
+        uri: video["uri"],
+        type: "video/mp4",
+        name:
+          Platform.OS === "ios"
+            ? image[i]["filename"]
+            : `my_profile${Date.now()}.mp4`,
+      }]
     }
-    const res = upPostApi.post(data);
-    res
-      .then((res) => {
-        console.log("asdad", res.data);
-      })
-      .catch((err) => console.log("err", err));
+    } catch (error) {
+      console.log(error)
+    }
+    
+    try {
+      console.log(data)
+      console.log(data2)
+      const res = await upPostApi.post(data2, token)
+      console.log(res.data)
+    } catch (error) {
+      console.log(error)
+    }
+    // const res = upPostApi.post(data);
+    // res
+    //   .then((res) => {
+    //     console.log("asdad", res.data);
+    //   })
+    //   .catch((err) => console.log("err", err));
+  };
+
+  // =======================================================================================================
+  // =======================================================================================================
+  // =======================================================================================================
+  // =======================================================================================================
+  // =======================================================================================================
+
+  const [postText, setPostText] = useState("");
+  const [isSent, setIsSent] = useState(false);
+
+  // const [openSelect, setOpenSelect] = useState(route.params?route.params.mode:"image");
+  const [selectedImage, setSelectedImage] = useState([]);
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [inputIsFocus, setInputIsFocus] = useState(false);
+
+  const checkCanSend = () => {
+    return postText !== "" || selectedVideo != null || selectedImage.length > 0;
+  };
+  const onChangeText = (text) => {
+    setPostText(text);
+  };
+  const exitScreen = () => {
+    if(checkCanSend()) {
+      Alert.alert("Xác nhận", "Nội dung chưa được lưu bạn có chắc muốn hủy?", [
+        { text: "Không" },
+        {text:'Có',onPress: ()=>{navigation.goBack()}}
+      ])
+    }else{
+      navigation.goBack()
+    }
+  };
+  const removeImage = (i) => {
+    let images = Array.from(selectedImage);
+    images.splice(i, 1);
+    setSelectedImage(images);
+  };
+  const canOpenVideo = () => {
+    if (selectedImage.length > 0) return false;
+    return true;
+  };
+
+  const requestSend = async () => {
+    if (!isSent) {
+      setIsSent(true);
+      if (postText.length > 500) {
+        Alert.alert(
+          "Bài viết quá dài",
+          "Chỉ cho phép bài viết tối đa 500 ký tự",
+          [{ text: "OK" }]
+        );
+        return;
+      }
+      let images = [];
+      for (let i = 0; i < selectedImage.length; i++) {
+        let info = await MediaLibrary.getAssetInfoAsync(selectedImage[i]);
+        let fileInfo = await FileSystem.getInfoAsync(info.localUri);
+        if (fileInfo.size > MAX_IMAGE_SIZE) {
+          Alert.alert("Ảnh quá lớn", "Chỉ cho phép ảnh kích thước tối đa 4MB", [
+            { text: "OK" },
+          ]);
+          return;
+        }
+        let base64 = await FileSystem.readAsStringAsync(info.localUri, {
+          encoding: "base64",
+        });
+        images.push("data:image;base64," + base64);
+        console.log(base64.length / 1024 / 1024);
+      }
+
+      let videos = [];
+
+      if (selectedVideo != null) {
+        let info = await MediaLibrary.getAssetInfoAsync(selectedVideo);
+        let fileInfo = await FileSystem.getInfoAsync(info.localUri);
+        if (fileInfo.size > MAX_VIDEO_SIZE) {
+          Alert.alert(
+            "Video quá lớn",
+            "Chỉ cho phép video kích thước tối đa 10MB",
+            [{ text: "OK" }]
+          );
+          return;
+        }
+        if (info.duration > MAX_VIDEO_DURATION) {
+          Alert.alert(
+            "Video quá dài",
+            "Chỉ cho phép video có độ dài tối đa 10s",
+            [{ text: "OK" }]
+          );
+          return;
+        }
+        if (info.duration < MIN_VIDEO_DURATION) {
+          Alert.alert("Video quá ngắn", "Video cần tối thiểu 1s", [
+            { text: "OK" },
+          ]);
+          return;
+        }
+
+        let video = await FileSystem.readAsStringAsync(info.localUri, {
+          encoding: "base64",
+        });
+        videos.push("data:video;base64," + video);
+        console.log(videos[0].length);
+      }
+
+      const onSend = (progressEvent) => {
+        var percentCompleted = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
+        console.log(percentCompleted);
+      };
+      
+      await upPostApi.createPost(
+        token,
+        postText,
+        images,
+        videos,
+        onSend
+      )
+        .then((res) => {
+          console.log(res.data);
+          console.log(res.status);
+          // context.setNeedUpdateProfile(true);
+          // context.setNeedUpdateTimeline(true);
+          Alert.alert("Thành công", "Đã đăng bài xong", [{ text: "OK" }]);
+          return;
+        })
+        .catch((e) => {
+          console.log(e.response.status);
+          console.log(e.response);
+        });
+      navigation.goBack();
+    }
   };
 
   return (
@@ -121,7 +291,8 @@ const CreatePost = () => {
           Tạo bài viết
         </Text>
         <TouchableOpacity
-          onPress={handleSubmit}
+          // onPress={handleSubmit}
+          onPress={requestSend}
           style={{
             width: 60,
             height: 30,
@@ -149,9 +320,10 @@ const CreatePost = () => {
           }}
         >
           <Image
-            source={{
-              uri: "https://source.unsplash.com/random?sig=10",
-            }}
+            // source={{
+            //   uri: "https://source.unsplash.com/random?sig=10",
+            // }}
+            source={DefaultAvatar}
             style={{
               width: 40,
               height: 40,
@@ -159,12 +331,12 @@ const CreatePost = () => {
               marginRight: 10,
             }}
           ></Image>
-          <Text style={{ fontSize: 15 }}>Nobi Nobita</Text>
+          <Text style={{ fontSize: 15 }}>{store.user.user.data.username}</Text>
         </View>
         <View>
           <TextInput
             value={content}
-            onChangeText={(text) => setContent(text)}
+            onChangeText={(text) => setPostText(text)}
             placeholder="Bạn đang nghĩ gì..."
             multiline={true}
             style={{ padding: 15, fontSize: 20 }}

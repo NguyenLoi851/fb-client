@@ -38,9 +38,8 @@ const Shortcut = (props) => {
 const Menu = () => {
   const handleLogOut = async () => {
     try {
-      const data = {token: token};
-      console.log("Hello logout")
-      await logoutApi.logout(data);
+      // const data = {token: token};
+      // await logoutApi.logout(data);
       // await SecureStore.deleteItemAsync("access_token");
       // await SecureStore.deleteItemAsync("refresh_token");
       navigation.navigate('login');

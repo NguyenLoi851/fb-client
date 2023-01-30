@@ -11,30 +11,50 @@ import React, { useState } from "react";
 import { Icon, Image } from "react-native-elements";
 import { useEffect } from "react";
 // import ScaleImage from "./Image";
+import DefaultAvatar from "../assets/imgs/default_avatar.png"
+import { useSelector } from "react-redux";
+import { upPostApi } from "../apis/Post/upPostApi";
 
-const Post = () => {
+const Post = (prop) => {
   const BASE_URI = "https://source.unsplash.com/random?sig=";
-  const [likes, setLikes] = useState(100);
-  const [comments, setComments] = useState(200);
+  const [likes, setLikes] = useState(0);
+  const [comments, setComments] = useState(0);
+  console.log(JSON.stringify(prop.prop))
+  const store = useSelector((state) => state)
+  const token = store.user.user.token;
+  console.log("token", token)
+  const [liked, setLiked] = useState(false)
 
   const [full, setFull] = useState(false);
   useEffect(() => {
     LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+    setLikes(prop.prop.like.length)
+    setLiked(prop.prop.isLike)
   }, []);
 
+  const handleLike = async () => {
+    try {
+      await upPostApi.like(token, prop.prop._id)
+      setLikes(likes+1)
+      setLiked(true)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.avatar}>
           <Image
-            source={{
-              uri: "https://source.unsplash.com/random?sig=10",
-            }}
+            // source={{
+            //   uri: "https://source.unsplash.com/random?sig=10",
+            // }}
+            source={DefaultAvatar}
             containerStyle={styles.avatar_img}
           ></Image>
         </View>
         <View style={{ marginLeft: 10 }}>
-          <Text style={{ fontWeight: "500" }}>Nobi Nobita</Text>
+          <Text style={{ fontWeight: "500" }}>{prop.prop.author.username}</Text>
         </View>
         <View style={{ marginLeft: "auto" }}>
           <Icon name="ellipsis-horizontal" type="ionicon"></Icon>
@@ -44,13 +64,14 @@ const Post = () => {
       <View style={styles.content}>
         <View style={full ? styles.desc_full : styles.desc_short}>
           <Text>
-            Tại trận chung kết, các vận động viên đều đã biểu diễn hết sức mình
+            {/* Tại trận chung kết, các vận động viên đều đã biểu diễn hết sức mình
             để phô ra những ván bóng đẹp mắt làm hài lòng khán giả. Set đấu đầu
             tiên chỉ chứng kiến sự chênh lệch 2 điểm với chiến thắng nghiêng về
             VĐV Nguyễn Trọng Hiếu. Trong khi đó, VĐV Nguyễn Vũ Tuấn cũng đã
             chứng tỏ bản lĩnh khi vươn lên dẫn trước 2-1 ở set thứ 3. Ở 2 set
             đấu cuối cùng kết quả chia đều cho 2 bên với chiến thắng chung cuộc
-            dành cho VĐV Nguyễn Vũ Tuấn.
+            dành cho VĐV Nguyễn Vũ Tuấn. */}
+            {prop.prop.described}
           </Text>
         </View>
         <SafeAreaView style={{ minHeight: 380, maxHeight: 570 }}>
@@ -92,7 +113,7 @@ const Post = () => {
             paddingHorizontal: 5,
           }}
         >
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleLike}>
             <Icon name="thumbs-up" type="font-awesome"></Icon>
             <Text style={{ marginLeft: 10 }}>Thích</Text>
           </TouchableOpacity>
