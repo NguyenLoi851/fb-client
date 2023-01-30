@@ -16,10 +16,9 @@ const ConfirmScreen = () => {
         }
     }
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View>
 
             <View style={{ marginTop: 50 }}>
-
                 <Text style={{ textAlign: "center" }}> Chúng tôi đã gửi SMS kèm mã tới
                     <Text style={{ fontWeight: "bold" }}> {store.user.register.phone}  </Text>
                 </Text>
@@ -41,6 +40,16 @@ const ConfirmScreen = () => {
                         onChangeText={(text)=> setVerifyCode(text)}
                     />
                 </View>
+                <Text>
+                    FB-
+                    <View>
+                    <TextInput
+                        style={[styles.input, {marginLeft: 10, width: 150}]}
+                        secureTextEntry={true}
+                    />
+                    </View>
+
+                </Text>
 
                 <TouchableOpacity style={styles.button}>
                     <Text style={styles.buttonText} onPress={handleVerify}>Xác nhận</Text>

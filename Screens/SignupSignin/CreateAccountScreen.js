@@ -4,19 +4,26 @@ import { navigation } from "../../rootNavigation"
 
 const CreateAccountScreen = () => {
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={styles.container}>
+            <View>
+                <Image
+                source={require("../../assets/imgs/join_fb.png")}
+                style={{ width: "100%", height: 300, marginTop: 30 }}
+                ></Image>
+            </View>
+
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
             <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Tham gia Facebook</Text>
             <Text style={{ textAlign: "center", fontSize: 17 }}>Chúng tôi sẽ giúp bạn tạo tài khoản sau vài bước dễ dàng</Text>
+            
 
-            <View style={{ textAlign: "center" }}>
-                <TouchableOpacity
-                    style={[styles.button, { width: 250 }]}
+            <TouchableOpacity
+                    style={[styles.button, { width: 300 }]}
                     onPress={() => navigation.navigate('name')}
                 >
                     <Text style={styles.buttonText}>Tiếp</Text>
                 </TouchableOpacity>
-
-            </View>
+            </View>        
 
         </View>
     );
@@ -25,15 +32,18 @@ const CreateAccountScreen = () => {
 export default CreateAccountScreen;
 
 const styles = StyleSheet.create({
+    container: {
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        backgroundColor: "#fff",
+      },
+
     banner: {
         resizeMode: "contain",
         width: "100%",
         height: null,
         aspectRatio: 750 / 460, // Image ratio
-    },
-    container: {
-        flex: 1,
-        justifyContent: "space-between",
     },
     content: {
         padding: 22,

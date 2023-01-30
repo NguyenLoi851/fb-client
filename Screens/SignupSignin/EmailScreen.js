@@ -14,9 +14,8 @@ const EmailScreen = () => {
     }
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-
-            <Text style={{ fontWeight: "bold", textAlign: "center", fontSize: 18 }}> Nhập địa chỉ email của bạn?
+        <View>
+            <Text style={{ fontWeight: "bold", textAlign: "center", fontSize: 18, marginTop: 90 }}> Nhập địa chỉ email của bạn?
             </Text>
 
 
@@ -31,7 +30,7 @@ const EmailScreen = () => {
                 />
 
                 <TouchableOpacity
-                    style={styles.button}
+                    style={[styles.button, { width: 300, alignItems: 'center' }]}
                     onPress={handleAddEmail}
                 >
                     <Text style={styles.buttonText}>Tiếp</Text>
