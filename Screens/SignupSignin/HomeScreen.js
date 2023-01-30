@@ -38,7 +38,7 @@ const HomeScreen = () => {
                 <View style={styles.content}>
                     <TextInput
                         style={[styles.input, styles.inputUsername]}
-                        placeholder="Phone or email"
+                        placeholder="Nhập số điện thoại hoặc email"
                         placeholderTextColor="#cdcdcf"
                         value={phonenumber}
                         onChangeText={(text)=>setPhonenumber(text)}
@@ -47,18 +47,18 @@ const HomeScreen = () => {
                     <TextInput
                         style={[styles.input, styles.inputPassword]}
                         secureTextEntry={true}
-                        placeholder="Password"
+                        placeholder="Nhập mật khẩu"
                         placeholderTextColor="#cdcdcf"
                         value={password}
                         onChangeText={(text)=>setPassword(text)}
                     />
 
                     <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText} onPress={handleLogin}>Login</Text>
+                        <Text style={styles.buttonText} onPress={handleLogin}>Đăng nhập</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.link}>
-                        <Text style={styles.linkText}>Forgot Password?</Text>
+                        <Text style={styles.linkText}>Quên mật khẩu?</Text>
                     </TouchableOpacity>
 
                 </View>
@@ -66,16 +66,18 @@ const HomeScreen = () => {
                 <View style={styles.footer}>
                     <View style={styles.divider}>
                         <View style={styles.dividerLine} />
-                        <Text style={styles.dividerText}>OR</Text>
+                        <Text style={styles.dividerText}>Hoặc</Text>
                         <View style={styles.dividerLine} />
                     </View>
 
 
                     <TouchableOpacity style={[styles.button, styles.buttonRegister]}
-                        onPress={() => navigation.navigate('create-account')}>
+
+                    // NOTE 
+                        onPress={() => navigation.navigate('facebook')}>
 
                         <Text style={[styles.buttonText, styles.buttonRegisterText]}>
-                            Create new Facebook account
+                        Đăng ký tài khoản mới
                         </Text>
                     </TouchableOpacity>
                 </View>
