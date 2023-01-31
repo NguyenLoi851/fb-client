@@ -243,7 +243,7 @@ const HomePage = () => {
         <Post />
         <Post />
         <Post /> */}
-         {post.length > 0 && post.map(item => (<Post prop={item}/>))}
+         {post.length > 0 && post.map(item => (<Post key={item} prop={item}/>))}
 
       </ScrollView>
     </View>

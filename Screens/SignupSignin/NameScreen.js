@@ -4,7 +4,7 @@ import { navigation } from "../../rootNavigation"
 import { Icon, Input } from "react-native-elements";
 import { useDispatch } from 'react-redux';
 import { addName } from '../../store/user';
-import {isValidFirstName, isValidLastName } from '../../utils/validations';
+import { isValidFirstName, isValidFirstName2, isValidLastName, isValidLastName2 } from '../../utils/validations';
 
 
 
@@ -20,6 +20,11 @@ const NameScreen = () => {
 
 
     const handleSubmitName = () => {
+        setErrorFirstName(isValidFirstName2(firstName) == true ? "" : "Hãy nhập đúng tên")
+        setErrorLastName(isValidLastName2(lastName) == true ? "" : "Hãy nhập đúng họ")
+        if (isValidFirstName2(firstName) == false || (isValidLastName2(lastName)) == false) {
+            return
+        }
         const name = firstName + " " + lastName;
         dispatch(addName(name))
         navigation.navigate('date')
@@ -27,38 +32,36 @@ const NameScreen = () => {
 
     return (
         <View>
- 
+
             <Text style={{ fontWeight: "bold", textAlign: "center", fontSize: 18, marginTop: 90 }}> Bạn tên gì?</Text>
 
-            <View style={[styles.row, {marginTop: 50}]}>
-                <TextInput 
+            <View style={[styles.row, { marginTop: 50 }]}>
+                <TextInput
                     style={[styles.input, styles.inputWrap]}
                     placeholder="Họ"
                     placeholderTextColor="#cdcdcf"
                     value={firstName}
-                    onChangeText={(text) =>{
-                        setErrorFirstName(isValidFirstName(text) == true ? "" : "Hãy nhập đúng tên" ) 
+                    onChangeText={(text) => {
                         setFirstName(text)
-                    }    
                     }
-                />         
+                    }
+                />
 
-                <TextInput 
+                <TextInput
                     style={[styles.input, styles.inputWrap]}
                     placeholder="Tên"
                     placeholderTextColor="#cdcdcf"
                     value={lastName}
-                    onChangeText={(text)=>{
-                        setErrorLastName(isValidLastName(text) == true ? "" : "Hãy nhập đúng họ" ) 
+                    onChangeText={(text) => {
                         setLastName(text)
                     }
                     }
                 />
             </View>
 
-            <View style={[ {marginTop: 50}]}>
-            <Text style={{ color: "red", fontSize: 16 }}>{ errorFirstName }</Text>
-            <Text style={{ color: "red", fontSize: 16 }}>{ errorLastName }</Text>
+            <View style={[{ marginTop: 50 }]}>
+                <Text style={{ color: "red", fontSize: 16 }}>{errorFirstName}</Text>
+                <Text style={{ color: "red", fontSize: 16 }}>{errorLastName}</Text>
             </View>
 
 
@@ -152,9 +155,9 @@ const styles = StyleSheet.create({
     row: {
         flex: 1,
         flexDirection: "row"
-      },
-      inputWrap: {
+    },
+    inputWrap: {
         flex: 1,
         borderColor: "#cccccc",
-      },
+    },
 });

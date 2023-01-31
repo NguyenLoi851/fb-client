@@ -5,14 +5,43 @@ import uuid from "react-uuid";
 import { signupApi } from "../../apis/Auth/signupApi";
 import { navigation } from "../../rootNavigation"
 import { addPhone, addphone } from "../../store/user";
+import { Icon, Input } from "react-native-elements";
 
 const PhoneAndPasswordScreen = () => {
     const dispatch = useDispatch()
     const store = useSelector((state) => state)
     const [phone, setPhone] = useState("")
     const [password, setPassword] = useState("")
+    const [hidePassword, setHidePassword] = useState(true)
+    const [confirmPassword, setConfirmPassword] = useState("")
+    const [errPass, setErrPass] = useState("")
 
+    const checkHidePass = () => {
+        return hidePassword ? (
+            <Icon
+                style={styles.icon}
+                name="eye-off-outline"
+                type="ionicon"
+                color="#919194"
+                onPress={() => setHidePassword(!hidePassword)}
+            ></Icon>
+        ) : (
+            <Icon
+                style={styles.icon}
+                name="eye-outline"
+                type="ionicon"
+                color="#919194"
+                onPress={() => setHidePassword(!hidePassword)}
+            ></Icon>
+        );
+    };
     const handleAddPhoneAndPassword = async () => {
+        if (password != confirmPassword) {
+            setErrPass("Mật khẩu xác nhận không đúng")
+            return;
+        } else {
+            setErrPass("")
+        }
         try {
             const data = {
                 username: store.user.register.name,
@@ -66,21 +95,46 @@ const PhoneAndPasswordScreen = () => {
             <View style={styles.content}>
                 <TextInput
                     style={[styles.input, styles.inputPassword]}
-                    secureTextEntry={true}
+                    // secureTextEntry={true}
                     placeholder="Số điện thoại"
                     placeholderTextColor="#cdcdcf"
                     value={phone}
                     onChangeText={(text) => setPhone(text)}
+                    keyboardType="numeric"
                 />
 
-                <TextInput
+                {/* <TextInput
                     style={[styles.input, styles.inputPassword]}
                     secureTextEntry={true}
                     placeholder="Mật khẩu"
                     placeholderTextColor="#cdcdcf"
                     value={password}
                     onChangeText={(text) => setPassword(text)}
-                />
+                /> */}
+
+                <View style={styles.form_item}>
+                    <Input
+                        style={[styles.input, styles.inputPassword]}
+                        placeholder="Mật khẩu"
+                        value={password}
+                        // errorMessage={errPassword}
+                        onChangeText={(text) => setPassword(text)}
+                        rightIcon={checkHidePass()}
+                        secureTextEntry={hidePassword}
+                    ></Input>
+                </View>
+                <View style={styles.form_item}>
+                    <Input
+                        style={[styles.input, styles.inputPassword]}
+                        placeholder="Nhập lại mật khẩu"
+                        value={confirmPassword}
+                        // errorMessage={errConfirmPassword}
+                        onChangeText={(text) => setConfirmPassword(text)}
+                        rightIcon={checkHidePass()}
+                        secureTextEntry={hidePassword}
+                    ></Input>
+                </View>
+                <Text style={{ color: "red", fontSize: 16 }}>{errPass}</Text>
 
                 <TouchableOpacity
                     style={styles.button}

@@ -25,20 +25,21 @@ const EmailScreen = () => {
 
             <View style={styles.content}>
                 <View>
-                <TextInput
-                    style={[styles.input, styles.inputPassword]}
-                    secureTextEntry={true}
-                    placeholder="Địa chỉ email"
-                    placeholderTextColor="#cdcdcf"
-                    value={email}
-                    onChangeText={(text) => {
-                        setErrorEmail(isValidEmail(text) == true ? "" : "Hãy nhập đúng email" ) 
-                        setEmail(text)}
-                    }
-                />
+                    <TextInput
+                        style={[styles.input, styles.inputPassword]}
+                        // secureTextEntry={true}
+                        placeholder="Địa chỉ email"
+                        placeholderTextColor="#cdcdcf"
+                        value={email}
+                        onChangeText={(text) => {
+                            setErrorEmail(isValidEmail(text) == true ? "" : "Hãy nhập đúng email")
+                            setEmail(text)
+                        }
+                        }
+                    />
                 </View>
-                
-                <Text style={{color: "red", marginTop: 20}}>{ errorEmail }</Text>
+
+                <Text style={{ color: "red", marginTop: 20 }}>{errorEmail}</Text>
 
                 <TouchableOpacity
                     style={[styles.button, { width: 300, alignItems: 'center' }]}

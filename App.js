@@ -37,6 +37,9 @@ const rootStack = createStackNavigator();
 LogBox.ignoreLogs([
   "Overwriting fontFamily style attribute preprocessor"
 ]);
+LogBox.ignoreLogs([
+  "Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version."
+]);
 const Home = () => {
   return (
     <View>

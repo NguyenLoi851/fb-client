@@ -46,12 +46,16 @@ export const upPostApi = {
   },
 
   like: async(token, postId) => {
-    const url = "/postLike/action/" + {postId};
-    return await axiosClient.post(url, {
+    console.log("postId",postId)
+    const url = "/postLike/action/"+{postId};
+    return await axiosClient.post(url,{}, {
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        // Accept: "application/json",
+        // "Content-Type": "application/json",
         authorization: "Bearer " + token
+      },
+      params: {
+        postId
       }
     })
   }

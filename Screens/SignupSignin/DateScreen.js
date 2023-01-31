@@ -9,8 +9,21 @@ const DateScreen = () => {
     const [date, setDate] = useState("")
     const [date2, setDate2] = useState("")
     const [date3, setDate3] = useState("")
+    const [errDate, setErrDate] = useState("")
+    const [errDate2, setErrDate2] = useState("")
+    const [errDate3, setErrDate3] = useState("")
+
+    const isValidDate = (str) => {
+        return str != ""
+    }
     const handleAddDate = () => {
-        dispatch(addDate(date+date2+date3))
+        setErrDate(isValidDate(date) ? "" : "Hãy nhập đúng ngày")
+        setErrDate2(isValidDate(date2) ? "" : "Hãy nhập đúng tháng")
+        setErrDate3(isValidDate(date3) ? "" : "Hãy nhập đúng năm")
+        if (!isValidDate(date) || !isValidDate(date2) || !isValidDate(date3)) {
+            return;
+        }
+        dispatch(addDate(date + date2 + date3))
         navigation.navigate('rules')
     }
     return (
@@ -20,26 +33,35 @@ const DateScreen = () => {
                 Sinh nhật của bạn khi nào?{' '}
             </Text>
 
-            <TextInput
-                placeholder="Ngày"
-                placeholderTextColor="#cdcdcf"
-                value={date}
-                onChangeText={(text) => setDate(text)}
-            />
+            <View style={{ textAlign: "center", alignItems: 'center', justifyContent: 'center', alignItems: 'center', flexDirection: "row", alignContent: "center", marginTop: 50 }}>
+                <TextInput style={{ margin: 20 }}
+                    placeholder="Ngày"
+                    placeholderTextColor="#cdcdcf"
+                    value={date}
+                    onChangeText={(text) => setDate(text)}
+                    keyboardType="numeric"
+                />
 
-            <TextInput
-                placeholder="Tháng"
-                placeholderTextColor="#cdcdcf"
-                value={date2}
-                onChangeText={(text) => setDate2(text)}
-            />
+                <TextInput style={{ margin: 20 }}
+                    placeholder="Tháng"
+                    placeholderTextColor="#cdcdcf"
+                    value={date2}
+                    onChangeText={(text) => setDate2(text)}
+                    keyboardType="numeric"
+                />
 
-            <TextInput
-                placeholder="Năm"
-                placeholderTextColor="#cdcdcf"
-                value={date3}
-                onChangeText={(text) => setDate3(text)}
-            />
+                <TextInput style={{ margin: 20 }}
+                    placeholder="Năm"
+                    placeholderTextColor="#cdcdcf"
+                    value={date3}
+                    onChangeText={(text) => setDate3(text)}
+                    keyboardType="numeric"
+                />
+            </View>
+            <Text style={{ color: "red", fontSize: 16 }}>{errDate}</Text>
+            <Text style={{ color: "red", fontSize: 16 }}>{errDate2}</Text>
+            <Text style={{ color: "red", fontSize: 16 }}>{errDate3}</Text>
+
 
 
 
@@ -137,5 +159,13 @@ const styles = StyleSheet.create({
     },
     buttonRegisterText: {
         color: "#1077f7",
+    },
+    row: {
+        flex: 1,
+        flexDirection: "row"
+    },
+    inputWrap: {
+        flex: 1,
+        borderColor: "#cccccc",
     },
 });

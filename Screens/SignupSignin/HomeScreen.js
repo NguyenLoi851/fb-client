@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Button, View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, TextInput } from 'react-native';
 import { StatusBar } from "expo-status-bar";
 import FacebookBannerImage from "../../assets/imgs/facebook-banner.jpg";
@@ -6,19 +6,43 @@ import { navigation } from "../../rootNavigation";
 import { loginApi } from '../../apis/Auth/loginApi';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../../store/user';
+import { Icon, Input } from "react-native-elements";
 
 const HomeScreen = () => {
     const dispatch = useDispatch()
     const [phonenumber, setPhonenumber] = useState("")
     const [password, setPassword] = useState("")
-    const handleLogin = async() => {
+    const [hidePassword, setHidePassword] = useState(true)
+    const [confirmPassword, setConfirmPassword] = useState("")
+
+    const checkHidePass = () => {
+        return hidePassword ? (
+            <Icon
+                style={styles.icon}
+                name="eye-off-outline"
+                type="ionicon"
+                color="#919194"
+                onPress={() => setHidePassword(!hidePassword)}
+            ></Icon>
+        ) : (
+            <Icon
+                style={styles.icon}
+                name="eye-outline"
+                type="ionicon"
+                color="#919194"
+                onPress={() => setHidePassword(!hidePassword)}
+            ></Icon>
+        );
+    };
+
+    const handleLogin = async () => {
         const data = {
             phonenumber,
             password
         }
         try {
             const res = await loginApi.login(data)
-            if(res.data){
+            if (res.data) {
                 dispatch(addUser(res.data))
                 navigation.navigate("facebook")
             }
@@ -41,17 +65,30 @@ const HomeScreen = () => {
                         placeholder="Nhập số điện thoại hoặc email"
                         placeholderTextColor="#cdcdcf"
                         value={phonenumber}
-                        onChangeText={(text)=>setPhonenumber(text)}
+                        onChangeText={(text) => setPhonenumber(text)}
+                        keyboardType="numeric"
                     />
 
-                    <TextInput
+                    {/* <TextInput
                         style={[styles.input, styles.inputPassword]}
                         secureTextEntry={true}
                         placeholder="Nhập mật khẩu"
                         placeholderTextColor="#cdcdcf"
                         value={password}
                         onChangeText={(text)=>setPassword(text)}
-                    />
+                    /> */}
+                    <View style={styles.form_item}>
+                        <Input
+                            style={[styles.input, styles.inputPassword]}
+                            placeholder="Mật khẩu"
+                            value={password}
+                            // errorMessage={errPassword}
+                            onChangeText={(text) => setPassword(text)}
+                            rightIcon={checkHidePass()}
+                            secureTextEntry={hidePassword}
+                        ></Input>
+                    </View>
+
 
                     <TouchableOpacity style={styles.button}>
                         <Text style={styles.buttonText} onPress={handleLogin}>Đăng nhập</Text>
@@ -73,11 +110,12 @@ const HomeScreen = () => {
 
                     <TouchableOpacity style={[styles.button, styles.buttonRegister]}
 
-                    // NOTE 
+                        // NOTE 
                         onPress={() => navigation.navigate('create-account')}>
+                        {/* onPress={() => navigation.navigate('phone-password')}> */}
 
                         <Text style={[styles.buttonText, styles.buttonRegisterText]}>
-                        Đăng ký tài khoản mới
+                            Đăng ký tài khoản mới
                         </Text>
                     </TouchableOpacity>
                 </View>

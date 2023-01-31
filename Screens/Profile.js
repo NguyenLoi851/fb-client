@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import Post from "../Components/Post";
 import { Icon } from "react-native-elements";
 import { navigation } from "../rootNavigation";
+import uuid from "react-uuid";
 
 const Profile = () => {
   const user = useSelector((state) => state.user.user);
@@ -94,9 +95,9 @@ const Profile = () => {
                 gap: 10,
               }}
             >
-              {[1, 2, 3, 4, 5, 6].map((item) => {
+              {/* {[1, 2, 3, 4, 5, 6].map((item) => {
                 return (
-                  <TouchableOpacity>
+                  <TouchableOpacity key={}>
                     <View
                       style={{
                         marginBottom: 5,
@@ -122,7 +123,7 @@ const Profile = () => {
                     </View>
                   </TouchableOpacity>
                 );
-              })}
+              })} */}
             </View>
             <View>
               <TouchableOpacity

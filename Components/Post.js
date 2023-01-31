@@ -34,12 +34,23 @@ const Post = (prop) => {
 
   const handleLike = async () => {
     try {
+      // console.log("HelloLike")
+      console.log("Hello token", token)
       await upPostApi.like(token, prop.prop._id)
-      setLikes(likes+1)
-      setLiked(true)
+      if(liked == false){
+        setLikes(likes+1)
+        setLiked(true)
+      }else{
+        setLikes(likes-1)
+        setLiked(false)
+      }
+      
     } catch (error) {
       console.log(error)
     }
+  }
+  const isLiked = () => {
+    return liked == true;
   }
   return (
     <View style={styles.container}>
@@ -76,7 +87,7 @@ const Post = (prop) => {
           </Text>
         </View>
         <SafeAreaView style={{ minHeight: 380, maxHeight: 570 }}>
-          <FlatList
+          {/* <FlatList
             data={[...new Array(4)].map((_, i) => i.toString())}
             // style={}
             scrollEnabled={false}
@@ -93,7 +104,16 @@ const Post = (prop) => {
                 }}
               />
             )}
-          />
+          /> */}
+          <Image
+                source={{ uri: BASE_URI + 10 }}
+                containerStyle={{
+                  aspectRatio: 1,
+                  width: "100%",
+                  height: 150,
+                  flex: 1,
+                }}
+              />
         </SafeAreaView>
       </View>
       <View style={{}}>
@@ -115,8 +135,12 @@ const Post = (prop) => {
           }}
         >
           <TouchableOpacity style={styles.button} onPress={handleLike}>
-            <Icon name="thumbs-up" type="font-awesome"></Icon>
-            <Text style={{ marginLeft: 10 }}>Thích</Text>
+            <Icon name={liked ? "thumbs-down":"thumbs-up"} type="font-awesome"></Icon>
+            {/* {(({liked} == true) ? <Icon name="thumbs-up" type="font-awesome"></Icon> : <Icon name="thumbs-down" type="font-awesome"></Icon>)} */}
+            {/* <Icon name="thumbs-down" type="font-awesome"></Icon> */}
+            <Text style={{ marginLeft: 10 }}>{liked ? "Đã Thích":"Thích"}</Text>
+            {/* {(({liked} == true) ? <Text style={{ marginLeft: 10 }}>Đã Thích</Text> : <Text style={{ marginLeft: 10 }}>Thích</Text>)} */}
+            
           </TouchableOpacity>
           <TouchableOpacity style={styles.button}>
             <Icon name="comment" type="font-awesome"></Icon>
