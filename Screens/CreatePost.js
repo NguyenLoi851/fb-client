@@ -288,7 +288,7 @@ const CreatePost = () => {
             fontWeight: "600",
           }}
         >
-          Tạo bài viết
+        Tạo bài viết
         </Text>
         <TouchableOpacity
           // onPress={handleSubmit}

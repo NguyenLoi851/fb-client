@@ -4,12 +4,21 @@ import { navigation } from "../../rootNavigation"
 import { Icon, Input } from "react-native-elements";
 import { useDispatch } from 'react-redux';
 import { addName } from '../../store/user';
+import {isValidFirstName, isValidLastName } from '../../utils/validations';
+
+
 
 const NameScreen = () => {
     const dispatch = useDispatch()
-
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
+
+
+    // state for validation
+    const [errorFirstName, setErrorFirstName] = useState("")
+    const [errorLastName, setErrorLastName] = useState("")
+
+
     const handleSubmitName = () => {
         const name = firstName + " " + lastName;
         dispatch(addName(name))
@@ -18,7 +27,7 @@ const NameScreen = () => {
 
     return (
         <View>
-
+ 
             <Text style={{ fontWeight: "bold", textAlign: "center", fontSize: 18, marginTop: 90 }}> Bạn tên gì?</Text>
 
             <View style={[styles.row, {marginTop: 50}]}>
@@ -27,16 +36,29 @@ const NameScreen = () => {
                     placeholder="Họ"
                     placeholderTextColor="#cdcdcf"
                     value={firstName}
-                    onChangeText={(text)=>setFirstName(text)}
-                />
+                    onChangeText={(text) =>{
+                        setErrorFirstName(isValidFirstName(text) == true ? "" : "Hãy nhập đúng tên" ) 
+                        setFirstName(text)
+                    }    
+                    }
+                />         
 
                 <TextInput 
-                    style={styles.input}
+                    style={[styles.input, styles.inputWrap]}
                     placeholder="Tên"
                     placeholderTextColor="#cdcdcf"
                     value={lastName}
-                    onChangeText={(text)=>setLastName(text)}
+                    onChangeText={(text)=>{
+                        setErrorLastName(isValidLastName(text) == true ? "" : "Hãy nhập đúng họ" ) 
+                        setLastName(text)
+                    }
+                    }
                 />
+            </View>
+
+            <View style={[ {marginTop: 50}]}>
+            <Text style={{ color: "red", fontSize: 16 }}>{ errorFirstName }</Text>
+            <Text style={{ color: "red", fontSize: 16 }}>{ errorLastName }</Text>
             </View>
 
 

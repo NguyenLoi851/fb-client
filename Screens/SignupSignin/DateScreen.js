@@ -6,9 +6,11 @@ import { addDate } from "../../store/user";
 
 const DateScreen = () => {
     const dispatch = useDispatch()
-    const [date, setDate] = useState(0)
+    const [date, setDate] = useState("")
+    const [date2, setDate2] = useState("")
+    const [date3, setDate3] = useState("")
     const handleAddDate = () => {
-        dispatch(addDate(date))
+        dispatch(addDate(date+date2+date3))
         navigation.navigate('rules')
     }
     return (
@@ -19,13 +21,27 @@ const DateScreen = () => {
             </Text>
 
             <TextInput
-                    // style={[styles.input, styles.inputPassword]}
-                    // secureTextEntry={true}
-                    placeholder="Ngày sinh"
-                    placeholderTextColor="#cdcdcf"
-                    value={date}
-                    onChangeText={(text)=>setDate(text)}
-                />
+                placeholder="Ngày"
+                placeholderTextColor="#cdcdcf"
+                value={date}
+                onChangeText={(text) => setDate(text)}
+            />
+
+            <TextInput
+                placeholder="Tháng"
+                placeholderTextColor="#cdcdcf"
+                value={date2}
+                onChangeText={(text) => setDate2(text)}
+            />
+
+            <TextInput
+                placeholder="Năm"
+                placeholderTextColor="#cdcdcf"
+                value={date3}
+                onChangeText={(text) => setDate3(text)}
+            />
+
+
 
             <View style={{ textAlign: "center", alignItems: 'center', justifyContent: 'center', marginTop: 50 }}>
                 <TouchableOpacity

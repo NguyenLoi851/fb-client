@@ -25,6 +25,7 @@
     "react-native": "0.69.6",
     "react-native-config": "^1.4.11",
     "react-native-date-picker": "^4.2.6",
+    "react-native-element-dropdown": "^2.5.3",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "~2.5.0",
     "react-native-pager-view": "5.4.24",
@@ -36,7 +37,8 @@
     "react-navigation": "^4.4.4",
     "react-redux": "^8.0.5",
     "react-uuid": "^2.0.0",
-    "redux": "^4.2.0"
+    "redux": "^4.2.0",
+    "styled-components": "^5.3.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

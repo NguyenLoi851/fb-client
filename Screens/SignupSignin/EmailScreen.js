@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import { Button, View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, TextInput } from 'react-native';
+import { color } from "react-native-elements/dist/helpers";
 import { useDispatch } from "react-redux";
 import { navigation } from "../../rootNavigation"
 import { addEmail } from "../../store/user";
+import { isValidEmail } from "../../utils/validations"
+
 
 const EmailScreen = () => {
     const dispatch = useDispatch()
     const [email, setEmail] = useState("")
+
+    const [errorEmail, setErrorEmail] = useState("")
 
     const handleAddEmail = () => {
         dispatch(addEmail(email))
@@ -18,16 +23,22 @@ const EmailScreen = () => {
             <Text style={{ fontWeight: "bold", textAlign: "center", fontSize: 18, marginTop: 90 }}> Nhập địa chỉ email của bạn?
             </Text>
 
-
             <View style={styles.content}>
+                <View>
                 <TextInput
                     style={[styles.input, styles.inputPassword]}
                     secureTextEntry={true}
                     placeholder="Địa chỉ email"
                     placeholderTextColor="#cdcdcf"
                     value={email}
-                    onChangeText={(text) => setEmail(text)}
+                    onChangeText={(text) => {
+                        setErrorEmail(isValidEmail(text) == true ? "" : "Hãy nhập đúng email" ) 
+                        setEmail(text)}
+                    }
                 />
+                </View>
+                
+                <Text style={{color: "red", marginTop: 20}}>{ errorEmail }</Text>
 
                 <TouchableOpacity
                     style={[styles.button, { width: 300, alignItems: 'center' }]}

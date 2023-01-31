@@ -2,6 +2,10 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import { logoutApi } from "../apis/Auth/logoutApi";
 import { navigation } from "../rootNavigation";
+import { FontAwesome } from '@expo/vector-icons'; 
+
+
+
 
 const Shortcut = (props) => {
   const { name, icon, des } = props;
@@ -98,7 +102,7 @@ const Menu = () => {
           style={{
             color: "#333",
             fontWeight: "600",
-            fontSize: 24,
+            fontSize: 20,
             marginBottom: 10,
           }}
         >
@@ -115,11 +119,12 @@ const Menu = () => {
           }}
         >
           <Shortcut
-            name="Shortcut 1"
+            name="Đã lưu"
             icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU"
+
           ></Shortcut>
           <Shortcut
-            name="Shortcut 2"
+            name="Nhóm"
             icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU"
           ></Shortcut>
         </View>
@@ -132,14 +137,34 @@ const Menu = () => {
           }}
         >
           <Shortcut
-            name="Shortcut 3"
+            name="Bảng tin"
             icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU"
           ></Shortcut>
           <Shortcut
-            name="Shortcut 4"
+            name="Bạn bè"
             icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU"
           ></Shortcut>
         </View>
+
+
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Shortcut
+            name="Sự kiện"
+            icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU"
+          ></Shortcut>
+          <Shortcut
+            name="Chơi game"
+            icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU"
+          ></Shortcut>
+        </View>
+
         <View style={{ marginTop: 10 }}>
           <TouchableOpacity
             style={{ backgroundColor: "#ccc", borderRadius: 10, padding: 10 }}

@@ -46,7 +46,7 @@ const ConfirmScreen = () => {
                     <TextInput
                         style={[styles.input, {marginLeft: 10, width: 150}]}
                         secureTextEntry={true}
-                        placeholder="Mã xác thực (686868)"
+                        placeholder="Mã xác thực"
                         placeholderTextColor="#cdcdcf"
                         value={verifyCode}
                         onChangeText={(text)=> setVerifyCode(text)}

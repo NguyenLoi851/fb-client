@@ -19,7 +19,7 @@ const Post = (prop) => {
   const BASE_URI = "https://source.unsplash.com/random?sig=";
   const [likes, setLikes] = useState(0);
   const [comments, setComments] = useState(0);
-  console.log(JSON.stringify(prop.prop))
+  console.log("prop", JSON.stringify(prop.prop))
   const store = useSelector((state) => state)
   const token = store.user.user.token;
   console.log("token", token)
@@ -54,7 +54,8 @@ const Post = (prop) => {
           ></Image>
         </View>
         <View style={{ marginLeft: 10 }}>
-          <Text style={{ fontWeight: "500" }}>{prop.prop.author.username}</Text>
+          {/* <Text style={{ fontWeight: "500" }}>{prop.prop.author.username}</Text> */}
+          <Text style={{ fontWeight: "500" }}>aa</Text>
         </View>
         <View style={{ marginLeft: "auto" }}>
           <Icon name="ellipsis-horizontal" type="ionicon"></Icon>
