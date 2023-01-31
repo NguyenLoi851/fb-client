@@ -7,6 +7,7 @@ import { loginApi } from '../../apis/Auth/loginApi';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../../store/user';
 import { Icon, Input } from "react-native-elements";
+import { grey1 } from '../../common/color';
 
 const HomeScreen = () => {
     const dispatch = useDispatch()
@@ -14,6 +15,7 @@ const HomeScreen = () => {
     const [password, setPassword] = useState("")
     const [hidePassword, setHidePassword] = useState(true)
     const [confirmPassword, setConfirmPassword] = useState("")
+    const [errLogin, setErrLogin] = useState("")
 
     const checkHidePass = () => {
         return hidePassword ? (
@@ -45,8 +47,10 @@ const HomeScreen = () => {
             if (res.data) {
                 dispatch(addUser(res.data))
                 navigation.navigate("facebook")
+                setErrLogin("")
             }
         } catch (error) {
+            setErrLogin("Số điện thoại hoặc mật khẩu không đúng")
             console.log(error)
         }
         // navigation.navigate("facebook")
@@ -61,11 +65,11 @@ const HomeScreen = () => {
             <SafeAreaView style={styles.container}>
                 <View style={styles.content}>
                     <TextInput
-                        style={[styles.input, styles.inputUsername]}
+                        style={[styles.input, styles.inputUsername, { marginBottom: 10, marginLeft: 10, marginRight: 38 }]}
                         placeholder="Nhập số điện thoại hoặc email"
-                        placeholderTextColor="#cdcdcf"
+                        placeholderTextColor={grey1}
                         value={phonenumber}
-                        onChangeText={(text) => setPhonenumber(text)}
+                        onChangeText={(text) => {setPhonenumber(text), setErrLogin("")}}
                         keyboardType="numeric"
                     />
 
@@ -79,16 +83,19 @@ const HomeScreen = () => {
                     /> */}
                     <View style={styles.form_item}>
                         <Input
-                            style={[styles.input, styles.inputPassword]}
+                            // style={[styles.input, styles.inputPassword]}
+                            style={[styles.input, styles.inputUsername, {}]}
                             placeholder="Mật khẩu"
                             value={password}
                             // errorMessage={errPassword}
-                            onChangeText={(text) => setPassword(text)}
+                            placeholderTextColor={grey1}
+                            onChangeText={(text) => {setPassword(text), setErrLogin("")}}
                             rightIcon={checkHidePass()}
                             secureTextEntry={hidePassword}
                         ></Input>
                     </View>
 
+                    <Text style={{ color: "red", fontSize: 16, textAlign: "center", margin: 10 }}>{errLogin}</Text>
 
                     <TouchableOpacity style={styles.button}>
                         <Text style={styles.buttonText} onPress={handleLogin}>Đăng nhập</Text>
@@ -149,14 +156,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
     },
     inputUsername: {
-        borderBottomWidth: 0,
+        borderBottomWidth: 1,
         borderTopLeftRadius: 3,
         borderTopRightRadius: 3,
     },
-    inputPassword: {
-        borderBottomLeftRadius: 3,
-        borderBottomRightRadius: 3,
-    },
+    // inputPassword: {
+    //     borderBottomLeftRadius: 3,
+    //     borderBottomRightRadius: 3,
+    // },
     button: {
         height: 42,
         borderRadius: 6,

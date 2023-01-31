@@ -3,11 +3,13 @@ import * as SecureStore from "expo-secure-store";
 import { logoutApi } from "../apis/Auth/logoutApi";
 import { navigation } from "../rootNavigation";
 import { FontAwesome } from '@expo/vector-icons'; 
+import { useSelector } from "react-redux";
 
 
 
 
 const Shortcut = (props) => {
+
   const { name, icon, des } = props;
   return (
     <View
@@ -40,6 +42,9 @@ const Shortcut = (props) => {
 };
 
 const Menu = () => {
+  const store = useSelector((state)=>state)
+  console.log("store", store)
+  const username = store.user.user.data.username;
   const handleLogOut = async () => {
     try {
       // const data = {token: token};
@@ -82,7 +87,8 @@ const Menu = () => {
         </View>
         <View onTouchEnd={() => navigation.navigate('profile')}>
           <Text style={{ color: "#333", fontWeight: "600", fontSize: 24 }}>
-            Lương Hoàng
+            {username}
+            {/* Hello name */}
           </Text>
           <Text style={{ color: "#777", fontWeight: "600", fontSize: 18 }}>
             See your profile

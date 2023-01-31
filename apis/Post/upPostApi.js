@@ -1,7 +1,8 @@
 import axiosClient from "../axiosClient";
 import axios from "axios";
+import { baseUrl } from "../../common/baseUrl";
 
-const BaseURL = "http://192.168.1.6:3001/api/v1";
+const BaseURL = baseUrl;
 
 export const upPostApi = {
   post: (data, token) => {
@@ -45,18 +46,25 @@ export const upPostApi = {
     })
   },
 
+  // deletePost: async(token, postId) => {
+  //   const url = "/posts/delete/"
+  // }
+
   like: async(token, postId) => {
     console.log("postId",postId)
-    const url = "/postLike/action/"+{postId};
+    // const url = "/postLike/action/"+{postId};
+    const url = `/postLike/action/${postId}`;
+    // const url = "/postLike/action"+postId
     return await axiosClient.post(url,{}, {
       headers: {
         // Accept: "application/json",
         // "Content-Type": "application/json",
         authorization: "Bearer " + token
       },
-      params: {
-        postId
-      }
+      // params: {
+      //   postId,
+      //   a:0
+      // },
     })
   }
 };

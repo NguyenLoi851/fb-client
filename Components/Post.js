@@ -24,6 +24,7 @@ const Post = (prop) => {
   const token = store.user.user.token;
   console.log("token", token)
   const [liked, setLiked] = useState(false)
+  const [option, setOption] = useState(false)
 
   const [full, setFull] = useState(false);
   useEffect(() => {
@@ -31,6 +32,10 @@ const Post = (prop) => {
     setLikes(prop.prop.like.length)
     setLiked(prop.prop.isLike)
   }, []);
+
+  // const handleDelete = () => {
+  //   await 
+  // }
 
   const handleLike = async () => {
     try {
@@ -52,6 +57,10 @@ const Post = (prop) => {
   const isLiked = () => {
     return liked == true;
   }
+
+  const handleOption = () => {
+    setOption(!option);
+  }
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -65,11 +74,20 @@ const Post = (prop) => {
           ></Image>
         </View>
         <View style={{ marginLeft: 10 }}>
-          {/* <Text style={{ fontWeight: "500" }}>{prop.prop.author.username}</Text> */}
-          <Text style={{ fontWeight: "500" }}>aa</Text>
+          <Text style={{ fontWeight: "500" }}>{prop.prop.author.username}</Text>
+          {/* <Text style={{ fontWeight: "500" }}>aa</Text> */}
         </View>
         <View style={{ marginLeft: "auto" }}>
-          <Icon name="ellipsis-horizontal" type="ionicon"></Icon>
+          <TouchableOpacity onPress={handleOption}>
+
+          <Icon name="ellipsis-horizontal" type="ionicon">
+
+          </Icon>
+            {(option == true) ? (<TouchableOpacity>
+              <Text>Delete</Text>
+            </TouchableOpacity>): <></>}
+            
+          </TouchableOpacity>
         </View>
       </View>
 

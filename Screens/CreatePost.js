@@ -257,8 +257,9 @@ const CreatePost = () => {
           return;
         })
         .catch((e) => {
-          console.log(e.response.status);
-          console.log(e.response);
+          // console.log(e.response.status);
+          // console.log(e.response);
+          console.log(e)
         });
       navigation.goBack();
     }

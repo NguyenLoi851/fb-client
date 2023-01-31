@@ -6,6 +6,7 @@ import { signupApi } from "../../apis/Auth/signupApi";
 import { navigation } from "../../rootNavigation"
 import { addPhone, addphone } from "../../store/user";
 import { Icon, Input } from "react-native-elements";
+import httpStatus from "../../common/httpStatus";
 
 const PhoneAndPasswordScreen = () => {
     const dispatch = useDispatch()
@@ -15,6 +16,7 @@ const PhoneAndPasswordScreen = () => {
     const [hidePassword, setHidePassword] = useState(true)
     const [confirmPassword, setConfirmPassword] = useState("")
     const [errPass, setErrPass] = useState("")
+    const [errApi, setErrApi] = useState("")
 
     const checkHidePass = () => {
         return hidePassword ? (
@@ -54,9 +56,11 @@ const PhoneAndPasswordScreen = () => {
 
             try {
                 const res = await signupApi.post(data);
-                dispatch(addPhone(phone))
+                    dispatch(addPhone(phone))
                 navigation.navigate('confirm')
+                setErrApi("")
             } catch (error) {
+                setErrApi("Phone number already exists")
                 console.log(error)
             }
 
@@ -99,7 +103,7 @@ const PhoneAndPasswordScreen = () => {
                     placeholder="Số điện thoại"
                     placeholderTextColor="#cdcdcf"
                     value={phone}
-                    onChangeText={(text) => setPhone(text)}
+                    onChangeText={(text) => {setPhone(text), setErrApi("")}}
                     keyboardType="numeric"
                 />
 
@@ -114,7 +118,7 @@ const PhoneAndPasswordScreen = () => {
 
                 <View style={styles.form_item}>
                     <Input
-                        style={[styles.input, styles.inputPassword]}
+                        style={[styles.input, styles.inputPassword, { width: 500 }]}
                         placeholder="Mật khẩu"
                         value={password}
                         // errorMessage={errPassword}
@@ -125,7 +129,7 @@ const PhoneAndPasswordScreen = () => {
                 </View>
                 <View style={styles.form_item}>
                     <Input
-                        style={[styles.input, styles.inputPassword]}
+                        style={[styles.input, styles.inputPassword, { width: 500 }]}
                         placeholder="Nhập lại mật khẩu"
                         value={confirmPassword}
                         // errorMessage={errConfirmPassword}
@@ -134,7 +138,9 @@ const PhoneAndPasswordScreen = () => {
                         secureTextEntry={hidePassword}
                     ></Input>
                 </View>
-                <Text style={{ color: "red", fontSize: 16 }}>{errPass}</Text>
+                <Text style={{ color: "red", fontSize: 16, textAlign:"center" }}>{errPass}</Text>
+                <Text style={{ color: "red", fontSize: 16, textAlign:"center" }}>{errApi}</Text>
+
 
                 <TouchableOpacity
                     style={styles.button}

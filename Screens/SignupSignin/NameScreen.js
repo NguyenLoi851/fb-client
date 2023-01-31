@@ -20,8 +20,8 @@ const NameScreen = () => {
 
 
     const handleSubmitName = () => {
-        setErrorFirstName(isValidFirstName2(firstName) == true ? "" : "Hãy nhập đúng tên")
-        setErrorLastName(isValidLastName2(lastName) == true ? "" : "Hãy nhập đúng họ")
+        setErrorFirstName(isValidFirstName2(firstName) == true ? "" : "Hãy nhập tên")
+        setErrorLastName(isValidLastName2(lastName) == true ? "" : "Hãy nhập họ")
         if (isValidFirstName2(firstName) == false || (isValidLastName2(lastName)) == false) {
             return
         }
@@ -37,7 +37,7 @@ const NameScreen = () => {
 
             <View style={[styles.row, { marginTop: 50 }]}>
                 <TextInput
-                    style={[styles.input, styles.inputWrap]}
+                    style={[styles.input, styles.inputWrap, {marginLeft: 20, marginRight: 10}]}
                     placeholder="Họ"
                     placeholderTextColor="#cdcdcf"
                     value={firstName}
@@ -48,7 +48,7 @@ const NameScreen = () => {
                 />
 
                 <TextInput
-                    style={[styles.input, styles.inputWrap]}
+                    style={[styles.input, styles.inputWrap, {marginLeft: 10, marginRight: 20}]}
                     placeholder="Tên"
                     placeholderTextColor="#cdcdcf"
                     value={lastName}
@@ -60,8 +60,8 @@ const NameScreen = () => {
             </View>
 
             <View style={[{ marginTop: 50 }]}>
-                <Text style={{ color: "red", fontSize: 16 }}>{errorFirstName}</Text>
-                <Text style={{ color: "red", fontSize: 16 }}>{errorLastName}</Text>
+                <Text style={{ color: "red", fontSize: 16, textAlign: "center", margin: 20 }}>{errorFirstName}</Text>
+                <Text style={{ color: "red", fontSize: 16, textAlign: "center" }}>{errorLastName}</Text>
             </View>
 
 

@@ -12,6 +12,15 @@ const DateScreen = () => {
     const [errDate, setErrDate] = useState("")
     const [errDate2, setErrDate2] = useState("")
     const [errDate3, setErrDate3] = useState("")
+    const [errDateAll, setErrDateAll] = useState("")
+
+    const validateDate=()=>{
+        if(Number(date) > 31 || Number(date2) > 12 || Number(date3) > 2023) {
+            setErrDateAll("Ngày sinh không hợp lệ")
+        }else{
+            setErrDateAll("")
+        }
+    }
 
     const isValidDate = (str) => {
         return str != ""
@@ -20,6 +29,7 @@ const DateScreen = () => {
         setErrDate(isValidDate(date) ? "" : "Hãy nhập đúng ngày")
         setErrDate2(isValidDate(date2) ? "" : "Hãy nhập đúng tháng")
         setErrDate3(isValidDate(date3) ? "" : "Hãy nhập đúng năm")
+        validateDate()
         if (!isValidDate(date) || !isValidDate(date2) || !isValidDate(date3)) {
             return;
         }
@@ -34,7 +44,7 @@ const DateScreen = () => {
             </Text>
 
             <View style={{ textAlign: "center", alignItems: 'center', justifyContent: 'center', alignItems: 'center', flexDirection: "row", alignContent: "center", marginTop: 50 }}>
-                <TextInput style={{ margin: 20 }}
+                <TextInput style={{ margin: 20,borderColor: "#cccccc", borderWidth: 1, width: 50, paddingTop:5, paddingBottom:5, paddingLeft: 5}}
                     placeholder="Ngày"
                     placeholderTextColor="#cdcdcf"
                     value={date}
@@ -42,7 +52,7 @@ const DateScreen = () => {
                     keyboardType="numeric"
                 />
 
-                <TextInput style={{ margin: 20 }}
+                <TextInput style={{ marginLe: 20,borderColor: "#cccccc", borderWidth: 1, width: 50, paddingTop:5, paddingBottom:5, paddingLeft: 5 }}
                     placeholder="Tháng"
                     placeholderTextColor="#cdcdcf"
                     value={date2}
@@ -50,7 +60,7 @@ const DateScreen = () => {
                     keyboardType="numeric"
                 />
 
-                <TextInput style={{ margin: 20 }}
+                <TextInput style={{ margin: 20,borderColor: "#cccccc", borderWidth: 1, width: 50, paddingTop:5, paddingBottom:5, paddingLeft: 5 }}
                     placeholder="Năm"
                     placeholderTextColor="#cdcdcf"
                     value={date3}
@@ -58,9 +68,10 @@ const DateScreen = () => {
                     keyboardType="numeric"
                 />
             </View>
-            <Text style={{ color: "red", fontSize: 16 }}>{errDate}</Text>
-            <Text style={{ color: "red", fontSize: 16 }}>{errDate2}</Text>
-            <Text style={{ color: "red", fontSize: 16 }}>{errDate3}</Text>
+            <Text style={{ color: "red", fontSize: 16,textAlign: "center" }}>{errDate}</Text>
+            <Text style={{ color: "red", fontSize: 16,textAlign: "center" }}>{errDate2}</Text>
+            <Text style={{ color: "red", fontSize: 16,textAlign: "center" }}>{errDate3}</Text>
+            <Text style={{ color: "red", fontSize: 16,textAlign: "center" }}>{errDateAll}</Text>
 
 
 
