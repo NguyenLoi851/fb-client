@@ -153,7 +153,7 @@ const Post = (prop) => {
           }}
         >
           <TouchableOpacity style={styles.button} onPress={handleLike}>
-            <Icon name={liked ? "thumbs-down":"thumbs-up"} type="font-awesome"></Icon>
+            <Icon name={liked ? "thumbs-up":"thumbs-o-up"} type="font-awesome"></Icon>
             {/* {(({liked} == true) ? <Icon name="thumbs-up" type="font-awesome"></Icon> : <Icon name="thumbs-down" type="font-awesome"></Icon>)} */}
             {/* <Icon name="thumbs-down" type="font-awesome"></Icon> */}
             <Text style={{ marginLeft: 10 }}>{liked ? "Đã Thích":"Thích"}</Text>

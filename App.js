@@ -18,7 +18,7 @@ import Profile from "./Screens/Profile.js";
 import UpdateProfile from "./Screens/UpdateProfile.js";
 import BlockList from "./Screens/BlockList.js";
 
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { store } from "./store/store.js";
 
 import Menu from "./Screens/Menu.js";
@@ -31,6 +31,9 @@ import NameScreen from "./Screens/SignupSignin/NameScreen.js";
 import RulesScreen from "./Screens/SignupSignin/RulesScreen.js";
 import PhoneAndPasswordScreen from "./Screens/SignupSignin/PhoneAndPasswordScreen.js";
 import { LogBox } from 'react-native';
+import Menu2 from "./Screens/Menu2.js";
+import Setting from "./Screens/Setting.js";
+import SettingTab from "./Screens/Setting.js";
 
 const Stack = createStackNavigator();
 const rootStack = createStackNavigator();
@@ -86,12 +89,29 @@ const NotificationTab = () => {
     </View>
   );
 };
+// const MenuTab = () => {
+//   return (
+//     <View>
+//       <Menu />
+//     </View>
+//   );
+// };
 const MenuTab = () => {
-  return (
+  const store = useSelector((state)=>state)
+  if(store.user.navigation == "setting"){
+    return(
+      <View>
+        <SettingTab />
+      </View>
+    )
+  }
+  else{
+    return (
     <View>
-      <Menu />
+      <Menu2 />
     </View>
   );
+  }
 };
 const Tab = createMaterialTopTabNavigator();
 export const MainTab = () => {
@@ -221,6 +241,8 @@ export default function App() {
           <rootStack.Screen component={CreatePost} name="createPost" options={{headerShown: false}}/>
           <rootStack.Screen component={BlockList} name="blockList" options={{headerShown: false}}/>
           <rootStack.Screen component={UpdateProfile} name="updateProfile" options={{headerShown: false}}/>
+          {/* <rootStack.Screen component={SettingTab} name="setting" options={{headerShown: false}}/>
+          <rootStack.Screen component={MenuTab} name="menu" options={{headerShown: false}}/> */}
         </rootStack.Navigator>
       </NavigationContainer>
     </Provider>
