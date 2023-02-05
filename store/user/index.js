@@ -11,6 +11,9 @@ const userSlice = createSlice({
     addUser(state, action) {
       state.user = action.payload;
     },
+    changeToken(state, action) {
+      state.user.user.token = action.payload;
+    },
     addName(state, action) {
       state.register = { ...state.register, name: action.payload };
     },
@@ -45,5 +48,5 @@ const userSlice = createSlice({
 // })
 
 export default userSlice.reducer;
-export const { addUser, addDate, addName, addEmail, addPhone, navigate } = userSlice.actions;
+export const { addUser, addDate, addName, addEmail, addPhone, navigate, changeToken } = userSlice.actions;
 // export const { addDate, addName } = registerInfoSlice.actions;

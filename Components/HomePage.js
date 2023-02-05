@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View, ScrollView, SafeAreaView } from "react-native";
+import { StyleSheet, Text, View, ScrollView, SafeAreaView, RefreshControl } from "react-native";
 import Post from "./Post";
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { navigation } from "../rootNavigation";
 import { Image } from "react-native";
@@ -18,7 +18,7 @@ import { upPostApi } from "../apis/Post/upPostApi";
 //   useEffect(() => {
 //     getPost()
 //   }, [])
-  
+
 
 //   const getPost = async () => {
 //     try {
@@ -92,11 +92,11 @@ import { upPostApi } from "../apis/Post/upPostApi";
 //     </View>
 //      {/* post.map(item=>(<Post {{item.described, item.author.username}}/>)) */}
 
-    
+
 import {
-	Ionicons,
-	MaterialIcons,
-	MaterialCommunityIcons
+  Ionicons,
+  MaterialIcons,
+  MaterialCommunityIcons
 } from '@expo/vector-icons'
 import styled from 'styled-components/native'
 
@@ -145,108 +145,119 @@ const HomePage = () => {
   useEffect(() => {
     getPost()
   }, [])
-  
+
 
   const getPost = async () => {
     try {
       const res = await upPostApi.get(token)
       console.log("other post", res.data)
       console.log("post", JSON.stringify(res.data.data, 0, 2))
-      setPost(res.data.data)
+      setPost(res.data.data.reverse())
     } catch (error) {
       console.log(error)
     }
   }
+  const [refreshing, setRefreshing] = useState(false);
 
+  const onRefresh = async() => {
+    setRefreshing(true);
+    await getPost()
+    setTimeout(async () => {
+      setRefreshing(false);
+    }, 1000);
+  };
   return (
     <>
-    <View>
-      <ScrollView
-        horizontal={false}
-        style={{ display: "flex", flexDirection: "column" }}
-      >
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("createPost");
-          }}
+      <View>
+        <ScrollView refreshControl={
+          <RefreshControl refreshing={refreshing}
+            onRefresh={onRefresh} />
+        }
+          horizontal={false}
+          style={{ display: "flex", flexDirection: "column" }}
         >
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              paddingVertical: 10,
-              backgroundColor: "#fff",
-              alignItems: "center",
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("createPost");
             }}
           >
-            <Image
-              source={
-                //   {
-                //   // uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU",
-                //   uri: "../assets/imgs/default_avatar.png"
-                // }
-                DefaultAvatar
-              }
+            <View
               style={{
-                width: 40,
-                height: 40,
-                borderRadius: 100,
-                marginRight: 10,
-              }}
-            ></Image>
-            <TextInput
-              placeholder="Bạn đang nghĩ gì?"
-              style={{
-                borderRadius: 100,
-                flex: 1,
-                borderWidth: 1,
-                borderColor: "#CFCFD5",
+                flexDirection: "row",
                 paddingHorizontal: 20,
-                paddingVertical: 5,
-                marginRight: 15,
+                paddingVertical: 10,
+                backgroundColor: "#fff",
+                alignItems: "center",
               }}
-            ></TextInput>
-            <Icon type="ionicon" name="images" color={"#58C472"}></Icon>
-          </View>
-        </TouchableOpacity>
-				<Divider />
+            >
+              <Image
+                source={
+                  //   {
+                  //   // uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU",
+                  //   uri: "../assets/imgs/default_avatar.png"
+                  // }
+                  DefaultAvatar
+                }
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 100,
+                  marginRight: 10,
+                }}
+              ></Image>
+              <TextInput
+                placeholder="Bạn đang nghĩ gì?"
+                style={{
+                  borderRadius: 100,
+                  flex: 1,
+                  borderWidth: 1,
+                  borderColor: "#CFCFD5",
+                  paddingHorizontal: 20,
+                  paddingVertical: 5,
+                  marginRight: 15,
+                }}
+              ></TextInput>
+              <Icon type="ionicon" name="images" color={"#58C472"}></Icon>
+            </View>
+          </TouchableOpacity>
+          <Divider />
 
-        <Row>
-					<Menu>
-						<Ionicons name='ios-videocam' size={22} color='#F44337' />
-						<MenuText>Live</MenuText>
-					</Menu>
-					<Separator />
+          <Row>
+            <Menu>
+              <Ionicons name='ios-videocam' size={22} color='#F44337' />
+              <MenuText>Live</MenuText>
+            </Menu>
+            <Separator />
 
-					<Menu>
-						<MaterialIcons
-							name='photo-size-select-actual'
-							size={20}
-							color='#4CAF50'
-						/>
-						<MenuText>Photo</MenuText>
-					</Menu>
-					<Separator />
+            <Menu>
+              <MaterialIcons
+                name='photo-size-select-actual'
+                size={20}
+                color='#4CAF50'
+              />
+              <MenuText>Photo</MenuText>
+            </Menu>
+            <Separator />
 
-					<Menu>
-						<MaterialCommunityIcons
-							name='video-plus'
-							size={22}
-							color='#E141FC'
-						/>
-						<MenuText>Room</MenuText>
-					</Menu>
-				</Row>
+            <Menu>
+              <MaterialCommunityIcons
+                name='video-plus'
+                size={22}
+                color='#E141FC'
+              />
+              <MenuText>Room</MenuText>
+            </Menu>
+          </Row>
 
 
-        {/* <Post />
+          {/* <Post />
         <Post />
         <Post />
         <Post /> */}
-         {post.length > 0 && post.map(item => (<Post key={item} prop={item}/>))}
+          {post.length > 0 && post.map(item => (<Post key={item} prop={item} fc = {onRefresh}/>))}
 
-      </ScrollView>
-    </View>
+        </ScrollView>
+      </View>
     </>
   );
 };

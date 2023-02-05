@@ -253,7 +253,7 @@ const CreatePost = () => {
           console.log(res.status);
           // context.setNeedUpdateProfile(true);
           // context.setNeedUpdateTimeline(true);
-          Alert.alert("Thành công", "Đã đăng bài xong", [{ text: "OK" }]);
+          Alert.alert("Thành công", "Đã đăng bài xong, kéo xuống để tải lại trang", [{ text: "OK" }]);
           return;
         })
         .catch((e) => {

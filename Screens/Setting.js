@@ -14,7 +14,7 @@ import { StyleSheet } from "react-native";
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { navigation } from '../rootNavigation'
 
-const SettingTab = () => {
+const Setting = () => {
 
   return (
     <View 
@@ -39,7 +39,7 @@ const SettingTab = () => {
         </TouchableOpacity>
         {/* </Link> */}
         {/* <Link to={{screen: ScreenNames.security}}> */}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=> navigation.navigate("security")}>
           <View style={styles.item}>
             <MaterialCommunityIcons
             name='security'
@@ -98,7 +98,7 @@ const SettingTab = () => {
   )
 }
 
-export default SettingTab
+export default Setting
 
 
 const styles = StyleSheet.create({

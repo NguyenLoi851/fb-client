@@ -18,7 +18,7 @@ import Profile from "./Screens/Profile.js";
 import UpdateProfile from "./Screens/UpdateProfile.js";
 import BlockList from "./Screens/BlockList.js";
 
-import { Provider, useSelector } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import { store } from "./store/store.js";
 
 import Menu from "./Screens/Menu.js";
@@ -33,7 +33,8 @@ import PhoneAndPasswordScreen from "./Screens/SignupSignin/PhoneAndPasswordScree
 import { LogBox } from 'react-native';
 import Menu2 from "./Screens/Menu2.js";
 import Setting from "./Screens/Setting.js";
-import SettingTab from "./Screens/Setting.js";
+import Security from "./Screens/Security.js";
+import ChangePassword from "./Screens/ChangePassword.js";
 
 const Stack = createStackNavigator();
 const rootStack = createStackNavigator();
@@ -96,23 +97,15 @@ const NotificationTab = () => {
 //     </View>
 //   );
 // };
+
 const MenuTab = () => {
-  const store = useSelector((state)=>state)
-  if(store.user.navigation == "setting"){
-    return(
-      <View>
-        <SettingTab />
-      </View>
-    )
-  }
-  else{
     return (
     <View>
       <Menu2 />
     </View>
   );
-  }
 };
+
 const Tab = createMaterialTopTabNavigator();
 export const MainTab = () => {
   const mainTabNavigationOptions = {
@@ -241,8 +234,9 @@ export default function App() {
           <rootStack.Screen component={CreatePost} name="createPost" options={{headerShown: false}}/>
           <rootStack.Screen component={BlockList} name="blockList" options={{headerShown: false}}/>
           <rootStack.Screen component={UpdateProfile} name="updateProfile" options={{headerShown: false}}/>
-          {/* <rootStack.Screen component={SettingTab} name="setting" options={{headerShown: false}}/>
-          <rootStack.Screen component={MenuTab} name="menu" options={{headerShown: false}}/> */}
+          <rootStack.Screen component={Setting} name="setting" options={{title: 'Cài đặt'}}/>
+          <rootStack.Screen component={Security} name="security" options={{title: "Mật khẩu và bảo mật"}}/>
+          <rootStack.Screen component={ChangePassword} name="change-password" options={{title: "Thay đổi mật khẩu"}}/>
         </rootStack.Navigator>
       </NavigationContainer>
     </Provider>

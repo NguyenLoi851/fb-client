@@ -150,10 +150,10 @@ const Menu2 = () => {
                     dropDownContainerStyle={styles.dropDownContainerStyle}
                     listItemLabelStyle={styles.listItemLabelStyle}
                     onSelectItem={(item) => {
-                        dispatch(navigate("setting"))
+                        // dispatch(navigate("setting"))
                         // setRandom(Math.random())
                         // this.forceUpdate()
-                        // navigation.navigate("menu")
+                        navigation.navigate("setting")
                         // return <SettingTab />
                     }}
                 />

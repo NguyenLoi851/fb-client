@@ -6,6 +6,7 @@ import {
   LogBox,
   SafeAreaView,
   TouchableOpacity,
+  RefreshControl,
 } from "react-native";
 import React, { useState } from "react";
 import { Icon, Image } from "react-native-elements";
@@ -14,6 +15,8 @@ import { useEffect } from "react";
 import DefaultAvatar from "../assets/imgs/default_avatar.png"
 import { useSelector } from "react-redux";
 import { upPostApi } from "../apis/Post/upPostApi";
+import { deletePostApi } from "../apis/Post/delelePostApi";
+import { editPostApi } from "../apis/Post/editPostApi";
 
 const Post = (prop) => {
   const BASE_URI = "https://source.unsplash.com/random?sig=";
@@ -25,6 +28,8 @@ const Post = (prop) => {
   console.log("token", token)
   const [liked, setLiked] = useState(false)
   const [option, setOption] = useState(false)
+  // const [reload, setReload] = useState(0)
+  const [deleteSuccess, setDeleteSuccess] = useState(false)
 
   const [full, setFull] = useState(false);
   useEffect(() => {
@@ -36,20 +41,52 @@ const Post = (prop) => {
   // const handleDelete = () => {
   //   await 
   // }
+  // const [refreshing, setRefreshing] = useState(false)
+
+  const handleDelete = async () => {
+    try {
+      setOption(false)
+      const res = await deletePostApi.delete(prop.prop._id, token)
+      console.log(res.data)
+      // setReload(reload + 1)
+      // setRefreshing(true)
+      // prop.fc.onRefresh()
+      setDeleteSuccess(true)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // useEffect(() => {
+
+  // }, [refreshing])
+  
+
+  // const handleEdit = async () => {
+  //   try {
+  //     // setOption(false)
+  //     // const postId = prop.prop._id
+
+  //     // const res = await editPostApi.edit()
+
+  //   } catch (error) {
+      
+  //   }
+  // }
 
   const handleLike = async () => {
     try {
       // console.log("HelloLike")
       console.log("Hello token", token)
       await upPostApi.like(token, prop.prop._id)
-      if(liked == false){
-        setLikes(likes+1)
+      if (liked == false) {
+        setLikes(likes + 1)
         setLiked(true)
-      }else{
-        setLikes(likes-1)
+      } else {
+        setLikes(likes - 1)
         setLiked(false)
       }
-      
+
     } catch (error) {
       console.log(error)
     }
@@ -62,31 +99,43 @@ const Post = (prop) => {
     setOption(!option);
   }
   return (
+    // <RefreshControl onRefresh={refreshing}>
     <View style={styles.container}>
+      {deleteSuccess && (<>
+        <Text style={{textAlign:"center", color:"red", fontSize: 16, margin: 10}}>
+          Đã xóa thành công, kéo xuống để tải lại trang
+        </Text>
+      </>)}
       <View style={styles.header}>
         <View style={styles.avatar}>
           <Image
-            // source={{
-            //   uri: "https://source.unsplash.com/random?sig=10",
-            // }}
             source={DefaultAvatar}
             containerStyle={styles.avatar_img}
           ></Image>
         </View>
         <View style={{ marginLeft: 10 }}>
           <Text style={{ fontWeight: "500" }}>{prop.prop.author.username}</Text>
-          {/* <Text style={{ fontWeight: "500" }}>aa</Text> */}
         </View>
         <View style={{ marginLeft: "auto" }}>
           <TouchableOpacity onPress={handleOption}>
+            {(option == true) ? (
+              <TouchableOpacity onPress={()=>{setOption(false)}}>
+                  <TouchableOpacity style={{ margin: 5 }} onPress={handleDelete}>
+                    <Text>Delete</Text>
+                  </TouchableOpacity>
 
-          <Icon name="ellipsis-horizontal" type="ionicon">
 
-          </Icon>
-            {(option == true) ? (<TouchableOpacity>
-              <Text>Delete</Text>
-            </TouchableOpacity>): <></>}
-            
+
+                <TouchableOpacity style={{ margin: 5 }} onPress={handleEdit}>
+                  <Text>Edit</Text>
+                </TouchableOpacity>
+              </TouchableOpacity>
+            )
+
+              : <Icon name="ellipsis-horizontal" type="ionicon">
+
+              </Icon>}
+
           </TouchableOpacity>
         </View>
       </View>
@@ -94,13 +143,6 @@ const Post = (prop) => {
       <View style={styles.content}>
         <View style={full ? styles.desc_full : styles.desc_short}>
           <Text>
-            {/* Tại trận chung kết, các vận động viên đều đã biểu diễn hết sức mình
-            để phô ra những ván bóng đẹp mắt làm hài lòng khán giả. Set đấu đầu
-            tiên chỉ chứng kiến sự chênh lệch 2 điểm với chiến thắng nghiêng về
-            VĐV Nguyễn Trọng Hiếu. Trong khi đó, VĐV Nguyễn Vũ Tuấn cũng đã
-            chứng tỏ bản lĩnh khi vươn lên dẫn trước 2-1 ở set thứ 3. Ở 2 set
-            đấu cuối cùng kết quả chia đều cho 2 bên với chiến thắng chung cuộc
-            dành cho VĐV Nguyễn Vũ Tuấn. */}
             {prop.prop.described}
           </Text>
         </View>
@@ -124,14 +166,14 @@ const Post = (prop) => {
             )}
           /> */}
           <Image
-                source={{ uri: BASE_URI + 10 }}
-                containerStyle={{
-                  aspectRatio: 1,
-                  width: "100%",
-                  height: 150,
-                  flex: 1,
-                }}
-              />
+            source={{ uri: BASE_URI + 10 }}
+            containerStyle={{
+              aspectRatio: 1,
+              width: "100%",
+              height: 150,
+              flex: 1,
+            }}
+          />
         </SafeAreaView>
       </View>
       <View style={{}}>
@@ -153,12 +195,12 @@ const Post = (prop) => {
           }}
         >
           <TouchableOpacity style={styles.button} onPress={handleLike}>
-            <Icon name={liked ? "thumbs-up":"thumbs-o-up"} type="font-awesome"></Icon>
+            <Icon name={liked ? "thumbs-up" : "thumbs-o-up"} type="font-awesome"></Icon>
             {/* {(({liked} == true) ? <Icon name="thumbs-up" type="font-awesome"></Icon> : <Icon name="thumbs-down" type="font-awesome"></Icon>)} */}
             {/* <Icon name="thumbs-down" type="font-awesome"></Icon> */}
-            <Text style={{ marginLeft: 10 }}>{liked ? "Đã Thích":"Thích"}</Text>
+            <Text style={{ marginLeft: 10 }}>{liked ? "Đã Thích" : "Thích"}</Text>
             {/* {(({liked} == true) ? <Text style={{ marginLeft: 10 }}>Đã Thích</Text> : <Text style={{ marginLeft: 10 }}>Thích</Text>)} */}
-            
+
           </TouchableOpacity>
           <TouchableOpacity style={styles.button}>
             <Icon name="comment" type="font-awesome"></Icon>
@@ -167,6 +209,7 @@ const Post = (prop) => {
         </View>
       </View>
     </View>
+    // </RefreshControl>
   );
 };
 
