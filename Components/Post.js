@@ -9,7 +9,7 @@ import {
   RefreshControl,
 } from "react-native";
 import React, { useState } from "react";
-import { Icon, Image } from "react-native-elements";
+import { Icon, Image, Input } from "react-native-elements";
 import { useEffect } from "react";
 // import ScaleImage from "./Image";
 import DefaultAvatar from "../assets/imgs/default_avatar.png"
@@ -17,6 +17,8 @@ import { useSelector } from "react-redux";
 import { upPostApi } from "../apis/Post/upPostApi";
 import { deletePostApi } from "../apis/Post/delelePostApi";
 import { editPostApi } from "../apis/Post/editPostApi";
+import { commentPostApi } from "../apis/Post/commentPostApi";
+import { Button } from "react-native";
 
 const Post = (prop) => {
   const BASE_URI = "https://source.unsplash.com/random?sig=";
@@ -36,8 +38,11 @@ const Post = (prop) => {
     LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
     setLikes(prop.prop.like.length)
     setLiked(prop.prop.isLike)
+    // const res = await commentPostApi.list(prop.prop._id, token)
+    // console.log("commentList ",JSON.stringify(res.data,0,2))
+    // setCommentList(res.data)
   }, []);
-
+  const [newComment, setNewComment] = useState("")
   // const handleDelete = () => {
   //   await 
   // }
@@ -60,7 +65,7 @@ const Post = (prop) => {
   // useEffect(() => {
 
   // }, [refreshing])
-  
+
 
   // const handleEdit = async () => {
   //   try {
@@ -70,9 +75,14 @@ const Post = (prop) => {
   //     // const res = await editPostApi.edit()
 
   //   } catch (error) {
-      
+
   //   }
   // }
+
+  const [commentOption, setCommentOption] = useState(false)
+  const handleCommentOption = () => {
+    setCommentOption(!commentOption)
+  }
 
   const handleLike = async () => {
     try {
@@ -95,6 +105,34 @@ const Post = (prop) => {
     return liked == true;
   }
 
+  const handleCreateNewComment = async () => {
+    try {
+      if(newComment == "") {
+        return
+      }
+      const data = {
+        content: newComment
+      }
+      const res = await commentPostApi.create(data, prop.prop._id, token)
+      console.log(res.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  
+  const [commentList, setCommentList] = useState([])
+  const handleComment = async () => {
+    handleCommentOption()
+    try {
+      const res = await commentPostApi.list(prop.prop._id, token)
+      console.log("commentList ",JSON.stringify(res.data,0,2))
+      setCommentList(res.data.data)
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
   const handleOption = () => {
     setOption(!option);
   }
@@ -102,7 +140,7 @@ const Post = (prop) => {
     // <RefreshControl onRefresh={refreshing}>
     <View style={styles.container}>
       {deleteSuccess && (<>
-        <Text style={{textAlign:"center", color:"red", fontSize: 16, margin: 10}}>
+        <Text style={{ textAlign: "center", color: "red", fontSize: 16, margin: 10 }}>
           Đã xóa thành công, kéo xuống để tải lại trang
         </Text>
       </>)}
@@ -119,12 +157,12 @@ const Post = (prop) => {
         <View style={{ marginLeft: "auto" }}>
           <TouchableOpacity onPress={handleOption}>
             {(option == true) ? (
-              <TouchableOpacity onPress={()=>{setOption(false)}}>
-                  <TouchableOpacity style={{ margin: 10}} onPress={handleDelete}>
-                    <Text>Delete</Text>
-                  </TouchableOpacity>
+              <TouchableOpacity onPress={() => { setOption(false) }}>
+                <TouchableOpacity style={{ margin: 10 }} onPress={handleDelete}>
+                  <Text>Delete</Text>
+                </TouchableOpacity>
 
-                <TouchableOpacity style={{ margin: 10 }} 
+                <TouchableOpacity style={{ margin: 10 }}
                 // onPress={handleEdit}
                 >
                   <Text>Edit</Text>
@@ -202,11 +240,24 @@ const Post = (prop) => {
             {/* {(({liked} == true) ? <Text style={{ marginLeft: 10 }}>Đã Thích</Text> : <Text style={{ marginLeft: 10 }}>Thích</Text>)} */}
 
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleComment}>
             <Icon name="comment" type="font-awesome"></Icon>
             <Text style={{ marginLeft: 10 }}>Bình luận</Text>
           </TouchableOpacity>
+          
         </View>
+        {commentOption && (<>
+          <Input placeholder="Your new comment"
+          value={newComment}
+          onChangeText={setNewComment}
+          style={{marginTop: 10}}>
+          </Input>
+          <TouchableOpacity onPress={handleCreateNewComment}>
+          <Text style={{backgroundColor:"green", marginLeft: 250, textAlign: "center"}}>Comment</Text>
+          </TouchableOpacity>
+
+          </>)}
+          {commentList.length > 0 && commentList.map(item => (<Text key={item}>{item.content}</Text>))}
       </View>
     </View>
     // </RefreshControl>

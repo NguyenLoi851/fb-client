@@ -35,6 +35,7 @@ import Menu2 from "./Screens/Menu2.js";
 import Setting from "./Screens/Setting.js";
 import Security from "./Screens/Security.js";
 import ChangePassword from "./Screens/ChangePassword.js";
+import FriendScreen from "./Screens/FriendScreen/index.js";
 
 const Stack = createStackNavigator();
 const rootStack = createStackNavigator();
@@ -65,7 +66,8 @@ const HomeTab = () => {
 const FriendTab = () => {
   return (
     <View>
-      <Text>friendTab</Text>
+      {/* <Text>friendTab</Text> */}
+      <FriendScreen />
     </View>
   );
 };
