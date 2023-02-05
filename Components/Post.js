@@ -120,13 +120,13 @@ const Post = (prop) => {
           <TouchableOpacity onPress={handleOption}>
             {(option == true) ? (
               <TouchableOpacity onPress={()=>{setOption(false)}}>
-                  <TouchableOpacity style={{ margin: 5 }} onPress={handleDelete}>
+                  <TouchableOpacity style={{ margin: 10}} onPress={handleDelete}>
                     <Text>Delete</Text>
                   </TouchableOpacity>
 
-
-
-                <TouchableOpacity style={{ margin: 5 }} onPress={handleEdit}>
+                <TouchableOpacity style={{ margin: 10 }} 
+                // onPress={handleEdit}
+                >
                   <Text>Edit</Text>
                 </TouchableOpacity>
               </TouchableOpacity>
