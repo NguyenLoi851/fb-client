@@ -42,21 +42,30 @@ const CreatePost = () => {
   };
   const uploadImage = async () => {
     await permissionRequest();
+
     if (permissionRequest()) {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: "Images",
-        allowsMultipleSelection: true,
-        selectionLimit: 4,
+        allowsMultipleSelection: false,
+        // selectionLimit: 4,
       });
-      console.log(result.selected);
-      if (result.selected) {
-        result.selected.map((item) => {
-          console.log(item);
-          setImage([...image, item]);
-        });
-      } else {
-        setImage([...image, result]);
+
+      console.log("CLGT")
+      console.log(result);
+      console.log("CLGT")
+      if (!result.cancelled) {
+        const fruits = [];
+
+        fruits.push(result.assets[0])
+        setImage(fruits);
       }
+      // if (result.selected) {
+      //   result.selected.map((item) => {
+      //     setImage([...image, item]);
+      //   });
+      // } else {
+      //   setImage([...image, result]);
+      // }
     }
   };
   const handleAddImage = () => {
@@ -183,21 +192,40 @@ const CreatePost = () => {
         return;
       }
       let images = [];
-      for (let i = 0; i < selectedImage.length; i++) {
-        let info = await MediaLibrary.getAssetInfoAsync(selectedImage[i]);
-        let fileInfo = await FileSystem.getInfoAsync(info.localUri);
+      console.log(image.length)
+      for (let i = 0; i < image.length; i++) {
+        var thisImage=image[i];
+        var uri=thisImage.uri;
+        // let info = await MediaLibrary.getAssetInfoAsync(selectedImage[i]);
+        let fileInfo = await FileSystem.getInfoAsync(uri);
         if (fileInfo.size > MAX_IMAGE_SIZE) {
           Alert.alert("Ảnh quá lớn", "Chỉ cho phép ảnh kích thước tối đa 4MB", [
             { text: "OK" },
           ]);
           return;
         }
-        let base64 = await FileSystem.readAsStringAsync(info.localUri, {
+        let base64 = await FileSystem.readAsStringAsync(uri, {
           encoding: "base64",
         });
         images.push("data:image;base64," + base64);
         console.log(base64.length / 1024 / 1024);
       }
+
+      //    for (let i = 0; i < selectedImage.length; i++) {
+      //   let info = await MediaLibrary.getAssetInfoAsync(selectedImage[i]);
+      //   let fileInfo = await FileSystem.getInfoAsync(info.localUri);
+      //   if (fileInfo.size > MAX_IMAGE_SIZE) {
+      //     Alert.alert("Ảnh quá lớn", "Chỉ cho phép ảnh kích thước tối đa 4MB", [
+      //       { text: "OK" },
+      //     ]);
+      //     return;
+      //   }
+      //   let base64 = await FileSystem.readAsStringAsync(info.localUri, {
+      //     encoding: "base64",
+      //   });
+      //   images.push("data:image;base64," + base64);
+      //   console.log(base64.length / 1024 / 1024);
+      // }
 
       let videos = [];
 

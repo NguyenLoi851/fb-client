@@ -19,9 +19,10 @@ import { deletePostApi } from "../apis/Post/delelePostApi";
 import { editPostApi } from "../apis/Post/editPostApi";
 import { commentPostApi } from "../apis/Post/commentPostApi";
 import { Button } from "react-native";
+import { baseUrl, fileURL } from "../common/baseUrl";
 
 const Post = (prop) => {
-  const BASE_URI = "https://source.unsplash.com/random?sig=";
+  const [BASE_URI,setBaseURI] = useState("")
   const [likes, setLikes] = useState(0);
   const [comments, setComments] = useState(0);
   console.log("prop", JSON.stringify(prop.prop))
@@ -38,6 +39,15 @@ const Post = (prop) => {
     LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
     setLikes(prop.prop.like.length)
     setLiked(prop.prop.isLike)
+    console.log("lllllllllllllllllllllllllllllllllllllllll")
+
+    if(prop.prop.images.length>0){
+      var newURI= fileURL+"/files/"+ prop.prop.images[0].fileName
+      setBaseURI(newURI)
+      console.log(baseUrl);
+
+    }
+  
     // const res = await commentPostApi.list(prop.prop._id, token)
     // console.log("commentList ",JSON.stringify(res.data,0,2))
     // setCommentList(res.data)
@@ -203,15 +213,28 @@ const Post = (prop) => {
               />
             )}
           /> */}
-          <Image
-            source={{ uri: BASE_URI + 10 }}
+          {
+            BASE_URI.length>10?
+            <Image
+            source={{ uri: BASE_URI}}
             containerStyle={{
               aspectRatio: 1,
               width: "100%",
               height: 150,
               flex: 1,
             }}
-          />
+            />:<></>
+            // <Image
+            // source={{ uri: BASE_URI}}
+            // containerStyle={{
+            //   aspectRatio: 1,
+            //   width: "100%",
+            //   height: 150,
+            //   flex: 1,
+            // }}
+            // />
+          }
+          
         </SafeAreaView>
       </View>
       <View style={{}}>
