@@ -81,7 +81,7 @@ const BlockList = () => {
                     uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRtdBb_F-5FEyDOX0h9cz3lBnUb39fNIW8zg&usqp=CAU",
                   }}
                 ></Image>
-                <Text style={{ fontSize: 16, flex: 1 }}>Nobi Nobita</Text>
+                <Text style={{ fontSize: 16, flex: 1 }}>nguyen van dat</Text>
                 <TouchableOpacity
                   style={{
                     marginLeft: 10,

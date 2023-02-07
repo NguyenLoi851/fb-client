@@ -39,10 +39,9 @@ const Post = (prop) => {
     LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
     setLikes(prop.prop.like.length)
     setLiked(prop.prop.isLike)
-    console.log("lllllllllllllllllllllllllllllllllllllllll")
 
     if(prop.prop.images.length>0){
-      var newURI= fileURL+"/files/"+ prop.prop.images[0].fileName
+      var newURI= fileURL+ prop.prop.images[0].fileName
       setBaseURI(newURI)
       console.log(baseUrl);
 

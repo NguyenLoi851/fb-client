@@ -1,13 +1,49 @@
 import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Post from "../Components/Post";
 import { Icon } from "react-native-elements";
 import { navigation } from "../rootNavigation";
 import uuid from "react-uuid";
+import { fileURL } from "../common/baseUrl";
+import { DocumentAPI } from "../apis/Documents/DocumentAPI";
 
 const Profile = () => {
-  const user = useSelector((state) => state.user.user);
+  const store = useSelector((state) => state);
+
+  const [coverIMGURI,setCoverIMGURI] = useState("")
+  const [profileIMGURI,setProfileIMGURI] = useState("")
+
+
+  useEffect(()=>{
+    
+    
+    getData()
+
+    // var newURI = fileURL+
+
+  },[])
+
+  const getData=async ()=>{
+    console.log("odaythangnuloi")
+
+    console.log(JSON.stringify(store,0,2))
+
+    var user=store.user.user.data
+
+    const coverID = user.cover_image
+    const profileID= user.avatar
+
+    const coverRes = await  DocumentAPI.get(coverID)
+    const profileRes = await DocumentAPI.get(profileID)
+   
+    setCoverIMGURI(fileURL+coverRes.data.data.fileName)
+    setProfileIMGURI(fileURL+profileRes.data.data.fileName)
+
+
+  }
+
+
   return (
     <View style={{ paddingVertical: 10 }}>
       <ScrollView>
@@ -15,7 +51,7 @@ const Profile = () => {
           <View>
             <Image
               style={{ height: 230, width: "100%" }}
-              source={{ uri: "https://source.unsplash.com/random?sig=10" }}
+              source={{ uri: coverIMGURI }}
             ></Image>
           </View>
           <View
@@ -37,7 +73,7 @@ const Profile = () => {
                 width: 140,
                 borderRadius: 100,
               }}
-              source={{ uri: "https://source.unsplash.com/random?sig=10" }}
+              source={{ uri: profileIMGURI }}
             ></Image>
           </View>
           <View
@@ -52,7 +88,7 @@ const Profile = () => {
             }}
           >
             <Text style={{ fontSize: 25, fontWeight: "700" }}>
-              Nobita Kirama
+              Nguyen van Dat
             </Text>
             <TouchableOpacity
               onPress={() => {
@@ -118,7 +154,7 @@ const Profile = () => {
                           fontWeight: "600",
                         }}
                       >
-                        Nobita
+                       dat
                       </Text>
                     </View>
                   </TouchableOpacity>

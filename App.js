@@ -110,6 +110,8 @@ const MenuTab = () => {
 
 const Tab = createMaterialTopTabNavigator();
 export const MainTab = () => {
+  
+
   const mainTabNavigationOptions = {
     tabBarStyle: {
       height: 60,

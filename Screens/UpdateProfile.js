@@ -1,7 +1,139 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { fileURL } from "../common/baseUrl";
+import { DocumentAPI } from "../apis/Documents/DocumentAPI";
+import { navigation } from "../rootNavigation";
+import * as ImagePicker from "expo-image-picker";
 
+const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
+const MAX_VIDEO_SIZE = 10 * 1024 * 1024;
+const MAX_VIDEO_DURATION = 10;
+const MIN_VIDEO_DURATION = 1;
 const UpdateProfile = () => {
+
+  const store = useSelector((state) => state);
+
+  const [coverIMGURI,setCoverIMGURI] = useState("")
+  const [profileIMGURI,setProfileIMGURI] = useState("")
+
+  useEffect(()=>{
+    
+    
+    getData()
+
+    // var newURI = fileURL+
+
+  },[])
+
+  const getData=async ()=>{
+
+    console.log(JSON.stringify(store,0,2))
+
+    var user=store.user.user.data
+
+    const coverID = user.cover_image
+    const profileID= user.avatar
+
+    const coverRes = await  DocumentAPI.get(coverID)
+    const profileRes = await DocumentAPI.get(profileID)
+   
+    setCoverIMGURI(fileURL+coverRes.data.data.fileName)
+    setProfileIMGURI(fileURL+profileRes.data.data.fileName)
+
+
+  }
+
+  const [image, setImage] = useState([]);
+
+  const handleAddImage = () => {
+    uploadImage();
+  };
+
+  const permissionRequest = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      alert(" k có quyền truy cập!!!");
+      return false;
+    } else return true;
+  };
+
+  const uploadImage = async () => {
+    await permissionRequest();
+
+    if (permissionRequest()) {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: "Images",
+        allowsMultipleSelection: false,
+        // selectionLimit: 4,
+      });
+
+
+      if (!result.cancelled) {
+        const fruits = [];
+        fruits.push(result.assets[0])
+        setImage(fruits);
+
+        requestSend()
+      }
+    }
+  };
+
+
+  const requestSend = async () => {
+   
+      let images = [];
+      for (let i = 0; i < image.length; i++) {
+        var thisImage=image[i];
+        var uri=thisImage.uri;
+        // let info = await MediaLibrary.getAssetInfoAsync(selectedImage[i]);
+        let fileInfo = await FileSystem.getInfoAsync(uri);
+        if (fileInfo.size > MAX_IMAGE_SIZE) {
+          Alert.alert("Ảnh quá lớn", "Chỉ cho phép ảnh kích thước tối đa 4MB", [
+            { text: "OK" },
+          ]);
+          return;
+        }
+        let base64 = await FileSystem.readAsStringAsync(uri, {
+          encoding: "base64",
+        });
+        images.push("data:image;base64," + base64);
+      }
+
+
+     
+
+      const onSend = (progressEvent) => {
+        var percentCompleted = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
+        console.log(percentCompleted);
+      };
+      
+      await upPostApi.createPost(
+        token,
+        postText,
+        images,
+        videos,
+        onSend
+      )
+        .then((res) => {
+          console.log(res.data);
+          console.log(res.status);
+          // context.setNeedUpdateProfile(true);
+          // context.setNeedUpdateTimeline(true);
+          Alert.alert("Thành công", "Đã đăng bài xong, kéo xuống để tải lại trang", [{ text: "OK" }]);
+          return;
+        })
+        .catch((e) => {
+          // console.log(e.response.status);
+          // console.log(e.response);
+          console.log(e)
+        });
+      // navigation.goBack();
+    }
+  
+
   return (
     <View
       style={{
@@ -79,7 +211,7 @@ const UpdateProfile = () => {
                 borderRadius: 150,
               }}
               source={{
-                uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRtdBb_F-5FEyDOX0h9cz3lBnUb39fNIW8zg&usqp=CAU",
+                uri: profileIMGURI,
               }}
             ></Image>
           </View>
@@ -129,7 +261,7 @@ const UpdateProfile = () => {
                 borderRadius: 8,
               }}
               source={{
-                uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRtdBb_F-5FEyDOX0h9cz3lBnUb39fNIW8zg&usqp=CAU",
+                uri: coverIMGURI,
               }}
             ></Image>
           </View>
@@ -154,7 +286,11 @@ const UpdateProfile = () => {
             >
               Thông tin cá nhân
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={()=>{
+                navigation.navigate("changeAvatar")
+              }}
+            >
               <Text
                 style={{
                   fontSize: 18,
@@ -176,7 +312,7 @@ const UpdateProfile = () => {
               <Text style={{ fontSize: 16, width: 100, fontWeight: "600" }}>
                 Tên hiển thị:
               </Text>
-              <Text style={{ fontSize: 16 }}>Nobi Nobita</Text>
+              <Text style={{ fontSize: 16 }}>nguyen dat</Text>
             </View>
             <View
               style={{ display: "flex", flexDirection: "row", marginBottom: 5 }}
