@@ -20,6 +20,7 @@ import { editPostApi } from "../apis/Post/editPostApi";
 import { commentPostApi } from "../apis/Post/commentPostApi";
 import { Button } from "react-native";
 import { baseUrl, fileURL } from "../common/baseUrl";
+import PostComment from "./Comment"
 
 const Post = (prop) => {
   const [BASE_URI,setBaseURI] = useState("")
@@ -27,13 +28,14 @@ const Post = (prop) => {
   const [comments, setComments] = useState(0);
   console.log("prop", JSON.stringify(prop.prop))
   const store = useSelector((state) => state)
+  console.log("Store in post", JSON.stringify(store, 0, 2))
   const token = store.user.user.token;
   console.log("token", token)
   const [liked, setLiked] = useState(false)
   const [option, setOption] = useState(false)
   // const [reload, setReload] = useState(0)
   const [deleteSuccess, setDeleteSuccess] = useState(false)
-
+  const [commentList, setCommentList] = useState([])
   const [full, setFull] = useState(false);
   useEffect(() => {
     LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
@@ -124,12 +126,21 @@ const Post = (prop) => {
       }
       const res = await commentPostApi.create(data, prop.prop._id, token)
       console.log(res.data)
+      
+      commentList.push({
+        user: {
+          username: store.user.user.data.username,
+          avatar: store.user.user.data.avatar
+        },
+        content: newComment
+      })
+      setNewComment("")
     } catch (error) {
       console.log(error)
     }
   }
   
-  const [commentList, setCommentList] = useState([])
+  
   const handleComment = async () => {
     handleCommentOption()
     try {
@@ -282,7 +293,7 @@ const Post = (prop) => {
           </TouchableOpacity>
 
           </>)}
-          {commentList.length > 0 && commentList.map(item => (<Text key={item}>{item.content}</Text>))}
+          {commentList.length > 0 && commentList.reverse().map(item => (<PostComment key={item}>{item}</PostComment>))}
       </View>
     </View>
     // </RefreshControl>
