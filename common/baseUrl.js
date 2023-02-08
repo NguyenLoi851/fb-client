@@ -1,3 +1,3 @@
-export const baseUrl = "http://192.168.0.104:3001/api/v1"
+export const baseUrl = "http://10.4.20.133:3001/api/v1"
 
-export const fileURL = "http://192.168.0.104:3001/files/"
+export const fileURL = "http://10.4.20.133:3001/files/"

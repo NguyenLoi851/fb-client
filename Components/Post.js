@@ -193,6 +193,8 @@ const Post = (prop) => {
             {prop.prop.described}
           </Text>
         </View>
+        {BASE_URI == "" ? <></> : 
+        
         <SafeAreaView style={{ minHeight: 380, maxHeight: 570 }}>
           {/* <FlatList
             data={[...new Array(4)].map((_, i) => i.toString())}
@@ -234,7 +236,8 @@ const Post = (prop) => {
             // />
           }
           
-        </SafeAreaView>
+        </SafeAreaView>}
+        
       </View>
       <View style={{}}>
         <View

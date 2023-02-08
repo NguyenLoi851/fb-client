@@ -45,6 +45,8 @@ LogBox.ignoreLogs([
 LogBox.ignoreLogs([
   "Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version."
 ]);
+LogBox.ignoreAllLogs(true)
+
 const Home = () => {
   return (
     <View>
