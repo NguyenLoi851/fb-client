@@ -1,6 +1,7 @@
 import React, { Component, useEffect, useState } from 'react'
 import { SafeAreaView, ScrollView, Text } from 'react-native'
 import FriendSearch from './FriendSearch'
+import NotFriendList from './NotFriendList'
 // import FriendSearch from './FriendSearch'
 // import FriendRequestList from './FriendRequestList'
 
@@ -12,7 +13,8 @@ const FriendScreen = () => {
       <ScrollView>
         {/* <FriendSearch navigation={navigation} />
         <FriendRequestList /> */}
-        {/* <FriendSearch/> */}
+        <FriendSearch/>
+        <NotFriendList/>
       </ScrollView>
     </SafeAreaView>
   )
