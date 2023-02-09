@@ -99,6 +99,8 @@ import {
   MaterialCommunityIcons
 } from '@expo/vector-icons'
 import styled from 'styled-components/native'
+import { fileURL } from "../common/baseUrl";
+import { DocumentAPI } from "../apis/Documents/DocumentAPI";
 
 
 const Row = styled.View`
@@ -141,11 +143,23 @@ const HomePage = () => {
   console.log("Homepage", JSON.stringify(store, 0, 2))
   const [post, setPost] = useState([])
   const token = store.user.user.token;
+  const [profileIMGURI,setProfileIMGURI] = useState("")
+  const avatarId = store.user.user.data.avatar
 
   useEffect(() => {
+    getAvatar()
     getPost()
   }, [])
 
+  const getAvatar = async() => {
+    try {
+      const coverRes = await DocumentAPI.get(avatarId)
+    setProfileIMGURI(fileURL+coverRes.data.data.fileName)
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
 
   const getPost = async () => {
     try {
@@ -161,6 +175,7 @@ const HomePage = () => {
 
   const onRefresh = async() => {
     setRefreshing(true);
+    setPost([])
     await getPost()
     setTimeout(async () => {
       setRefreshing(false);
@@ -190,7 +205,19 @@ const HomePage = () => {
                 alignItems: "center",
               }}
             >
-              <Image
+              {
+                profileIMGURI != "" ? 
+                <Image
+                source={{uri: profileIMGURI}}
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 100,
+                  marginRight: 10,
+                }}
+              ></Image> :
+                
+                <Image
                 source={
                   //   {
                   //   // uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU",
@@ -205,6 +232,8 @@ const HomePage = () => {
                   marginRight: 10,
                 }}
               ></Image>
+              
+              }
               <TextInput
                 placeholder="Bạn đang nghĩ gì?"
                 style={{

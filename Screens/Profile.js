@@ -33,14 +33,18 @@ const Profile = () => {
 
     const coverID = user.cover_image
     const profileID= user.avatar
-
-    const coverRes = await  DocumentAPI.get(coverID)
-    const profileRes = await DocumentAPI.get(profileID)
-   
-    setCoverIMGURI(fileURL+coverRes.data.data.fileName)
-    setProfileIMGURI(fileURL+profileRes.data.data.fileName)
-
-
+    try {
+       const coverRes = await DocumentAPI.get(coverID)
+       setCoverIMGURI(fileURL+coverRes.data.data.fileName)
+    } catch (error) {
+      console.log(error)
+    }
+    try {
+      const profileRes = await DocumentAPI.get(profileID)
+      setProfileIMGURI(fileURL+profileRes.data.data.fileName)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
 

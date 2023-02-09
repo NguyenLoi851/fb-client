@@ -21,12 +21,13 @@ import { commentPostApi } from "../apis/Post/commentPostApi";
 import { Button } from "react-native";
 import { baseUrl, fileURL } from "../common/baseUrl";
 import PostComment from "./Comment"
+import { DocumentAPI } from "../apis/Documents/DocumentAPI";
 
 const Post = (prop) => {
-  const [BASE_URI,setBaseURI] = useState("")
+  const [BASE_URI, setBaseURI] = useState("")
   const [likes, setLikes] = useState(0);
   const [comments, setComments] = useState(0);
-  console.log("prop", JSON.stringify(prop.prop))
+  console.log("prop", JSON.stringify(prop.prop, 0, 2))
   const store = useSelector((state) => state)
   console.log("Store in post", JSON.stringify(store, 0, 2))
   const token = store.user.user.token;
@@ -37,18 +38,32 @@ const Post = (prop) => {
   const [deleteSuccess, setDeleteSuccess] = useState(false)
   const [commentList, setCommentList] = useState([])
   const [full, setFull] = useState(false);
+  const [profileIMGURI,setProfileIMGURI] = useState("")
+  const avatarId = store.user.user.data.avatar
+
+  const getAvatar = async() => {
+    try {
+      const coverRes = await DocumentAPI.get(avatarId)
+    setProfileIMGURI(fileURL+coverRes.data.data.fileName)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
     setLikes(prop.prop.like.length)
     setLiked(prop.prop.isLike)
+    setComments(prop.prop.countComments)
 
-    if(prop.prop.images.length>0){
-      var newURI= fileURL+ prop.prop.images[0].fileName
+    if (prop.prop.images.length > 0) {
+      var newURI = fileURL + prop.prop.images[0].fileName
       setBaseURI(newURI)
       console.log(baseUrl);
 
     }
-  
+
+    getAvatar()
     // const res = await commentPostApi.list(prop.prop._id, token)
     // console.log("commentList ",JSON.stringify(res.data,0,2))
     // setCommentList(res.data)
@@ -118,7 +133,7 @@ const Post = (prop) => {
 
   const handleCreateNewComment = async () => {
     try {
-      if(newComment == "") {
+      if (newComment == "") {
         return
       }
       const data = {
@@ -126,7 +141,7 @@ const Post = (prop) => {
       }
       const res = await commentPostApi.create(data, prop.prop._id, token)
       console.log(res.data)
-      
+
       commentList.push({
         user: {
           username: store.user.user.data.username,
@@ -139,13 +154,13 @@ const Post = (prop) => {
       console.log(error)
     }
   }
-  
-  
+
+
   const handleComment = async () => {
     handleCommentOption()
     try {
       const res = await commentPostApi.list(prop.prop._id, token)
-      console.log("commentList ",JSON.stringify(res.data,0,2))
+      console.log("commentList ", JSON.stringify(res.data, 0, 2))
       setCommentList(res.data.data)
     } catch (error) {
       console.log(error)
@@ -166,10 +181,22 @@ const Post = (prop) => {
       </>)}
       <View style={styles.header}>
         <View style={styles.avatar}>
-          <Image
-            source={DefaultAvatar}
-            containerStyle={styles.avatar_img}
-          ></Image>
+
+          {
+            profileIMGURI != "" ?
+
+              <Image
+                source={{ uri: profileIMGURI }}
+                containerStyle={styles.avatar_img} >
+
+              </Image>
+              :
+
+              <Image
+                source={DefaultAvatar}
+                containerStyle={styles.avatar_img}
+              ></Image>
+           }
         </View>
         <View style={{ marginLeft: 10 }}>
           <Text style={{ fontWeight: "500" }}>{prop.prop.author.username}</Text>
@@ -204,10 +231,10 @@ const Post = (prop) => {
             {prop.prop.described}
           </Text>
         </View>
-        {BASE_URI == "" ? <></> : 
-        
-        <SafeAreaView style={{ minHeight: 380, maxHeight: 570 }}>
-          {/* <FlatList
+        {BASE_URI == "" ? <></> :
+
+          <SafeAreaView style={{ minHeight: 380, maxHeight: 570 }}>
+            {/* <FlatList
             data={[...new Array(4)].map((_, i) => i.toString())}
             // style={}
             scrollEnabled={false}
@@ -225,30 +252,30 @@ const Post = (prop) => {
               />
             )}
           /> */}
-          {
-            BASE_URI.length>10?
-            <Image
-            source={{ uri: BASE_URI}}
-            containerStyle={{
-              aspectRatio: 1,
-              width: "100%",
-              height: 150,
-              flex: 1,
-            }}
-            />:<></>
-            // <Image
-            // source={{ uri: BASE_URI}}
-            // containerStyle={{
-            //   aspectRatio: 1,
-            //   width: "100%",
-            //   height: 150,
-            //   flex: 1,
-            // }}
-            // />
-          }
-          
-        </SafeAreaView>}
-        
+            {
+              BASE_URI.length > 10 ?
+                <Image
+                  source={{ uri: BASE_URI }}
+                  containerStyle={{
+                    aspectRatio: 1,
+                    width: "100%",
+                    height: 150,
+                    flex: 1,
+                  }}
+                /> : <></>
+              // <Image
+              // source={{ uri: BASE_URI}}
+              // containerStyle={{
+              //   aspectRatio: 1,
+              //   width: "100%",
+              //   height: 150,
+              //   flex: 1,
+              // }}
+              // />
+            }
+
+          </SafeAreaView>}
+
       </View>
       <View style={{}}>
         <View
@@ -280,20 +307,20 @@ const Post = (prop) => {
             <Icon name="comment" type="font-awesome"></Icon>
             <Text style={{ marginLeft: 10 }}>Bình luận</Text>
           </TouchableOpacity>
-          
+
         </View>
         {commentOption && (<>
           <Input placeholder="Your new comment"
-          value={newComment}
-          onChangeText={setNewComment}
-          style={{marginTop: 10}}>
+            value={newComment}
+            onChangeText={setNewComment}
+            style={{ marginTop: 10 }}>
           </Input>
           <TouchableOpacity onPress={handleCreateNewComment}>
-          <Text style={{backgroundColor:"green", marginLeft: 250, textAlign: "center"}}>Comment</Text>
+            <Text style={{ backgroundColor: "green", marginLeft: 250, textAlign: "center" }}>Comment</Text>
           </TouchableOpacity>
 
-          </>)}
-          {commentList.length > 0 && commentList.reverse().map(item => (<PostComment key={item}>{item}</PostComment>))}
+        </>)}
+        {commentList.length > 0 && commentList.reverse().map(item => (<PostComment key={item}>{item}</PostComment>))}
       </View>
     </View>
     // </RefreshControl>

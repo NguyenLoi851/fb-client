@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import DefaultAvatar from "../assets/imgs/default_avatar.png"
 import { navigate } from '../store/user';
 import SettingTab from './Setting';
+import { DocumentAPI } from '../apis/Documents/DocumentAPI';
+import { fileURL } from '../common/baseUrl';
 
 const Menu2 = () => {
     const dispatch = useDispatch()
@@ -21,6 +23,23 @@ const Menu2 = () => {
     const store = useSelector((state) => state)
     const username = store.user.user.data.username;
     const [random, setRandom] = useState(0)
+    const [profileIMGURI, setProfileIMGURI] = useState("")
+    const avatarId = store.user.user.data.avatar
+    console.log("Menu",JSON.stringify(store, 0, 2))
+
+    useEffect(() => {
+      getAvatar()
+    }, [])
+    
+    const getAvatar = async() => {
+        try {
+          const coverRes = await DocumentAPI.get(avatarId)
+        setProfileIMGURI(fileURL+coverRes.data.data.fileName)
+        console.log("avatar in menu", coverRes.data.data.fileName)
+        } catch (error) {
+          console.log(error)
+        }
+      }
 
     const handleLogOut = async () => {
         try {
@@ -59,6 +78,18 @@ const Menu2 = () => {
                         }}
                     >
                         <View>
+                            {
+                                profileIMGURI != "" ? 
+                                <Image
+                                source={{uri: profileIMGURI}}
+                                style={{
+                                    width: 40,
+                                    height: 40,
+                                    borderRadius: 100,
+                                    marginRight: 10,
+                                }}
+                            ></Image>
+                            :
                             <Image
                                 // source={{
                                 //   uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU",
@@ -71,14 +102,15 @@ const Menu2 = () => {
                                     marginRight: 10,
                                 }}
                             ></Image>
+                             }
+                            
                         </View>
                         <View onTouchEnd={() => navigation.navigate('profile')}>
                             <Text style={{ color: "#333", fontWeight: "600", fontSize: 24 }}>
                                 {username}
-                                {/* Hello name */}
                             </Text>
                             <Text style={{ color: "#777", fontWeight: "600", fontSize: 18 }}>
-                                See your profile
+                                Xem tài khoản cá nhân
                             </Text>
                         </View>
                     </View>
