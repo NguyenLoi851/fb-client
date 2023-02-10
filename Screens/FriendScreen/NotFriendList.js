@@ -1,24 +1,46 @@
 import { StyleSheet, Text, View, ScrollView, SafeAreaView, RefreshControl } from "react-native";
 import React, { useState, useEffect } from "react";
 import PersonTab from "./PersonTab";
+import { UserAPI } from "../../apis/User/UserAPI";
 
 const NotFriendList = () => {
+    const [allUsers, setAllUsers] = useState([])
 
-    const [people, setPeople] = useState([2,3,4])
+    useEffect(() => {
+      getAllUsers()
+    }, [])
+    
+    const getAllUsers = async() => {
+      try {
+        const res = await UserAPI.list()
+        console.log("all users", JSON.stringify(res.data, 0, 2))
+        setAllUsers(res.data.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
 
-    // const getPeople = async() => {
-    // }
     return (
         <View>
             <View>
-                <Text>
-                    Những người bạn có thể biết
-                </Text>
+            <Text
+          style={{
+            // fontFamily: 'FACEBOLF',
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: 'black',
+            margin: 10,
+            lineHeight: 40,
+            textAlign: "center"
+          }}
+        >
+          Những người bạn có thể biết
+        </Text>
             </View>
             <View>
                 {
-                    people.length > 0 &&
-                    people.map(item => <PersonTab key={item}>{item}</PersonTab>)
+                    allUsers.length > 0 &&
+                    allUsers.map(item => <PersonTab key={item}>{item}</PersonTab>)
                 }
             </View>
         </View>

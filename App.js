@@ -36,6 +36,7 @@ import Setting from "./Screens/Setting.js";
 import Security from "./Screens/Security.js";
 import ChangePassword from "./Screens/ChangePassword.js";
 import FriendScreen from "./Screens/FriendScreen/index.js";
+import AllFriend from "./Screens/FriendScreen/AllFriend.js";
 
 const Stack = createStackNavigator();
 const rootStack = createStackNavigator();
@@ -227,6 +228,7 @@ export default function App() {
           <rootStack.Screen component={VerifyEmail} name="verify"/>
           <rootStack.Screen component={CreateAccountScreen} name="create-account" options={{ title: 'Tạo tài khoản' }}/>
           <rootStack.Screen component={NameScreen} name="name" options={{ title: 'Tên' }}/>
+          <rootStack.Screen component={AllFriend} name="all-friend" options={{ title: 'Bạn bè' }}/>
           <rootStack.Screen component={DateScreen} name="date" options={{ title: 'Ngày sinh' }}/>
           <rootStack.Screen component={RulesScreen} name="rules" options={{ title: 'Điều khoản & quyền riêng tư' }}/>
           <rootStack.Screen component={EmailScreen} name="email" options={{ title: 'Địa chỉ email' }}/>

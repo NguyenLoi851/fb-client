@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import { navigation } from '../../rootNavigation'
 // import ScreenNames from 'general/constants/ScreenNames'
 const FriendSearch = () => {
   return (
@@ -13,7 +14,7 @@ const FriendSearch = () => {
       >
         <Text
           style={{
-            fontFamily: 'FACEBOLF',
+            // fontFamily: 'FACEBOLF',
             fontSize: 25,
             fontWeight: 'bold',
             color: 'black',
@@ -50,9 +51,9 @@ const FriendSearch = () => {
           <Text style={styles.button_text}>Gợi ý</Text>
         </TouchableOpacity>
         <TouchableOpacity
-        //   onPress={() => {
-        //     props.navigation.navigate(ScreenNames.allFriendView)
-        //   }}
+          onPress={() => {
+            navigation.navigate("all-friend")
+          }}
           style={[styles.button, { width: '30%' }]}
         >
           <Text style={styles.button_text}>Tất cả bạn bè</Text>
@@ -88,6 +89,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
-    fontFamily: 'FACEBOLF',
+    // fontFamily: 'FACEBOLF',
   },
 })

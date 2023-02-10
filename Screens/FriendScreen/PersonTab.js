@@ -7,27 +7,75 @@ import {
     SafeAreaView,
     TouchableOpacity,
     RefreshControl,
-    Button
+    Button,
+    Image
 } from "react-native";
+import React, { useState, useEffect } from "react";
+import { DocumentAPI } from "../../apis/Documents/DocumentAPI";
+import { fileURL } from "../../common/baseUrl";
+import DefaultAvatar from "../../assets/imgs/default_avatar.png"
 
 const PersonTab = (prop) => {
+
+    console.log("Prop in person tab", JSON.stringify(prop, 0, 2))
+    const user = prop.children
+    const [profileIMGURI, setProfileIMGURI] = useState("")
+    useEffect(() => {
+        getAvatar()
+    }, [])
+    const getAvatar = async () => {
+        try {
+            const coverRes = await DocumentAPI.get(user.avatar)
+            setProfileIMGURI(fileURL + coverRes.data.data.fileName)
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
     return (
-        <View style={{flexDirection:"row"}}>
-            <View style={{margin: 10}}>
-                <Text >
-                    Avatar
-                </Text>
+        <View style={{ flexDirection: "row" }}>
+            <View style={{ margin: 10 }}>
+                {
+                    profileIMGURI != "" ?
+                        <Image
+                            source={{ uri: profileIMGURI }}
+                            style={{
+                                width: 40,
+                                height: 40,
+                                borderRadius: 100,
+                                marginRight: 10,
+                            }}
+                        ></Image> :
+
+                        <Image
+                            source={
+                                //   {
+                                //   // uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU",
+                                //   uri: "../assets/imgs/default_avatar.png"
+                                // }
+                                DefaultAvatar
+                            }
+                            style={{
+                                width: 40,
+                                height: 40,
+                                borderRadius: 100,
+                                marginRight: 10,
+                            }}
+                        ></Image>
+
+                }
             </View>
 
             <View>
-                <View style={{margin: 10}}>
-                    <Text style={{fontWeight: "bold"}}>
-                        Name
+                <View style={{ margin: 10 }}>
+                    <Text style={{ fontWeight: "bold" }}>
+                        {user.username}
                     </Text>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                    <View>
+                    <View style={{ width: 125 }}>
                         <TouchableOpacity>
                             <View>
                                 <Button title="Thêm bạn bè">
@@ -36,7 +84,7 @@ const PersonTab = (prop) => {
                         </TouchableOpacity>
                     </View>
 
-                    <View style={{ marginLeft: 10 }}>
+                    <View style={{ marginLeft: 10, width: 125 }}>
                         <TouchableOpacity>
                             <View>
                                 <Button title="Gỡ" color="#D9CECA">
@@ -47,8 +95,6 @@ const PersonTab = (prop) => {
 
                 </View>
             </View>
-
-
         </View>
     )
 }
