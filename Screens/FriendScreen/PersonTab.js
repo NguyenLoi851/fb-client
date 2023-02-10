@@ -14,9 +14,14 @@ import React, { useState, useEffect } from "react";
 import { DocumentAPI } from "../../apis/Documents/DocumentAPI";
 import { fileURL } from "../../common/baseUrl";
 import DefaultAvatar from "../../assets/imgs/default_avatar.png"
+import { friendApi } from "../../apis/Friends/FriendApi";
+import { useSelector } from "react-redux";
 
 const PersonTab = (prop) => {
 
+    const store = useSelector((state)=>state)
+    console.log("PersonTab", JSON.stringify(store, 0, 2))
+    const token = store.user.user.token
     console.log("Prop in person tab", JSON.stringify(prop, 0, 2))
     const user = prop.children
     const [profileIMGURI, setProfileIMGURI] = useState("")
@@ -30,7 +35,17 @@ const PersonTab = (prop) => {
         } catch (error) {
             console.log(error)
         }
+    }
 
+    const handleAddFriend = async()=> {
+        try {
+            const data = {user_id: user._id}
+            console.log("datainf", data)
+            const res = await friendApi.addFriend(data, token)
+            console.log("handleAddFriend",JSON.stringify(res.data,0,2))
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -76,19 +91,26 @@ const PersonTab = (prop) => {
 
                 <View style={{ flexDirection: "row" }}>
                     <View style={{ width: 125 }}>
-                        <TouchableOpacity>
-                            <View>
-                                <Button title="Thêm bạn bè">
-                                </Button>
+                        <TouchableOpacity
+                        onPress={handleAddFriend}>
+                            <View style={{backgroundColor:"#7DA0EF", height: 39, justifyContent: "center"}}>
+                                {/* <Button title="Thêm bạn bè">
+                                </Button> */}
+                                <Text style={{textAlign: "center", fontWeight: "bold", fontSize: 17}}>
+                                    Thêm bạn bè
+                                </Text>
                             </View>
                         </TouchableOpacity>
                     </View>
 
                     <View style={{ marginLeft: 10, width: 125 }}>
                         <TouchableOpacity>
-                            <View>
-                                <Button title="Gỡ" color="#D9CECA">
-                                </Button>
+                            <View style={{backgroundColor:"#E2E5EB", height: 39, justifyContent: "center"}}>
+                                {/* <Button title="Gỡ" color="#D9CECA">
+                                </Button> */}
+                                <Text style={{textAlign: "center", fontWeight: "bold", fontSize: 17}}>
+                                    Gỡ
+                                </Text>
                             </View>
                         </TouchableOpacity>
                     </View>

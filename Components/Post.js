@@ -194,7 +194,7 @@ const Post = (prop) => {
 
               <Image
                 source={DefaultAvatar}
-                containerStyle={styles.avatar_img}
+                // containerStyle={styles.avatar_img}
               ></Image>
            }
         </View>
