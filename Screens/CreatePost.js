@@ -21,6 +21,7 @@ import * as FileSystem from "expo-file-system";
 import { navigation } from "../rootNavigation";
 import { DocumentAPI } from "../apis/Documents/DocumentAPI";
 import { fileURL } from "../common/baseUrl";
+import Video from "react-native-video";
 
 const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
 const MAX_VIDEO_SIZE = 10 * 1024 * 1024;
@@ -62,16 +63,18 @@ const CreatePost = () => {
     if (permissionRequest()) {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: "Images",
-        allowsMultipleSelection: false,
-        // selectionLimit: 4,
+        allowsMultipleSelection: true,
+        selectionLimit: 4,
       });
 
       console.log("CLGT")
-      console.log(result);
+      console.log("result", JSON.stringify(result, 0, 2));
       console.log("CLGT")
       if (!result.cancelled) {
         const fruits = [];
+        // for(let i=0;i<result.length;i++){
 
+        // }
         fruits.push(result.assets[0])
         setImage(fruits);
       }
@@ -439,6 +442,29 @@ const CreatePost = () => {
         ) : (
           <></>
         )}
+        {/* {image[1] ? (
+          <SafeAreaView style={{ minHeight: 380, maxHeight: 570 }}>
+            <FlatList
+              data={image}
+              // style={}
+              numColumns={2}
+              keyExtractor={(e) => e}
+              renderItem={({ item }) => (
+                <Image
+                  source={{ uri: item.uri }}
+                  containerStyle={{
+                    aspectRatio: 1,
+                    width: "100%",
+                    height: 150,
+                    flex: 1,
+                  }}
+                />
+              )}
+            ></FlatList>
+          </SafeAreaView>
+        ) : (
+          <></>
+        )} */}
       </View>
       <View
         style={{
