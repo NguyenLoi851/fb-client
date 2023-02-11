@@ -72,9 +72,7 @@ const CreatePost = () => {
       console.log("CLGT")
       if (!result.cancelled) {
         const fruits = [];
-        // for(let i=0;i<result.length;i++){
 
-        // }
         fruits.push(result.assets[0])
         setImage(fruits);
       }
@@ -442,29 +440,6 @@ const CreatePost = () => {
         ) : (
           <></>
         )}
-        {/* {image[1] ? (
-          <SafeAreaView style={{ minHeight: 380, maxHeight: 570 }}>
-            <FlatList
-              data={image}
-              // style={}
-              numColumns={2}
-              keyExtractor={(e) => e}
-              renderItem={({ item }) => (
-                <Image
-                  source={{ uri: item.uri }}
-                  containerStyle={{
-                    aspectRatio: 1,
-                    width: "100%",
-                    height: 150,
-                    flex: 1,
-                  }}
-                />
-              )}
-            ></FlatList>
-          </SafeAreaView>
-        ) : (
-          <></>
-        )} */}
       </View>
       <View
         style={{
