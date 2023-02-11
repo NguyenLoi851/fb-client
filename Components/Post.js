@@ -13,7 +13,7 @@ import { Icon, Image, Input } from "react-native-elements";
 import { useEffect } from "react";
 // import ScaleImage from "./Image";
 import DefaultAvatar from "../assets/imgs/default_avatar.png"
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { upPostApi } from "../apis/Post/upPostApi";
 import { deletePostApi } from "../apis/Post/delelePostApi";
 import { editPostApi } from "../apis/Post/editPostApi";
@@ -22,8 +22,11 @@ import { Button } from "react-native";
 import { baseUrl, fileURL } from "../common/baseUrl";
 import PostComment from "./Comment"
 import { DocumentAPI } from "../apis/Documents/DocumentAPI";
+import { navigation } from "../rootNavigation";
+import { editPost } from "../store/user";
 
 const Post = (prop) => {
+  const dispatch = useDispatch()
   const [BASE_URI, setBaseURI] = useState("")
   const [likes, setLikes] = useState(0);
   const [comments, setComments] = useState(0);
@@ -38,13 +41,14 @@ const Post = (prop) => {
   const [deleteSuccess, setDeleteSuccess] = useState(false)
   const [commentList, setCommentList] = useState([])
   const [full, setFull] = useState(false);
-  const [profileIMGURI,setProfileIMGURI] = useState("")
-  const avatarId = store.user.user.data.avatar
-
-  const getAvatar = async() => {
+  const [profileIMGURI, setProfileIMGURI] = useState("")
+  // const avatarId = store.user.user.data.avatar
+  const avatarId = prop.prop.author.avatar._id
+  console.log("store.user.user.data.id == prop.prop.author._id", store.user.user.data.id, prop.prop.author._id)
+  const getAvatar = async () => {
     try {
       const coverRes = await DocumentAPI.get(avatarId)
-    setProfileIMGURI(fileURL+coverRes.data.data.fileName)
+      setProfileIMGURI(fileURL + coverRes.data.data.fileName)
     } catch (error) {
       console.log(error)
     }
@@ -168,8 +172,15 @@ const Post = (prop) => {
 
   }
 
+  const isAuthor = store.user.user.data.id === prop.prop.author._id
+
   const handleOption = () => {
     setOption(!option);
+  }
+
+  const handleEdit = () => {
+    dispatch(editPost(prop.prop._id))
+    navigation.navigate("edit-post")
   }
   return (
     // <RefreshControl onRefresh={refreshing}>
@@ -194,35 +205,38 @@ const Post = (prop) => {
 
               <Image
                 source={DefaultAvatar}
-                // containerStyle={styles.avatar_img}
+              // containerStyle={styles.avatar_img}
               ></Image>
-           }
+          }
         </View>
         <View style={{ marginLeft: 10 }}>
           <Text style={{ fontWeight: "500" }}>{prop.prop.author.username}</Text>
         </View>
-        <View style={{ marginLeft: "auto" }}>
-          <TouchableOpacity onPress={handleOption}>
-            {(option == true) ? (
-              <TouchableOpacity onPress={() => { setOption(false) }}>
-                <TouchableOpacity style={{ margin: 10 }} onPress={handleDelete}>
-                  <Text>Delete</Text>
+        {isAuthor == false
+          ? <></> : <View style={{ marginLeft: "auto" }}>
+            <TouchableOpacity onPress={handleOption}>
+              {(option == true) ? (
+                <TouchableOpacity onPress={() => { setOption(false) }}>
+                  <TouchableOpacity style={{ margin: 10 }} onPress={handleDelete}>
+                    <Text>Delete</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={{ margin: 10 }}
+                    onPress={handleEdit}
+                  >
+                    <Text>Edit</Text>
+                  </TouchableOpacity>
                 </TouchableOpacity>
+              )
 
-                <TouchableOpacity style={{ margin: 10 }}
-                // onPress={handleEdit}
-                >
-                  <Text>Edit</Text>
-                </TouchableOpacity>
-              </TouchableOpacity>
-            )
+                : <Icon name="ellipsis-horizontal" type="ionicon">
 
-              : <Icon name="ellipsis-horizontal" type="ionicon">
+                </Icon>
+              }
 
-              </Icon>}
-
-          </TouchableOpacity>
-        </View>
+            </TouchableOpacity>
+          </View>
+        }
       </View>
 
       <View style={styles.content}>

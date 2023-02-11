@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, TouchableOpacity, Image } from 'react-native'
+import { View, Text, TouchableOpacity, Image, RefreshControl } from 'react-native'
 // import styles from './styles'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import DropDownPicker from 'react-native-dropdown-picker'
@@ -14,6 +14,7 @@ import { navigate } from '../store/user';
 import SettingTab from './Setting';
 import { DocumentAPI } from '../apis/Documents/DocumentAPI';
 import { fileURL } from '../common/baseUrl';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const Menu2 = () => {
     const dispatch = useDispatch()
@@ -25,21 +26,21 @@ const Menu2 = () => {
     const [random, setRandom] = useState(0)
     const [profileIMGURI, setProfileIMGURI] = useState("")
     const avatarId = store.user.user.data.avatar
-    console.log("Menu",JSON.stringify(store, 0, 2))
+    console.log("Menu", JSON.stringify(store, 0, 2))
 
     useEffect(() => {
-      getAvatar()
+        getAvatar()
     }, [])
-    
-    const getAvatar = async() => {
+
+    const getAvatar = async () => {
         try {
-          const coverRes = await DocumentAPI.get(avatarId)
-        setProfileIMGURI(fileURL+coverRes.data.data.fileName)
-        console.log("avatar in menu", coverRes.data.data.fileName)
+            const coverRes = await DocumentAPI.get(avatarId)
+            setProfileIMGURI(fileURL + coverRes.data.data.fileName)
+            console.log("avatar in menu", coverRes.data.data.fileName)
         } catch (error) {
-          console.log(error)
+            console.log(error)
         }
-      }
+    }
 
     const handleLogOut = async () => {
         try {
@@ -53,165 +54,178 @@ const Menu2 = () => {
             console.log(err)
         }
     }
-
+    const [refreshing, setRefreshing] = useState(false);
+    const onRefresh = async() => {
+      setRefreshing(true);
+      setTimeout(async () => {
+        setRefreshing(false);
+      }, 1000);
+    };
     return (
-        <View style={styles.wrapper}>
-            <View style={styles.navbar}>
-                <View style={styles.headerNav}>
-                    <Text style={styles.labelNav}>Menu</Text>
-                    <Icon name="search" style={styles.iconSearch} />
-                </View>
-                <TouchableOpacity
-                    //   onPress={() => {
-                    //     navigate(ScreenNames.profileView)
-                    //   }}
-                    style={styles.linkUser}
-                >
-                    {/* <Text style={styles.userName}>{username}</Text>
-           */}
-                    <View
-                        style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            marginTop: 10,
-                            alignItems: "center",
-                        }}
-                    >
-                        <View>
-                            {
-                                profileIMGURI != "" ? 
-                                <Image
-                                source={{uri: profileIMGURI}}
-                                style={{
-                                    width: 40,
-                                    height: 40,
-                                    borderRadius: 100,
-                                    marginRight: 10,
-                                }}
-                            ></Image>
-                            :
-                            <Image
-                                // source={{
-                                //   uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU",
-                                // }}
-                                source={DefaultAvatar}
-                                style={{
-                                    width: 40,
-                                    height: 40,
-                                    borderRadius: 100,
-                                    marginRight: 10,
-                                }}
-                            ></Image>
-                             }
-                            
-                        </View>
-                        <View onTouchEnd={() => navigation.navigate('profile')}>
-                            <Text style={{ color: "#333", fontWeight: "600", fontSize: 24 }}>
-                                {username}
-                            </Text>
-                            <Text style={{ color: "#777", fontWeight: "600", fontSize: 18 }}>
-                                Xem tài khoản cá nhân
-                            </Text>
-                        </View>
+        <ScrollView refreshControl={
+            <RefreshControl refreshing={refreshing}
+                onRefresh={onRefresh} />
+        }
+        >
+            <View style={styles.wrapper}>
+                <View style={styles.navbar}>
+                    <View style={styles.headerNav}>
+                        <Text style={styles.labelNav}>Menu</Text>
+                        <Icon name="search" style={styles.iconSearch} />
                     </View>
-                </TouchableOpacity>
-            </View>
-            {/* Trợ giúp & hỗ trợ */}
-            <View style={openHelp && styles.dropdownHelpOpen}>
-                <DropDownPicker
-                    placeholder="Trợ giúp & hỗ trợ"
-                    style={styles.dropdownStyle}
-                    textStyle={{
-                        fontSize: 20,
-                        fontWeight: '700',
-                    }}
-                    open={openHelp}
-                    setOpen={setOpenHelp}
-                    items={[
-                        {
-                            label: 'Điều khoản & chính sách',
-                            value: '1',
-                            icon: () => <Icon name="book" style={styles.icon} />,
-                            containerStyle: {
-                                height: 60,
-                                backgroundColor: '#fff',
-                                borderWidth: 0,
-                                borderColor: '#dfdfdf',
-                                borderRadius: 8,
-                                margin: 5,
-                                color: 'black',
-                                fontWeight: '600',
+                    <TouchableOpacity
+                        //   onPress={() => {
+                        //     navigate(ScreenNames.profileView)
+                        //   }}
+                        style={styles.linkUser}
+                    >
+                        {/* <Text style={styles.userName}>{username}</Text>
+           */}
+                        <View
+                            style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                marginTop: 10,
+                                alignItems: "center",
+                            }}
+                        >
+                            <View>
+                                {
+                                    profileIMGURI != "" ?
+                                        <Image
+                                            source={{ uri: profileIMGURI }}
+                                            style={{
+                                                width: 40,
+                                                height: 40,
+                                                borderRadius: 100,
+                                                marginRight: 10,
+                                            }}
+                                        ></Image>
+                                        :
+                                        <Image
+                                            // source={{
+                                            //   uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU",
+                                            // }}
+                                            source={DefaultAvatar}
+                                            style={{
+                                                width: 40,
+                                                height: 40,
+                                                borderRadius: 100,
+                                                marginRight: 10,
+                                            }}
+                                        ></Image>
+                                }
+
+                            </View>
+                            <View onTouchEnd={() => navigation.navigate('profile')}>
+                                <Text style={{ color: "#333", fontWeight: "600", fontSize: 24 }}>
+                                    {username}
+                                </Text>
+                                <Text style={{ color: "#777", fontWeight: "600", fontSize: 18 }}>
+                                    Xem tài khoản cá nhân
+                                </Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+                {/* Trợ giúp & hỗ trợ */}
+                <View style={openHelp && styles.dropdownHelpOpen}>
+                    <DropDownPicker
+                        placeholder="Trợ giúp & hỗ trợ"
+                        style={styles.dropdownStyle}
+                        textStyle={{
+                            fontSize: 20,
+                            fontWeight: '700',
+                        }}
+                        open={openHelp}
+                        setOpen={setOpenHelp}
+                        items={[
+                            {
+                                label: 'Điều khoản & chính sách',
+                                value: '1',
+                                icon: () => <Icon name="book" style={styles.icon} />,
+                                containerStyle: {
+                                    height: 60,
+                                    backgroundColor: '#fff',
+                                    borderWidth: 0,
+                                    borderColor: '#dfdfdf',
+                                    borderRadius: 8,
+                                    margin: 5,
+                                    color: 'black',
+                                    fontWeight: '600',
+                                },
                             },
-                        },
-                    ]}
-                    dropDownContainerStyle={styles.dropDownContainerStyle}
-                    listItemLabelStyle={styles.listItemLabelStyle}
-                    onSelectItem={(item) => {
-                        // navigate(ScreenNames.termsPolicies)
-                    }}
-                />
-            </View>
-            {/* Cài đặt và quyền riêng tư */}
-            <View style={openSetting && styles.dropdownSettingOpen}>
-                <DropDownPicker
-                    placeholder="Cài đặt và quyền riêng tư"
-                    style={styles.dropdownStyle}
-                    textStyle={{
-                        fontSize: 20,
-                        fontWeight: '700',
-                    }}
-                    open={openSetting}
-                    setOpen={setOpenSetting}
-                    items={[
-                        {
-                            label: 'Cài đặt',
-                            value: '1',
-                            icon: () => <Icon name="user-circle" style={styles.icon} />,
-                            containerStyle: {
-                                height: 60,
-                                backgroundColor: '#fff',
-                                borderWidth: 0,
-                                borderColor: '#dfdfdf',
-                                borderRadius: 8,
-                                margin: 5,
-                                color: 'black',
-                                fontWeight: '600',
+                        ]}
+                        dropDownContainerStyle={styles.dropDownContainerStyle}
+                        listItemLabelStyle={styles.listItemLabelStyle}
+                        onSelectItem={(item) => {
+                            // navigate(ScreenNames.termsPolicies)
+                        }}
+                    />
+                </View>
+                {/* Cài đặt và quyền riêng tư */}
+                <View style={openSetting && styles.dropdownSettingOpen}>
+                    <DropDownPicker
+                        placeholder="Cài đặt và quyền riêng tư"
+                        style={styles.dropdownStyle}
+                        textStyle={{
+                            fontSize: 20,
+                            fontWeight: '700',
+                        }}
+                        open={openSetting}
+                        setOpen={setOpenSetting}
+                        items={[
+                            {
+                                label: 'Cài đặt',
+                                value: '1',
+                                icon: () => <Icon name="user-circle" style={styles.icon} />,
+                                containerStyle: {
+                                    height: 60,
+                                    backgroundColor: '#fff',
+                                    borderWidth: 0,
+                                    borderColor: '#dfdfdf',
+                                    borderRadius: 8,
+                                    margin: 5,
+                                    color: 'black',
+                                    fontWeight: '600',
+                                },
                             },
-                        },
-                    ]}
-                    dropDownContainerStyle={styles.dropDownContainerStyle}
-                    listItemLabelStyle={styles.listItemLabelStyle}
-                    onSelectItem={(item) => {
-                        // dispatch(navigate("setting"))
-                        // setRandom(Math.random())
-                        // this.forceUpdate()
-                        navigation.navigate("setting")
-                        // return <SettingTab />
-                    }}
-                />
-            </View>
-            {/* Đăng xuất */}
-            {/* <TouchableOpacity style={styles.logOut} onPress={handleLogOut}>
+                        ]}
+                        dropDownContainerStyle={styles.dropDownContainerStyle}
+                        listItemLabelStyle={styles.listItemLabelStyle}
+                        onSelectItem={(item) => {
+                            // dispatch(navigate("setting"))
+                            // setRandom(Math.random())
+                            // this.forceUpdate()
+                            navigation.navigate("setting")
+                            // return <SettingTab />
+                        }}
+                    />
+                </View>
+                {/* Đăng xuất */}
+                {/* <TouchableOpacity style={styles.logOut} onPress={handleLogOut}>
                 <Text style={styles.labelLogOut}>Đăng xuất</Text>
             </TouchableOpacity> */}
-                    <View style={{ marginTop: 10 }}>
-          <TouchableOpacity
-            style={{ backgroundColor: "#ccc", borderRadius: 10, padding: 10 }}
-            onPress={handleLogOut}
-          >
-            <Text
-              style={{
-                color: "#333",
-                fontWeight: "600",
-                fontSize: 18,
-                textAlign: "center",
-              }}
-            >
-              Log out
-            </Text>
-          </TouchableOpacity>
-        </View>
-        </View>
+                <View style={{ marginTop: 10 }}>
+                    <TouchableOpacity
+                        style={{ backgroundColor: "#ccc", borderRadius: 10, padding: 10 }}
+                        onPress={handleLogOut}
+                    >
+                        <Text
+                            style={{
+                                color: "#333",
+                                fontWeight: "600",
+                                fontSize: 18,
+                                textAlign: "center",
+                            }}
+                        >
+                            Log out
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </ScrollView>
+
     )
 }
 

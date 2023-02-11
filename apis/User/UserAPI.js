@@ -9,5 +9,13 @@ export const UserAPI = {
   list: async () => {
     const url = '/users/list'
     return await axiosClient.get(url)
+  },
+  edit: async(data, token) => {
+    const url = '/users/edit'
+    return await axiosClient.post(url, data, {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    })
   }
 };

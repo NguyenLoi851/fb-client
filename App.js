@@ -37,6 +37,8 @@ import Security from "./Screens/Security.js";
 import ChangePassword from "./Screens/ChangePassword.js";
 import FriendScreen from "./Screens/FriendScreen/index.js";
 import AllFriend from "./Screens/FriendScreen/AllFriend.js";
+import AllFriendProfile from "./Screens/AllFriendProfile.js";
+import EditPost from "./Screens/EditPost.js";
 
 const Stack = createStackNavigator();
 const rootStack = createStackNavigator();
@@ -229,6 +231,7 @@ export default function App() {
           <rootStack.Screen component={CreateAccountScreen} name="create-account" options={{ title: 'Tạo tài khoản' }}/>
           <rootStack.Screen component={NameScreen} name="name" options={{ title: 'Tên' }}/>
           <rootStack.Screen component={AllFriend} name="all-friend" options={{ title: 'Bạn bè' }}/>
+          <rootStack.Screen component={AllFriendProfile} name="all-friend-profile" options={{ title: 'Bạn bè' }}/>
           <rootStack.Screen component={DateScreen} name="date" options={{ title: 'Ngày sinh' }}/>
           <rootStack.Screen component={RulesScreen} name="rules" options={{ title: 'Điều khoản & quyền riêng tư' }}/>
           <rootStack.Screen component={EmailScreen} name="email" options={{ title: 'Địa chỉ email' }}/>
@@ -240,6 +243,7 @@ export default function App() {
           <rootStack.Screen component={ProfileTab} name="profile" options={{headerShown: false}}/>
           <rootStack.Screen component={SignupPage} name="signup" options={{headerShown: false}}/>
           <rootStack.Screen component={CreatePost} name="createPost" options={{headerShown: false}}/>
+          <rootStack.Screen component={EditPost} name="edit-post" options={{headerShown: false}}/>
           <rootStack.Screen component={BlockList} name="blockList" options={{headerShown: false}}/>
           <rootStack.Screen component={UpdateProfile} name="updateProfile" options={{headerShown: false}}/>
           <rootStack.Screen component={Setting} name="setting" options={{title: 'Cài đặt'}}/>

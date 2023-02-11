@@ -37,12 +37,43 @@ export const upPostApi = {
     });
   },
 
-  get: async(token) => {
+  editPost: (token, described, images, videos, onSend, id) => {
+    return axios({
+      method: "post",
+      url: `${BaseURL}/posts/edit/${id}`,
+      data: {
+        described,
+        images,
+        videos,
+      },
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
+      },
+      maxContentLength: 100000000,
+      maxBodyLength: 1000000000,
+      onUploadProgress: onSend,
+    });
+  },
+
+  get: async(token, params) => {
     const url = "/posts/list";
+    console.log("paramsget",params)
     return await axiosClient.get(url, {
       headers: {
         Authorization: "Bearer " + token
-      }
+      },
+      params: {...params}
+    })
+  },
+
+  show: async(token, id)=>{
+    const url = `/posts/show/${id}`
+    return await axiosClient.get(url, {
+      headers: {
+        Authorization: "Bearer " + token
+      },
     })
   },
 

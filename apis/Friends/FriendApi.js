@@ -47,5 +47,37 @@ export const friendApi = {
                 Authorization: "Bearer " + token
             }
         })
+    },
+    getListFriends: async(token) => {
+        const url = '/friends/list'
+        return await axiosClient.get(url, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        })
+    },
+    unFriend: async(data, token)=> {
+        const url = '/friends/set-remove'
+        return await axiosClient.post(url, data, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        })
+    },
+    cancelRequest: async(data, token) =>{
+        const url = '/friends/cancel-request'
+        return await axiosClient.post(url, data, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        })
+    },
+    getListNot: async(token) => {
+        const url = '/friends/listnot'
+        return await axiosClient.get(url, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        })
     }
 }

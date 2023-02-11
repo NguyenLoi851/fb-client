@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from 'react'
-import { SafeAreaView, ScrollView, Text } from 'react-native'
+import { SafeAreaView, ScrollView, Text, RefreshControl } from 'react-native'
 import { UserAPI } from '../../apis/User/UserAPI'
 import FriendSearch from './FriendSearch'
 import NotFriendList from './NotFriendList'
@@ -8,14 +8,24 @@ import NotFriendList from './NotFriendList'
 
 const FriendScreen = () => {
   console.log('FriendScreen is rendering !!!!')
-
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async() => {
+    setRefreshing(true);
+    setTimeout(async () => {
+      setRefreshing(false);
+    }, 1000);
+  };
   return (
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView refreshControl={
+        <RefreshControl refreshing={refreshing}
+          onRefresh={onRefresh} />
+      }
+      >
         {/* <FriendSearch navigation={navigation} />
         <FriendRequestList /> */}
-        <FriendSearch/>
-        <NotFriendList/>
+        <FriendSearch />
+        <NotFriendList />
       </ScrollView>
     </SafeAreaView>
   )

@@ -26,6 +26,7 @@ const ChangePassword=() => {
       console.log(res.data)
       // dispatch(changeToken(res.data.token))
       dispatch(addUser(res.data))
+      navigation.navigate("setting")
     } catch (error) {
       console.log(error)
     }

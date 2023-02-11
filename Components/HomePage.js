@@ -143,7 +143,7 @@ const HomePage = () => {
   console.log("Homepage", JSON.stringify(store, 0, 2))
   const [post, setPost] = useState([])
   const token = store.user.user.token;
-  const [profileIMGURI,setProfileIMGURI] = useState("")
+  const [profileIMGURI, setProfileIMGURI] = useState("")
   const avatarId = store.user.user.data.avatar
 
   useEffect(() => {
@@ -151,14 +151,13 @@ const HomePage = () => {
     getPost()
   }, [])
 
-  const getAvatar = async() => {
+  const getAvatar = async () => {
     try {
       const coverRes = await DocumentAPI.get(avatarId)
-    setProfileIMGURI(fileURL+coverRes.data.data.fileName)
+      setProfileIMGURI(fileURL + coverRes.data.data.fileName)
     } catch (error) {
       console.log(error)
     }
-    
   }
 
   const getPost = async () => {
@@ -173,7 +172,7 @@ const HomePage = () => {
   }
   const [refreshing, setRefreshing] = useState(false);
 
-  const onRefresh = async() => {
+  const onRefresh = async () => {
     setRefreshing(true);
     setPost([])
     await getPost()
@@ -206,33 +205,33 @@ const HomePage = () => {
               }}
             >
               {
-                profileIMGURI != "" ? 
-                <Image
-                source={{uri: profileIMGURI}}
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 100,
-                  marginRight: 10,
-                }}
-              ></Image> :
-                
-                <Image
-                source={
-                  //   {
-                  //   // uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU",
-                  //   uri: "../assets/imgs/default_avatar.png"
-                  // }
-                  DefaultAvatar
-                }
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 100,
-                  marginRight: 10,
-                }}
-              ></Image>
-              
+                profileIMGURI != "" ?
+                  <Image
+                    source={{ uri: profileIMGURI }}
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 100,
+                      marginRight: 10,
+                    }}
+                  ></Image> :
+
+                  <Image
+                    source={
+                      //   {
+                      //   // uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU",
+                      //   uri: "../assets/imgs/default_avatar.png"
+                      // }
+                      DefaultAvatar
+                    }
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 100,
+                      marginRight: 10,
+                    }}
+                  ></Image>
+
               }
               <TextInput
                 placeholder="Bạn đang nghĩ gì?"
@@ -283,7 +282,7 @@ const HomePage = () => {
         <Post />
         <Post />
         <Post /> */}
-          {post.length > 0 && post.map(item => (<Post key={item} prop={item} fc = {onRefresh}/>))}
+          {post.length > 0 && post.map(item => (<Post key={item} prop={item} fc={onRefresh} />))}
 
         </ScrollView>
       </View>

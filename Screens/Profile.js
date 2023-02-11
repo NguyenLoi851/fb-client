@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView } from "react-native";
+import { View, Text, Image, ScrollView, RefreshControl } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Post from "../Components/Post";
@@ -16,13 +16,13 @@ import {
   MaterialCommunityIcons
 } from '@expo/vector-icons'
 import { upPostApi } from "../apis/Post/upPostApi";
+import { friendApi } from "../apis/Friends/FriendApi";
 
 const Divider = styled.View`
 	width: 100%;
 	height: 0.5px;
 	background: #f0f0f0;
 `
-
 const Row = styled.View`
 	flex-direction: row;
 	background: #ffffff;
@@ -53,6 +53,7 @@ const Profile = () => {
 
   const [coverIMGURI, setCoverIMGURI] = useState("")
   const [profileIMGURI, setProfileIMGURI] = useState("")
+  const [friends, setFriends] = useState([])
 
   const token = store.user.user.token;
 
@@ -61,14 +62,25 @@ const Profile = () => {
 
     getData()
     getPost()
-
+    getFriends()
     // var newURI = fileURL+
 
   }, [])
 
+  const getFriends = async () => {
+    try {
+      const res = await friendApi.getListFriends(token)
+      console.log("myfriend",JSON.stringify(res.data, 0, 2))
+      setFriends(res.data.data.friends)
+    } catch (error) {
+      console.log("myfriend",error)
+    }
+  }
+
   const getPost = async () => {
     try {
-      const res = await upPostApi.get(token)
+      const params = {userId: store.user.user.data.id}
+      const res = await upPostApi.get(token, params)
       console.log("other post", res.data)
       console.log("post", JSON.stringify(res.data.data, 0, 2))
       setPost(res.data.data.reverse())
@@ -100,10 +112,26 @@ const Profile = () => {
     }
   }
 
-
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async() => {
+    setRefreshing(true);
+    setPost([])
+    setFriends([])
+    await getPost()
+    await getFriends()
+    setTimeout(async () => {
+      setRefreshing(false);
+    }, 1000);
+  };
   return (
     <View style={{ paddingVertical: 10 }}>
-      <ScrollView>
+      <ScrollView refreshControl={
+          <RefreshControl refreshing={refreshing}
+            onRefresh={onRefresh} />
+        }
+          // horizontal={false}
+          // style={{ display: "flex", flexDirection: "column" }}
+        >
         <View style={{ position: "relative", backgroundColor: "#fff" }}>
           <View>
             <Image
@@ -176,7 +204,7 @@ const Profile = () => {
         >
           <View>
             <Text style={{ fontSize: 20, fontWeight: "700" }}>Bạn bè</Text>
-            <Text>244 người bạn</Text>
+            <Text>{friends.length} người bạn</Text>
           </View>
           <View>
             <View
@@ -227,6 +255,7 @@ const Profile = () => {
                   borderRadius: 8,
                   backgroundColor: "#e4e4e4",
                 }}
+                onPress={()=>navigation.navigate("all-friend-profile")}
               >
                 <Text
                   style={{
@@ -254,94 +283,94 @@ const Profile = () => {
             horizontal={false}
             style={{ display: "flex", flexDirection: "column" }}
           > */}
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate("createPost");
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("createPost");
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                paddingVertical: 10,
+                backgroundColor: "#fff",
+                alignItems: "center",
               }}
             >
-              <View
+              {
+                profileIMGURI != "" ?
+                  <Image
+                    source={{ uri: profileIMGURI }}
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 100,
+                      marginRight: 10,
+                    }}
+                  ></Image> :
+
+                  <Image
+                    source={
+                      //   {
+                      //   // uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU",
+                      //   uri: "../assets/imgs/default_avatar.png"
+                      // }
+                      DefaultAvatar
+                    }
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 100,
+                      marginRight: 10,
+                    }}
+                  ></Image>
+
+              }
+              <TextInput
+                placeholder="Bạn đang nghĩ gì?"
                 style={{
-                  flexDirection: "row",
+                  borderRadius: 100,
+                  flex: 1,
+                  borderWidth: 1,
+                  borderColor: "#CFCFD5",
                   paddingHorizontal: 20,
-                  paddingVertical: 10,
-                  backgroundColor: "#fff",
-                  alignItems: "center",
+                  paddingVertical: 5,
+                  marginRight: 15,
                 }}
-              >
-                {
-                  profileIMGURI != "" ?
-                    <Image
-                      source={{ uri: profileIMGURI }}
-                      style={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 100,
-                        marginRight: 10,
-                      }}
-                    ></Image> :
+              ></TextInput>
+              <Icon type="ionicon" name="images" color={"#58C472"}></Icon>
+            </View>
+          </TouchableOpacity>
+          <Divider />
 
-                    <Image
-                      source={
-                        //   {
-                        //   // uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU",
-                        //   uri: "../assets/imgs/default_avatar.png"
-                        // }
-                        DefaultAvatar
-                      }
-                      style={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 100,
-                        marginRight: 10,
-                      }}
-                    ></Image>
+          <Row>
+            <Menu>
+              <Ionicons name='ios-videocam' size={22} color='#F44337' />
+              <MenuText>Live</MenuText>
+            </Menu>
+            <Separator />
 
-                }
-                <TextInput
-                  placeholder="Bạn đang nghĩ gì?"
-                  style={{
-                    borderRadius: 100,
-                    flex: 1,
-                    borderWidth: 1,
-                    borderColor: "#CFCFD5",
-                    paddingHorizontal: 20,
-                    paddingVertical: 5,
-                    marginRight: 15,
-                  }} 
-                ></TextInput>
-                <Icon type="ionicon" name="images" color={"#58C472"}></Icon>
-              </View>
-            </TouchableOpacity>
-            <Divider />
+            <Menu>
+              <MaterialIcons
+                name='photo-size-select-actual'
+                size={20}
+                color='#4CAF50'
+              />
+              <MenuText>Photo</MenuText>
+            </Menu>
+            <Separator />
 
-            <Row>
-              <Menu>
-                <Ionicons name='ios-videocam' size={22} color='#F44337' />
-                <MenuText>Live</MenuText>
-              </Menu>
-              <Separator />
+            <Menu>
+              <MaterialCommunityIcons
+                name='video-plus'
+                size={22}
+                color='#E141FC'
+              />
+              <MenuText>Room</MenuText>
+            </Menu>
+          </Row>
 
-              <Menu>
-                <MaterialIcons
-                  name='photo-size-select-actual'
-                  size={20}
-                  color='#4CAF50'
-                />
-                <MenuText>Photo</MenuText>
-              </Menu>
-              <Separator />
-
-              <Menu>
-                <MaterialCommunityIcons
-                  name='video-plus'
-                  size={22}
-                  color='#E141FC'
-                />
-                <MenuText>Room</MenuText>
-              </Menu>
-            </Row>
-
-            {post.length > 0 && post.map(item => (<Post key={item} prop={item} />))}
+          {post.length > 0 && post.map(item => (<Post key={item} prop={item} />))}
 
           {/* </ScrollView> */}
         </View>

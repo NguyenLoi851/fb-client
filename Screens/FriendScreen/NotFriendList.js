@@ -19,11 +19,12 @@ const NotFriendList = () => {
 
   const getAllUsers = async () => {
     try {
-      const res = await UserAPI.list()
-      console.log("all users", JSON.stringify(res.data, 0, 2))
-      setAllUsers(res.data.data)
+      // const res = await UserAPI.list()
+      const res = await friendApi.getListNot(token)
+      console.log("all users in not list", JSON.stringify(res.data, 0, 2))
+      setAllUsers(res.data.data.friends)
     } catch (error) {
-      console.log(error)
+      console.log("all users in not list",error)
     }
   }
 
@@ -38,7 +39,23 @@ const NotFriendList = () => {
     }
   }
 
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async() => {
+    setRefreshing(true);
+    setAllUsers([])
+    setRequestFriends([])
+    await getAllUsers()
+    await getRequestFriends()
+    setTimeout(async () => {
+      setRefreshing(false);
+    }, 1000);
+  };
   return (
+    <ScrollView refreshControl={
+      <RefreshControl refreshing={refreshing}
+        onRefresh={onRefresh} />
+    }
+    >
     <View>
       <View>
         <Text
@@ -81,6 +98,8 @@ const NotFriendList = () => {
         }
       </View>
     </View>
+    </ScrollView>
+
   )
 }
 

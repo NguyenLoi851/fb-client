@@ -51,7 +51,7 @@ const RequestTab = (prop) => {
 
     const handleNotAcceptFriend = async () => {
         try {
-            const data = { user_id: user._id, is_accept: 11 }
+            const data = { user_id: user._id, is_accept: 2 }
             console.log("datainf", data)
             const res = await friendApi.notAcceptFriend(data, token)
             console.log("handleNotAcceptFriend", JSON.stringify(res.data, 0, 2))

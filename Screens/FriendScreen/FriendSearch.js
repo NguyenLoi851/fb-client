@@ -52,7 +52,7 @@ const FriendSearch = () => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("all-friend")
+            navigation.navigate("all-friend-profile")
           }}
           style={[styles.button, { width: '30%' }]}
         >
