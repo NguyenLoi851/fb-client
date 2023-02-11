@@ -156,7 +156,7 @@ export const MainTab = () => {
           name="Friend"
           component={FriendTab}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           options={{
             tabBarIcon: ({ tintColor, focused }) => (
               <Icon
@@ -169,7 +169,7 @@ export const MainTab = () => {
           }}
           name="Profile"
           component={ProfileTab}
-        />
+        /> */}
         <Tab.Screen
           options={{
             tabBarIcon: ({ tintColor, focused }) => (

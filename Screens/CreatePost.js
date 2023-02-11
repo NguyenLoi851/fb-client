@@ -12,13 +12,15 @@ import {
 import React from "react";
 import { Icon, Image } from "react-native-elements";
 import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { upPostApi } from "../apis/Post/upPostApi";
 import { useSelector } from "react-redux";
 import DefaultAvatar from "../assets/imgs/default_avatar.png"
 import * as MediaLibrary from "expo-media-library";
 import * as FileSystem from "expo-file-system";
 import { navigation } from "../rootNavigation";
+import { DocumentAPI } from "../apis/Documents/DocumentAPI";
+import { fileURL } from "../common/baseUrl";
 
 const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
 const MAX_VIDEO_SIZE = 10 * 1024 * 1024;
@@ -32,7 +34,21 @@ const CreatePost = () => {
   const [image, setImage] = useState([]);
   const [video, setVideo] = useState(null);
   const windowWidth = Dimensions.get("window").width;
+  const [profileIMGURI,setProfileIMGURI] = useState("")
+  const avatarId = store.user.user.data.avatar
 
+  useEffect(() => {
+    getAvatar()
+  }, [])
+  const getAvatar = async() => {
+    try {
+      const coverRes = await DocumentAPI.get(avatarId)
+    setProfileIMGURI(fileURL+coverRes.data.data.fileName)
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
   const permissionRequest = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -348,7 +364,7 @@ const CreatePost = () => {
             flexDirection: "row",
           }}
         >
-          <Image
+          {/* <Image
             // source={{
             //   uri: "https://source.unsplash.com/random?sig=10",
             // }}
@@ -359,7 +375,36 @@ const CreatePost = () => {
               borderRadius: 100,
               marginRight: 10,
             }}
-          ></Image>
+          ></Image> */}
+          {
+                profileIMGURI != "" ? 
+                <Image
+                source={{uri: profileIMGURI}}
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 100,
+                  marginRight: 10,
+                }}
+              ></Image> :
+                
+                <Image
+                source={
+                  //   {
+                  //   // uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU",
+                  //   uri: "../assets/imgs/default_avatar.png"
+                  // }
+                  DefaultAvatar
+                }
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 100,
+                  marginRight: 10,
+                }}
+              ></Image>
+              
+              }
           <Text style={{ fontSize: 15 }}>{store.user.user.data.username}</Text>
         </View>
         <View>
