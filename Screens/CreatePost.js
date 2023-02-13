@@ -73,8 +73,19 @@ const CreatePost = () => {
       if (!result.cancelled) {
         const fruits = [];
 
-        fruits.push(result.assets[0])
+        // fruits.push(result.assets[0])
+        
+        const assets = result.assets
+        if(assets.length > 0){
+          assets.map(item=> fruits.push(item))
+        }
+        console.log("fruits", fruits)
+        if(fruits.length>4){
+          alert("chỉ dược up tối đa 4 ảnh")
+          return
+        }
         setImage(fruits);
+
       }
       // if (result.selected) {
       //   result.selected.map((item) => {
@@ -94,6 +105,7 @@ const CreatePost = () => {
     if (permissionRequest()) {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: "Videos",
+        allowsMultipleSelection: false
       });
       console.log(result);
       setVideo(result);

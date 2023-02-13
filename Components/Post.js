@@ -27,7 +27,7 @@ import { editPost } from "../store/user";
 
 const Post = (prop) => {
   const dispatch = useDispatch()
-  const [BASE_URI, setBaseURI] = useState("")
+  const [BASE_URI, setBaseURI] = useState([])
   const [likes, setLikes] = useState(0);
   const [comments, setComments] = useState(0);
   console.log("prop", JSON.stringify(prop.prop, 0, 2))
@@ -61,10 +61,11 @@ const Post = (prop) => {
     setComments(prop.prop.countComments)
 
     if (prop.prop.images.length > 0) {
-      var newURI = fileURL + prop.prop.images[0].fileName
+      var newURI = []
+      prop.prop.images.map(item => newURI.push(fileURL + item.fileName))
       setBaseURI(newURI)
+      console.log("newURI", newURI)
       console.log(baseUrl);
-
     }
 
     getAvatar()
@@ -247,52 +248,42 @@ const Post = (prop) => {
             {prop.prop.described}
           </Text>
         </View>
-        {BASE_URI == "" ? <></> :
-
-          <SafeAreaView style={{ minHeight: 380, maxHeight: 570 }}>
-            {/* <FlatList
-            data={[...new Array(4)].map((_, i) => i.toString())}
-            // style={}
-            scrollEnabled={false}
-            numColumns={2}
-            keyExtractor={(e) => e}
-            renderItem={({ item }) => (
-              <Image
-                source={{ uri: BASE_URI + item }}
-                containerStyle={{
-                  aspectRatio: 1,
-                  width: "100%",
-                  height: 150,
-                  flex: 1,
-                }}
-              />
-            )}
-          /> */}
-            {
-              BASE_URI.length > 10 ?
-                <Image
-                  source={{ uri: BASE_URI }}
-                  containerStyle={{
-                    aspectRatio: 1,
-                    width: "100%",
-                    height: 150,
-                    flex: 1,
-                  }}
-                /> : <></>
-              // <Image
-              // source={{ uri: BASE_URI}}
-              // containerStyle={{
-              //   aspectRatio: 1,
-              //   width: "100%",
-              //   height: 150,
-              //   flex: 1,
-              // }}
-              // />
-            }
-
-          </SafeAreaView>}
-
       </View>
+      
+        {/* <Image source={{uri: BASE_URI[0]}} 
+        style={{
+          width: 150,
+          height: 150,
+          marginRight: 10,
+      }}>
+
+      </Image> */}
+      <SafeAreaView>
+      <FlatList
+  data={BASE_URI}
+  renderItem={({ item }) => (
+    <View
+      style={{
+        flex: 1,
+        flexDirection: 'column',
+        margin: 1
+      }}>
+      <Image
+        // style={styles.imageThumbnail}
+        source={{ uri: item }}
+        style={{ justifyContent: 'center', alignItems: 'center', height: 200, }}
+      />
+      {/* <Text>
+        {item}
+      </Text> */}
+    </View>
+  )}
+  //Setting the number of column
+  numColumns={2}
+  keyExtractor={(item, index) => index.toString()}
+/>
+</SafeAreaView>
+      
       <View style={{}}>
         <View
           style={{

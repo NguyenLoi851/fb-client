@@ -42,6 +42,7 @@ const EditPost = () => {
         getAvatar()
         getPostToEdit()
     }, [])
+    const phoneURL = "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252Fhelloworld-484b34d9-9e6e-4ebc-8b57-4f38f0c7c857/ImagePicker/"
 
     const getPostToEdit = async () => {
         try {
@@ -77,7 +78,7 @@ const EditPost = () => {
         if (permissionRequest()) {
             let result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: "Images",
-                allowsMultipleSelection: false,
+                allowsMultipleSelection: true,
                 // selectionLimit: 4,
             });
 
@@ -86,10 +87,21 @@ const EditPost = () => {
             console.log("CLGT")
             if (!result.cancelled) {
                 const fruits = [];
-
-                fruits.push(result.assets[0])
+        
+                // fruits.push(result.assets[0])
+                
+                const assets = result.assets
+                if(assets.length > 0){
+                  assets.map(item=> fruits.push(item))
+                }
+                console.log("fruits", fruits)
+                if(fruits.length>4){
+                  alert("chỉ dược up tối đa 4 ảnh")
+                  return
+                }
                 setImage(fruits);
-            }
+        
+              }
             // if (result.selected) {
             //   result.selected.map((item) => {
             //     setImage([...image, item]);
