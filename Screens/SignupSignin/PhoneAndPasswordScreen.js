@@ -96,7 +96,7 @@ const PhoneAndPasswordScreen = () => {
             </Text>
 
 
-            <View style={styles.content}>
+            <View style={[styles.content,{alignItems:"center"}]}>
                 <TextInput
                     style={[styles.input, styles.inputPassword]}
                     // secureTextEntry={true}
@@ -116,7 +116,7 @@ const PhoneAndPasswordScreen = () => {
                     onChangeText={(text) => setPassword(text)}
                 /> */}
 
-                <View style={styles.form_item}>
+                <View style={[styles.form_item, {width: 250}]}>
                     <Input
                         style={[styles.input, styles.inputPassword, { width: 500 }]}
                         placeholder="Mật khẩu"
@@ -127,7 +127,7 @@ const PhoneAndPasswordScreen = () => {
                         secureTextEntry={hidePassword}
                     ></Input>
                 </View>
-                <View style={styles.form_item}>
+                <View style={[styles.form_item, {width: 250}]}>
                     <Input
                         style={[styles.input, styles.inputPassword, { width: 500 }]}
                         placeholder="Nhập lại mật khẩu"
@@ -178,6 +178,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         height: 44,
         paddingHorizontal: 15,
+        width: 230
     },
     inputUsername: {
         borderBottomWidth: 0,
@@ -194,6 +195,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#1977f3",
         justifyContent: "center",
         marginVertical: 15,
+        width: 50
     },
     buttonText: {
         color: "#b4cafb",

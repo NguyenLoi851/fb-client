@@ -17,6 +17,7 @@ import {
 } from '@expo/vector-icons'
 import { upPostApi } from "../apis/Post/upPostApi";
 import { friendApi } from "../apis/Friends/FriendApi";
+import { UserAPI } from "../apis/User/UserAPI";
 
 const Divider = styled.View`
 	width: 100%;
@@ -112,6 +113,16 @@ const Profile = () => {
     }
   }
 
+  const getAvatarReload = async() => {
+    try {
+        const coverResReload = await UserAPI.show(token)
+        console.log("huhon", JSON.stringify(coverResReload.data, 0, 2))
+        setProfileIMGURI(fileURL + coverResReload.data.data.avatar.fileName)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async() => {
     setRefreshing(true);
@@ -119,6 +130,7 @@ const Profile = () => {
     setFriends([])
     await getPost()
     await getFriends()
+    await getAvatarReload()
     setTimeout(async () => {
       setRefreshing(false);
     }, 1000);

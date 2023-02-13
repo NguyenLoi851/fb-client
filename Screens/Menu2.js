@@ -15,6 +15,7 @@ import SettingTab from './Setting';
 import { DocumentAPI } from '../apis/Documents/DocumentAPI';
 import { fileURL } from '../common/baseUrl';
 import { ScrollView } from 'react-native-gesture-handler';
+import { UserAPI } from '../apis/User/UserAPI';
 
 const Menu2 = () => {
     const dispatch = useDispatch()
@@ -27,6 +28,7 @@ const Menu2 = () => {
     const [profileIMGURI, setProfileIMGURI] = useState("")
     const avatarId = store.user.user.data.avatar
     console.log("Menu", JSON.stringify(store, 0, 2))
+    const token = store.user.user.token
 
     useEffect(() => {
         getAvatar()
@@ -37,6 +39,16 @@ const Menu2 = () => {
             const coverRes = await DocumentAPI.get(avatarId)
             setProfileIMGURI(fileURL + coverRes.data.data.fileName)
             console.log("avatar in menu", coverRes.data.data.fileName)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getAvatarReload = async() => {
+        try {
+            const coverResReload = await UserAPI.show(token)
+            console.log("huhon", JSON.stringify(coverResReload.data, 0, 2))
+            setProfileIMGURI(fileURL + coverResReload.data.data.avatar.fileName)
         } catch (error) {
             console.log(error)
         }
@@ -57,6 +69,7 @@ const Menu2 = () => {
     const [refreshing, setRefreshing] = useState(false);
     const onRefresh = async() => {
       setRefreshing(true);
+      await getAvatarReload();
       setTimeout(async () => {
         setRefreshing(false);
       }, 1000);

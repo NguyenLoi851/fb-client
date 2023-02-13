@@ -146,14 +146,16 @@ const Post = (prop) => {
       const res = await commentPostApi.create(data, prop.prop._id, token)
       console.log(res.data)
 
-      commentList.push({
-        user: {
-          username: store.user.user.data.username,
-          avatar: store.user.user.data.avatar
-        },
-        content: newComment
-      })
+      // commentList.push({
+      //   user: {
+      //     username: store.user.user.data.username,
+      //     avatar: store.user.user.data.avatar
+      //   },
+      //   content: newComment
+      // })
       setNewComment("")
+      setCommentList([])
+      await handleComment()
     } catch (error) {
       console.log(error)
     }

@@ -39,6 +39,9 @@ import FriendScreen from "./Screens/FriendScreen/index.js";
 import AllFriend from "./Screens/FriendScreen/AllFriend.js";
 import AllFriendProfile from "./Screens/AllFriendProfile.js";
 import EditPost from "./Screens/EditPost.js";
+import MessageIntro from "./Screens/Message/MessageIntro.js";
+import MessageList from "./Screens/Message/MessageList.js";
+import MessageDetail from "./Screens/Message/MessageDetail.js";
 
 const Stack = createStackNavigator();
 const rootStack = createStackNavigator();
@@ -86,7 +89,7 @@ const ProfileTab = () => {
 const MessengerTab = () => {
   return (
     <View>
-      <Text>messengerTab</Text>
+      <MessageIntro/>
     </View>
   );
 };
@@ -237,8 +240,10 @@ export default function App() {
           <rootStack.Screen component={EmailScreen} name="email" options={{ title: 'Địa chỉ email' }}/>
           <rootStack.Screen component={ConfirmScreen} name="confirm" options={{ title: 'Xác nhận tài khoản' }}/>
           <rootStack.Screen component={PhoneAndPasswordScreen} name="phone-password" options={{title: 'Điện thoại và mật khẩu'}}/>
+          <rootStack.Screen component={MessageList} name="messenger" options={{title: 'Trò chuyện'}}/>
           
           
+          <rootStack.Screen component={MessageDetail} name="message-detail" options={{headerShown: false}}/>
           <rootStack.Screen component={MainTab} name="facebook" options={{headerShown: false}}/>
           <rootStack.Screen component={ProfileTab} name="profile" options={{headerShown: false}}/>
           <rootStack.Screen component={SignupPage} name="signup" options={{headerShown: false}}/>
