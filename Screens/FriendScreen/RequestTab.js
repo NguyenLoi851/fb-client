@@ -15,7 +15,9 @@ import { DocumentAPI } from "../../apis/Documents/DocumentAPI";
 import { fileURL } from "../../common/baseUrl";
 import DefaultAvatar from "../../assets/imgs/default_avatar.png"
 import { friendApi } from "../../apis/Friends/FriendApi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setOtherUser } from "../../store/user";
+import { navigation } from "../../rootNavigation";
 
 const RequestTab = (prop) => {
     const [isHandle, setIsHandle] = useState(false)
@@ -60,12 +62,16 @@ const RequestTab = (prop) => {
             console.log(error)
         }
     }
-
+    const dispatch = useDispatch()
     return (
         <View style={{ flexDirection: "row" }}>
             {isHandle == true
                 ? <></>
                 : <>
+                <TouchableOpacity onPress={()=>{
+                    dispatch(setOtherUser(user))
+                    navigation.navigate("other-profile")
+                }}>
                     <View style={{ margin: 10 }}>
                         {
                             profileIMGURI != "" ?
@@ -97,6 +103,8 @@ const RequestTab = (prop) => {
 
                         }
                     </View>
+                </TouchableOpacity>
+                    
 
                     <View>
                         <View style={{ margin: 10 }}>

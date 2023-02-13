@@ -42,6 +42,7 @@ import EditPost from "./Screens/EditPost.js";
 import MessageIntro from "./Screens/Message/MessageIntro.js";
 import MessageList from "./Screens/Message/MessageList.js";
 import MessageDetail from "./Screens/Message/MessageDetail.js";
+import OtherProfile from "./Screens/OtherProfile.js";
 
 const Stack = createStackNavigator();
 const rootStack = createStackNavigator();
@@ -246,6 +247,7 @@ export default function App() {
           <rootStack.Screen component={MessageDetail} name="message-detail" options={{headerShown: false}}/>
           <rootStack.Screen component={MainTab} name="facebook" options={{headerShown: false}}/>
           <rootStack.Screen component={ProfileTab} name="profile" options={{headerShown: false}}/>
+          <rootStack.Screen component={OtherProfile} name="other-profile" options={{headerShown: false}}/>
           <rootStack.Screen component={SignupPage} name="signup" options={{headerShown: false}}/>
           <rootStack.Screen component={CreatePost} name="createPost" options={{headerShown: false}}/>
           <rootStack.Screen component={EditPost} name="edit-post" options={{headerShown: false}}/>

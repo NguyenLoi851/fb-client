@@ -6,9 +6,13 @@ const userSlice = createSlice({
     user: {},
     register: {},
     navigation: "",
-    post:""
+    post:"",
+    otherUser: {}
   },
   reducers: {
+    setOtherUser(state, action) {
+      state.otherUser = action.payload
+    },
     editPost(state, action) {
       state.post = action.payload
     },
@@ -52,5 +56,5 @@ const userSlice = createSlice({
 // })
 
 export default userSlice.reducer;
-export const {editPost, addUser, addDate, addName, addEmail, addPhone, navigate, changeToken } = userSlice.actions;
+export const {setOtherUser, editPost, addUser, addDate, addName, addEmail, addPhone, navigate, changeToken } = userSlice.actions;
 // export const { addDate, addName } = registerInfoSlice.actions;

@@ -15,7 +15,9 @@ import { DocumentAPI } from "../../apis/Documents/DocumentAPI";
 import { fileURL } from "../../common/baseUrl";
 import DefaultAvatar from "../../assets/imgs/default_avatar.png"
 import { friendApi } from "../../apis/Friends/FriendApi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { navigation } from "../../rootNavigation";
+import { setOtherUser } from "../../store/user";
 
 const PersonTab = (prop) => {
 
@@ -62,12 +64,16 @@ const PersonTab = (prop) => {
             console.log(error)
         }
     }
-
+    const dispatch = useDispatch()
     return (
         <View>
             {
                 isRemove ? <></> : <View style={{ flexDirection: "row" }}>
-                    <View style={{ margin: 10 }}>
+                    <TouchableOpacity onPress={()=>{
+                    dispatch(setOtherUser(user))
+                    navigation.navigate("other-profile")
+                }}>
+<View style={{ margin: 10 }}>
                         {
                             profileIMGURI != "" ?
                                 <Image
@@ -98,6 +104,8 @@ const PersonTab = (prop) => {
 
                         }
                     </View>
+                    </TouchableOpacity>
+                    
 
                     {
                         isHandleAddFriend ?
