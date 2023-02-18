@@ -7,7 +7,8 @@ import {
     SafeAreaView,
     TouchableOpacity,
     Dimensions,
-    Alert
+    Alert,
+    ScrollView
 } from "react-native";
 import React from "react";
 import { Icon, Image } from "react-native-elements";
@@ -21,6 +22,7 @@ import * as FileSystem from "expo-file-system";
 import { navigation } from "../rootNavigation";
 import { DocumentAPI } from "../apis/Documents/DocumentAPI";
 import { fileURL } from "../common/baseUrl";
+import { Video } from 'expo-av';
 
 const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
 const MAX_VIDEO_SIZE = 10 * 1024 * 1024;
@@ -37,6 +39,7 @@ const EditPost = () => {
     const [profileIMGURI, setProfileIMGURI] = useState("")
     const avatarId = store.user.user.data.avatar
     const postId = store.user.post
+    const [videoUrl, setVideoUrl] = useState(null)
 
     useEffect(() => {
         getAvatar()
@@ -51,6 +54,7 @@ const EditPost = () => {
             setContent(res.data.data.described)
             setPostText(res.data.data.described)
             setImage(res.data.data.images.map(item => ({ ...item, uri: fileURL + item.fileName })))
+            setVideoUrl(fileURL + res.data.data.videos[0].fileName)
             // image
         } catch (error) {
             console.log(error)
@@ -87,21 +91,21 @@ const EditPost = () => {
             console.log("CLGT")
             if (!result.cancelled) {
                 const fruits = [];
-        
+
                 // fruits.push(result.assets[0])
-                
+
                 const assets = result.assets
-                if(assets.length > 0){
-                  assets.map(item=> fruits.push(item))
+                if (assets.length > 0) {
+                    assets.map(item => fruits.push(item))
                 }
                 console.log("fruits", fruits)
-                if(fruits.length>4){
-                  alert("chỉ dược up tối đa 4 ảnh")
-                  return
+                if (fruits.length > 4) {
+                    alert("chỉ dược up tối đa 4 ảnh")
+                    return
                 }
                 setImage(fruits);
-        
-              }
+
+            }
             // if (result.selected) {
             //   result.selected.map((item) => {
             //     setImage([...image, item]);
@@ -123,6 +127,7 @@ const EditPost = () => {
             });
             console.log(result);
             setVideo(result);
+            setSelectedVideo(result)
         }
     };
     const handleSubmit = async () => {
@@ -273,8 +278,13 @@ const EditPost = () => {
             let videos = [];
 
             if (selectedVideo != null) {
-                let info = await MediaLibrary.getAssetInfoAsync(selectedVideo);
-                let fileInfo = await FileSystem.getInfoAsync(info.localUri);
+                let info = await MediaLibrary.getAssetInfoAsync(selectedVideo.assets[0].assetId);
+                console.log("info", info)
+                // let info = await MediaLibrary.getAssetInfoAsync(selectedVideo);
+                // let info = selectedVideo.assets[0].uri
+                let fileInfo = await FileSystem.getInfoAsync(info.uri);
+                console.log("fileInfo", fileInfo)
+                // let fileInfo = await FileSystem.getInfoAsync(info.localUri);
                 if (fileInfo.size > MAX_VIDEO_SIZE) {
                     Alert.alert(
                         "Video quá lớn",
@@ -298,7 +308,7 @@ const EditPost = () => {
                     return;
                 }
 
-                let video = await FileSystem.readAsStringAsync(info.localUri, {
+                let video = await FileSystem.readAsStringAsync(info.uri, {
                     encoding: "base64",
                 });
                 videos.push("data:video;base64," + video);
@@ -341,61 +351,62 @@ const EditPost = () => {
     };
 
     return (
-        <View
-            style={{
-                flex: 1,
-                width: windowWidth,
-            }}
-        >
+        <ScrollView>
             <View
                 style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    paddingHorizontal: 20,
-                    paddingTop: 40,
-                    paddingBottom: 10,
-                    borderBottomColor: "#aaa",
-                    borderBottomWidth: 1,
+                    flex: 1,
+                    width: windowWidth,
                 }}
             >
-                <Text
+                <View
                     style={{
-                        fontSize: 20,
-                        fontWeight: "600",
-                    }}
-                >
-                    Chỉnh sửa bài viết
-                </Text>
-                <TouchableOpacity
-                    // onPress={handleSubmit}
-                    onPress={requestSend}
-                    style={{
-                        width: 60,
-                        height: 30,
-                        backgroundColor: "#0742e6",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        borderRadius: 8,
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        paddingHorizontal: 20,
+                        paddingTop: 40,
+                        paddingBottom: 10,
+                        borderBottomColor: "#aaa",
+                        borderBottomWidth: 1,
                     }}
                 >
                     <Text
                         style={{
-                            fontSize: 14,
-                            color: "#fff",
-                            fontWeight: "500",
+                            fontSize: 20,
+                            fontWeight: "600",
                         }}
                     >
-                        Cập nhật
+                        Chỉnh sửa bài viết
                     </Text>
-                </TouchableOpacity>
-            </View>
-            <View style={{ paddingHorizontal: 10, paddingTop: 15 }}>
-                <View
-                    style={{
-                        flexDirection: "row",
-                    }}
-                >
-                    {/* <Image
+                    <TouchableOpacity
+                        // onPress={handleSubmit}
+                        onPress={requestSend}
+                        style={{
+                            width: 60,
+                            height: 30,
+                            backgroundColor: "#0742e6",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            borderRadius: 8,
+                        }}
+                    >
+                        <Text
+                            style={{
+                                fontSize: 14,
+                                color: "#fff",
+                                fontWeight: "500",
+                            }}
+                        >
+                            Cập nhật
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={{ paddingHorizontal: 10, paddingTop: 15 }}>
+                    <View
+                        style={{
+                            flexDirection: "row",
+                        }}
+                    >
+                        {/* <Image
               // source={{
               //   uri: "https://source.unsplash.com/random?sig=10",
               // }}
@@ -407,71 +418,93 @@ const EditPost = () => {
                 marginRight: 10,
               }}
             ></Image> */}
-                    {
-                        profileIMGURI != "" ?
-                            <Image
-                                source={{ uri: profileIMGURI }}
-                                style={{
-                                    width: 40,
-                                    height: 40,
-                                    borderRadius: 100,
-                                    marginRight: 10,
-                                }}
-                            ></Image> :
+                        {
+                            profileIMGURI != "" ?
+                                <Image
+                                    source={{ uri: profileIMGURI }}
+                                    style={{
+                                        width: 40,
+                                        height: 40,
+                                        borderRadius: 100,
+                                        marginRight: 10,
+                                    }}
+                                ></Image> :
 
-                            <Image
-                                source={
-                                    //   {
-                                    //   // uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU",
-                                    //   uri: "../assets/imgs/default_avatar.png"
-                                    // }
-                                    DefaultAvatar
-                                }
-                                style={{
-                                    width: 40,
-                                    height: 40,
-                                    borderRadius: 100,
-                                    marginRight: 10,
-                                }}
-                            ></Image>
+                                <Image
+                                    source={
+                                        //   {
+                                        //   // uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU",
+                                        //   uri: "../assets/imgs/default_avatar.png"
+                                        // }
+                                        DefaultAvatar
+                                    }
+                                    style={{
+                                        width: 40,
+                                        height: 40,
+                                        borderRadius: 100,
+                                        marginRight: 10,
+                                    }}
+                                ></Image>
 
-                    }
-                    <Text style={{ fontSize: 15 }}>{store.user.user.data.username}</Text>
+                        }
+                        <Text style={{ fontSize: 15 }}>{store.user.user.data.username}</Text>
+                    </View>
+                    <View>
+                        <TextInput
+                            value={content}
+                            onChangeText={(text) => {
+                                setContent(text)
+                                setPostText(text)
+                            }}
+                            placeholder="Bạn đang nghĩ gì..."
+                            multiline={true}
+                            style={{ padding: 15, fontSize: 20 }}
+                        ></TextInput>
+                    </View>
+                    {image[0] ? (
+                        <SafeAreaView style={{ minHeight: 380, maxHeight: 570 }}>
+                            <FlatList
+                                data={image}
+                                // style={}
+                                numColumns={2}
+                                keyExtractor={(e) => e}
+                                renderItem={({ item }) => (
+                                    <Image
+                                        source={{ uri: item.uri }}
+                                        containerStyle={{
+                                            aspectRatio: 1,
+                                            width: "100%",
+                                            height: 150,
+                                            flex: 1,
+                                        }}
+                                    />
+                                )}
+                            ></FlatList>
+                        </SafeAreaView>
+                    ) : (
+                        <></>
+                    )}
                 </View>
                 <View>
-                    <TextInput
-                        value={content}
-                        onChangeText={(text) => { 
-                            setContent(text)
-                            setPostText(text)}}
-                        placeholder="Bạn đang nghĩ gì..."
-                        multiline={true}
-                        style={{ padding: 15, fontSize: 20 }}
-                    ></TextInput>
-                </View>
-                {image[0] ? (
-                    <SafeAreaView style={{ minHeight: 380, maxHeight: 570 }}>
-                        <FlatList
-                            data={image}
-                            // style={}
-                            numColumns={2}
-                            keyExtractor={(e) => e}
-                            renderItem={({ item }) => (
-                                <Image
-                                    source={{ uri: item.uri }}
-                                    containerStyle={{
-                                        aspectRatio: 1,
-                                        width: "100%",
-                                        height: 150,
-                                        flex: 1,
-                                    }}
+                    {
+                        (videoUrl || selectedVideo) ? <>
+                            <View>
+                                <Video
+                                    source={{ uri: videoUrl ? videoUrl : selectedVideo.assets[0].uri }}
+                                    rate={1.0}
+                                    volume={1.0}
+                                    isMuted={false}
+                                    resizeMode="cover"
+                                    shouldPlay
+                                    useNativeControls
+                                    // usePoster
+                                    // isLooping
+                                    style={{ width: '100%', height: 500 }}
                                 />
-                            )}
-                        ></FlatList>
-                    </SafeAreaView>
-                ) : (
-                    <></>
-                )}
+                            </View>
+                        </> : <></>
+                    }
+                </View>
             </View>
             <View
                 style={{
@@ -512,7 +545,8 @@ const EditPost = () => {
                     <Icon type="material" name="mood" color={"#F8C03E"}></Icon>
                 </TouchableOpacity>
             </View>
-        </View>
+        
+        </ScrollView >
     );
 };
 

@@ -24,6 +24,7 @@ import PostComment from "./Comment"
 import { DocumentAPI } from "../apis/Documents/DocumentAPI";
 import { navigation } from "../rootNavigation";
 import { editPost } from "../store/user";
+import { Video } from 'expo-av';
 
 const Post = (prop) => {
   const dispatch = useDispatch()
@@ -44,6 +45,8 @@ const Post = (prop) => {
   const [profileIMGURI, setProfileIMGURI] = useState("")
   // const avatarId = store.user.user.data.avatar
   const avatarId = prop.prop.author.avatar._id
+  const [videoUrl, setVideoUrl] = useState(null)
+
   console.log("store.user.user.data.id == prop.prop.author._id", store.user.user.data.id, prop.prop.author._id)
   const getAvatar = async () => {
     try {
@@ -66,6 +69,10 @@ const Post = (prop) => {
       setBaseURI(newURI)
       console.log("newURI", newURI)
       console.log(baseUrl);
+    }
+
+    if (prop.prop.videos.length > 0) {
+      setVideoUrl(fileURL + prop.prop.videos[0].fileName)
     }
 
     getAvatar()
@@ -249,8 +256,8 @@ const Post = (prop) => {
           </Text>
         </View>
       </View>
-      
-        {/* <Image source={{uri: BASE_URI[0]}} 
+
+      {/* <Image source={{uri: BASE_URI[0]}} 
         style={{
           width: 150,
           height: 150,
@@ -259,31 +266,51 @@ const Post = (prop) => {
 
       </Image> */}
       <SafeAreaView>
-      <FlatList
-  data={BASE_URI}
-  renderItem={({ item }) => (
-    <View
-      style={{
-        flex: 1,
-        flexDirection: 'column',
-        margin: 1
-      }}>
-      <Image
-        // style={styles.imageThumbnail}
-        source={{ uri: item }}
-        style={{ justifyContent: 'center', alignItems: 'center', height: 200, }}
-      />
-      {/* <Text>
+        <FlatList
+          data={BASE_URI}
+          renderItem={({ item }) => (
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'column',
+                margin: 1
+              }}>
+              <Image
+                // style={styles.imageThumbnail}
+                source={{ uri: item }}
+                style={{ justifyContent: 'center', alignItems: 'center', height: 200, }}
+              />
+              {/* <Text>
         {item}
       </Text> */}
-    </View>
-  )}
-  //Setting the number of column
-  numColumns={2}
-  keyExtractor={(item, index) => index.toString()}
-/>
-</SafeAreaView>
-      
+            </View>
+          )}
+          //Setting the number of column
+          numColumns={2}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </SafeAreaView>
+
+      {
+        videoUrl ? <>
+          <View>
+            <Video
+              source={{ uri: videoUrl }}
+              rate={1.0}
+              volume={1.0}
+              isMuted={false}
+              resizeMode="cover"
+              shouldPlay
+              useNativeControls
+              // usePoster
+              // isLooping
+              style={{ width: '100%', height: 500 }}
+            />
+          </View>
+        </> : <></>
+      }
+
+
       <View style={{}}>
         <View
           style={{

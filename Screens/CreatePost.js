@@ -21,7 +21,8 @@ import * as FileSystem from "expo-file-system";
 import { navigation } from "../rootNavigation";
 import { DocumentAPI } from "../apis/Documents/DocumentAPI";
 import { fileURL } from "../common/baseUrl";
-import Video from "react-native-video";
+import { Video } from 'expo-av';
+import { ScrollView } from "react-native-gesture-handler";
 
 const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
 const MAX_VIDEO_SIZE = 10 * 1024 * 1024;
@@ -29,26 +30,26 @@ const MAX_VIDEO_DURATION = 10;
 const MIN_VIDEO_DURATION = 1;
 const CreatePost = () => {
   const store = useSelector((state) => state)
-  console.log(JSON.stringify(store,0,2))
+  console.log(JSON.stringify(store, 0, 2))
   const token = store.user.user.token;
   const [content, setContent] = useState(null);
   const [image, setImage] = useState([]);
   const [video, setVideo] = useState(null);
   const windowWidth = Dimensions.get("window").width;
-  const [profileIMGURI,setProfileIMGURI] = useState("")
+  const [profileIMGURI, setProfileIMGURI] = useState("")
   const avatarId = store.user.user.data.avatar
 
   useEffect(() => {
     getAvatar()
   }, [])
-  const getAvatar = async() => {
+  const getAvatar = async () => {
     try {
       const coverRes = await DocumentAPI.get(avatarId)
-    setProfileIMGURI(fileURL+coverRes.data.data.fileName)
+      setProfileIMGURI(fileURL + coverRes.data.data.fileName)
     } catch (error) {
       console.log(error)
     }
-    
+
   }
   const permissionRequest = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -74,13 +75,13 @@ const CreatePost = () => {
         const fruits = [];
 
         // fruits.push(result.assets[0])
-        
+
         const assets = result.assets
-        if(assets.length > 0){
-          assets.map(item=> fruits.push(item))
+        if (assets.length > 0) {
+          assets.map(item => fruits.push(item))
         }
         console.log("fruits", fruits)
-        if(fruits.length>4){
+        if (fruits.length > 4) {
           alert("chỉ dược up tối đa 4 ảnh")
           return
         }
@@ -107,8 +108,9 @@ const CreatePost = () => {
         mediaTypes: "Videos",
         allowsMultipleSelection: false
       });
-      console.log(result);
+      console.log("video", JSON.stringify(result, 0, 2));
       setVideo(result);
+      setSelectedVideo(result);
     }
   };
   const handleSubmit = async () => {
@@ -123,36 +125,35 @@ const CreatePost = () => {
         name:
           Platform.OS === "ios"
             ? image[i]["filename"]
-            : `my_profile${Date.now()}.${
-                image[i]["uri"].slice(-4) === "jpeg" ? "jpg" : "png"
-              }`,
+            : `my_profile${Date.now()}.${image[i]["uri"].slice(-4) === "jpeg" ? "jpg" : "png"
+            }`,
       };
       data.append("images", upload_body);
       data2.images = [upload_body]
     }
     try {
       if (video["uri"]) {
-      data.append("videos", {
-        uri: video["uri"],
-        type: "video/mp4",
-        name:
-          Platform.OS === "ios"
-            ? image[i]["filename"]
-            : `my_profile${Date.now()}.mp4`,
-      });
-      data2.videos = [{
-        uri: video["uri"],
-        type: "video/mp4",
-        name:
-          Platform.OS === "ios"
-            ? image[i]["filename"]
-            : `my_profile${Date.now()}.mp4`,
-      }]
-    }
+        data.append("videos", {
+          uri: video["uri"],
+          type: "video/mp4",
+          name:
+            Platform.OS === "ios"
+              ? image[i]["filename"]
+              : `my_profile${Date.now()}.mp4`,
+        });
+        data2.videos = [{
+          uri: video["uri"],
+          type: "video/mp4",
+          name:
+            Platform.OS === "ios"
+              ? image[i]["filename"]
+              : `my_profile${Date.now()}.mp4`,
+        }]
+      }
     } catch (error) {
       console.log(error)
     }
-    
+
     try {
       console.log(data)
       console.log(data2)
@@ -190,12 +191,12 @@ const CreatePost = () => {
     setPostText(text);
   };
   const exitScreen = () => {
-    if(checkCanSend()) {
+    if (checkCanSend()) {
       Alert.alert("Xác nhận", "Nội dung chưa được lưu bạn có chắc muốn hủy?", [
         { text: "Không" },
-        {text:'Có',onPress: ()=>{navigation.goBack()}}
+        { text: 'Có', onPress: () => { navigation.goBack() } }
       ])
-    }else{
+    } else {
       navigation.goBack()
     }
   };
@@ -223,8 +224,8 @@ const CreatePost = () => {
       let images = [];
       console.log(image.length)
       for (let i = 0; i < image.length; i++) {
-        var thisImage=image[i];
-        var uri=thisImage.uri;
+        var thisImage = image[i];
+        var uri = thisImage.uri;
         // let info = await MediaLibrary.getAssetInfoAsync(selectedImage[i]);
         let fileInfo = await FileSystem.getInfoAsync(uri);
         if (fileInfo.size > MAX_IMAGE_SIZE) {
@@ -259,8 +260,13 @@ const CreatePost = () => {
       let videos = [];
 
       if (selectedVideo != null) {
-        let info = await MediaLibrary.getAssetInfoAsync(selectedVideo);
-        let fileInfo = await FileSystem.getInfoAsync(info.localUri);
+        let info = await MediaLibrary.getAssetInfoAsync(selectedVideo.assets[0].assetId);
+        console.log("info", info)
+        // let info = await MediaLibrary.getAssetInfoAsync(selectedVideo);
+        // let info = selectedVideo.assets[0].uri
+        let fileInfo = await FileSystem.getInfoAsync(info.uri);
+        console.log("fileInfo", fileInfo)
+        // let fileInfo = await FileSystem.getInfoAsync(info.localUri);
         if (fileInfo.size > MAX_VIDEO_SIZE) {
           Alert.alert(
             "Video quá lớn",
@@ -284,7 +290,7 @@ const CreatePost = () => {
           return;
         }
 
-        let video = await FileSystem.readAsStringAsync(info.localUri, {
+        let video = await FileSystem.readAsStringAsync(info.uri, {
           encoding: "base64",
         });
         videos.push("data:video;base64," + video);
@@ -297,7 +303,7 @@ const CreatePost = () => {
         );
         console.log(percentCompleted);
       };
-      
+
       await upPostApi.createPost(
         token,
         postText,
@@ -323,7 +329,8 @@ const CreatePost = () => {
   };
 
   return (
-    <View
+    <ScrollView>
+      <View
       style={{
         flex: 1,
         width: windowWidth,
@@ -346,7 +353,7 @@ const CreatePost = () => {
             fontWeight: "600",
           }}
         >
-        Tạo bài viết
+          Tạo bài viết
         </Text>
         <TouchableOpacity
           // onPress={handleSubmit}
@@ -390,9 +397,9 @@ const CreatePost = () => {
             }}
           ></Image> */}
           {
-                profileIMGURI != "" ? 
-                <Image
-                source={{uri: profileIMGURI}}
+            profileIMGURI != "" ?
+              <Image
+                source={{ uri: profileIMGURI }}
                 style={{
                   width: 40,
                   height: 40,
@@ -400,8 +407,8 @@ const CreatePost = () => {
                   marginRight: 10,
                 }}
               ></Image> :
-                
-                <Image
+
+              <Image
                 source={
                   //   {
                   //   // uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU",
@@ -416,8 +423,8 @@ const CreatePost = () => {
                   marginRight: 10,
                 }}
               ></Image>
-              
-              }
+
+          }
           <Text style={{ fontSize: 15 }}>{store.user.user.data.username}</Text>
         </View>
         <View>
@@ -452,6 +459,31 @@ const CreatePost = () => {
         ) : (
           <></>
         )}
+
+        {
+          selectedVideo ? <>
+            <View>
+              {/* <Text>
+                Hello
+              </Text> */}
+              <View>
+                <Video
+                source={{ uri: selectedVideo.assets[0].uri }}
+                // source={{ uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' }}
+                rate={1.0}
+                volume={1.0}
+                isMuted={false}
+                resizeMode="cover"
+                shouldPlay
+                useNativeControls
+                // usePoster
+                // isLooping
+                style={{ width: '100%', height: selectedVideo.assets[0].height > 500 ? 500 : selectedVideo.assets[0].height }}
+                /> 
+           </View>
+            </View>
+          </> : <></>
+        }
       </View>
       <View
         style={{
@@ -493,6 +525,8 @@ const CreatePost = () => {
         </TouchableOpacity>
       </View>
     </View>
+    </ScrollView>
+    
   );
 };
 
