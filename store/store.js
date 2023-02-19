@@ -1,4 +1,4 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import userSlice from "./user/index";
 
 const rootReducer = combineReducers({
@@ -6,4 +6,8 @@ const rootReducer = combineReducers({
   // registerInfo: registerInfoSlice,
 });
 
-export const store = configureStore({ reducer: rootReducer });
+export const store = configureStore({
+  reducer: rootReducer, middleware: getDefaultMiddleware => getDefaultMiddleware({
+    serializableCheck: false
+  })
+});

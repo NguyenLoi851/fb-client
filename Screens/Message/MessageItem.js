@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { View, Text, Image } from "react-native"
 import { fileURL } from "../../common/baseUrl"
 import { useEffect, useState } from "react"
@@ -6,19 +6,21 @@ import { DocumentAPI } from "../../apis/Documents/DocumentAPI"
 import DefaultAvatar from "../../assets/imgs/default_avatar.png"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { navigation } from "../../rootNavigation"
+import { setOtherMessageUser } from "../../store/user"
 
 const MessageItem = (prop) => {
     const store = useSelector((state) => state)
     const token = store.user.user.token
     const user = prop.children
-    console.log("messageitem", JSON.stringify(user, 0, 2))
+    // console.log("messageitem", JSON.stringify(user, 0, 2))
     const [profileIMGURI, setProfileIMGURI] = useState("")
+    const dispatch = useDispatch()
     useEffect(() => {
         getAvatar()
     }, [])
     const getAvatar = async () => {
         try {
-            console.log("friendtabavatar", JSON.stringify(user, 0, 2))
+            // console.log("friendtabavatar", JSON.stringify(user, 0, 2))
             const coverRes = await DocumentAPI.get(user.avatar._id)
             setProfileIMGURI(fileURL + coverRes.data.data.fileName)
         } catch (error) {
@@ -27,7 +29,10 @@ const MessageItem = (prop) => {
     }
     return(
         <TouchableOpacity
-        onPress={()=>navigation.navigate("message-detail")}>
+        onPress={()=>{
+            dispatch(setOtherMessageUser(user))
+            navigation.navigate("message-detail")
+            }}>
             <View style={{ flexDirection: "row", borderStyle:"solid", borderWidth: 1, borderRadius: 10, marginBottom: 5}}>
             <View style={{marginLeft: 15, marginRight: 10, marginBottom: 20, marginTop: 15}}>
             {

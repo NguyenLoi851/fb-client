@@ -22,9 +22,9 @@ import { setOtherUser } from "../../store/user";
 const PersonTab = (prop) => {
 
     const store = useSelector((state) => state)
-    console.log("PersonTab", JSON.stringify(store, 0, 2))
+    // console.log("PersonTab", JSON.stringify(store, 0, 2))
     const token = store.user.user.token
-    console.log("Prop in person tab", JSON.stringify(prop, 0, 2))
+    // console.log("Prop in person tab", JSON.stringify(prop, 0, 2))
     const user = prop.children
     const [profileIMGURI, setProfileIMGURI] = useState("")
 
@@ -46,9 +46,9 @@ const PersonTab = (prop) => {
     const handleAddFriend = async () => {
         try {
             const data = { user_id: user._id }
-            console.log("datainf", data)
+            // console.log("datainf", data)
             const res = await friendApi.addFriend(data, token)
-            console.log("handleAddFriend", JSON.stringify(res.data, 0, 2))
+            // console.log("handleAddFriend", JSON.stringify(res.data, 0, 2))
             setIsHandleAddFriend(true)
         } catch (error) {
             console.log(error)

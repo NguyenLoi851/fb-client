@@ -16,8 +16,9 @@ import { getToken } from "../utils/getToken";
 import { navigation } from "../rootNavigation";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { addDate, addName, addUser } from "../store/user";
+import { addDate, addName, addUser, setSocket } from "../store/user";
 import uuid from "react-uuid";
+import { chatBaseUrl } from "../common/baseUrl";
 
 const LoginPage = () => {
   const [phoneNumber, setPhoneNumber] = useState("")
@@ -57,16 +58,27 @@ const LoginPage = () => {
         password: password,
         uuid: uuid(),
       };
-      console.log("data", data)
+      // console.log("data", data)
       try {
         const res = await loginApi.login(data);
-        console.log(res.data)
+        // console.log("reslogin",JSON.stringify(res.data,0,2))
         // const token = getToken(res.headers["set-cookie"][0]);
         // await SecureStore.setItemAsync("access_token", token.access_token);
         // await SecureStore.setItemAsync("refresh_token", token.refresh_token);
         dispatch(addUser(res.data));
         dispatch(addName("add name test"))
         dispatch(addDate("add date test"))
+        // const { io } = require("socket.io-client");
+        // const socket = io(chatBaseUrl, {
+        //   transportOptions: {
+        //     polling: {
+        //       extraHeaders: {
+        //         token: loginState.accessToken,
+        //       },
+        //     },
+        //   },
+        // });
+        // dispatch(setSocket(socket));
         setIsSubmitting(false);
         navigation.navigate("facebook");
       } catch (error) {

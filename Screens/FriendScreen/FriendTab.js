@@ -22,9 +22,9 @@ import { setOtherUser } from "../../store/user";
 const FriendTab = (prop) => {
     const dispatch = useDispatch()
     const store = useSelector((state) => state)
-    console.log("FriendTab", JSON.stringify(store, 0, 2))
+    // console.log("FriendTab", JSON.stringify(store, 0, 2))
     const token = store.user.user.token
-    console.log("Prop in person tab", JSON.stringify(prop, 0, 2))
+    // console.log("Prop in person tab", JSON.stringify(prop, 0, 2))
     const user = prop.children
     const [profileIMGURI, setProfileIMGURI] = useState("")
     useEffect(() => {
@@ -32,7 +32,7 @@ const FriendTab = (prop) => {
     }, [])
     const getAvatar = async () => {
         try {
-            console.log("friendtabavatar", JSON.stringify(user, 0, 2))
+            // console.log("friendtabavatar", JSON.stringify(user, 0, 2))
             const coverRes = await DocumentAPI.get(user.avatar._id)
             setProfileIMGURI(fileURL + coverRes.data.data.fileName)
         } catch (error) {
@@ -43,9 +43,9 @@ const FriendTab = (prop) => {
     const handleUnFriend = async () => {
         try {
             const data = { user_id: user._id }
-            console.log("datainf", data)
+            // console.log("datainf", data)
             const res = await friendApi.unFriend(data, token)
-            console.log("handleUnFriend", JSON.stringify(res.data, 0, 2))
+            // console.log("handleUnFriend", JSON.stringify(res.data, 0, 2))
             setIsHandled(false)
         } catch (error) {
             console.log(error)

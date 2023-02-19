@@ -31,11 +31,11 @@ const Post = (prop) => {
   const [BASE_URI, setBaseURI] = useState([])
   const [likes, setLikes] = useState(0);
   const [comments, setComments] = useState(0);
-  console.log("prop", JSON.stringify(prop.prop, 0, 2))
+  // console.log("prop", JSON.stringify(prop.prop, 0, 2))
   const store = useSelector((state) => state)
-  console.log("Store in post", JSON.stringify(store, 0, 2))
+  // console.log("Store in post", JSON.stringify(store, 0, 2))
   const token = store.user.user.token;
-  console.log("token", token)
+  // console.log("token", token)
   const [liked, setLiked] = useState(false)
   const [option, setOption] = useState(false)
   // const [reload, setReload] = useState(0)
@@ -47,7 +47,7 @@ const Post = (prop) => {
   const avatarId = prop.prop.author.avatar._id
   const [videoUrl, setVideoUrl] = useState(null)
 
-  console.log("store.user.user.data.id == prop.prop.author._id", store.user.user.data.id, prop.prop.author._id)
+  // console.log("store.user.user.data.id == prop.prop.author._id", store.user.user.data.id, prop.prop.author._id)
   const getAvatar = async () => {
     try {
       const coverRes = await DocumentAPI.get(avatarId)
@@ -67,8 +67,8 @@ const Post = (prop) => {
       var newURI = []
       prop.prop.images.map(item => newURI.push(fileURL + item.fileName))
       setBaseURI(newURI)
-      console.log("newURI", newURI)
-      console.log(baseUrl);
+      // console.log("newURI", newURI)
+      // console.log(baseUrl);
     }
 
     if (prop.prop.videos.length > 0) {
@@ -90,7 +90,7 @@ const Post = (prop) => {
     try {
       setOption(false)
       const res = await deletePostApi.delete(prop.prop._id, token)
-      console.log(res.data)
+      // console.log(res.data)
       // setReload(reload + 1)
       // setRefreshing(true)
       // prop.fc.onRefresh()
@@ -125,7 +125,7 @@ const Post = (prop) => {
   const handleLike = async () => {
     try {
       // console.log("HelloLike")
-      console.log("Hello token", token)
+      // console.log("Hello token", token)
       await upPostApi.like(token, prop.prop._id)
       if (liked == false) {
         setLikes(likes + 1)
@@ -152,7 +152,7 @@ const Post = (prop) => {
         content: newComment
       }
       const res = await commentPostApi.create(data, prop.prop._id, token)
-      console.log(res.data)
+      // console.log(res.data)
 
       // commentList.push({
       //   user: {
@@ -174,7 +174,7 @@ const Post = (prop) => {
     handleCommentOption()
     try {
       const res = await commentPostApi.list(prop.prop._id, token)
-      console.log("commentList ", JSON.stringify(res.data, 0, 2))
+      // console.log("commentList ", JSON.stringify(res.data, 0, 2))
       setCommentList(res.data.data)
     } catch (error) {
       console.log(error)

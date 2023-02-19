@@ -15,7 +15,7 @@ const MIN_VIDEO_DURATION = 1;
 const UpdateProfile = () => {
 
   const store = useSelector((state) => state);
-  console.log("storeinhere", JSON.stringify(store, 0, 2))
+  // console.log("storeinhere", JSON.stringify(store, 0, 2))
   const [coverIMGURI, setCoverIMGURI] = useState("")
   const [profileIMGURI, setProfileIMGURI] = useState("")
 
@@ -25,7 +25,7 @@ const UpdateProfile = () => {
 
   const getData = async () => {
 
-    console.log(JSON.stringify(store, 0, 2))
+    // console.log(JSON.stringify(store, 0, 2))
 
     var user = store.user.user.data
 
@@ -109,7 +109,7 @@ const UpdateProfile = () => {
       var percentCompleted = Math.round(
         (progressEvent.loaded * 100) / progressEvent.total
       );
-      console.log(percentCompleted);
+      // console.log(percentCompleted);
     };
 
     // await upPostApi.createPost(
@@ -137,7 +137,7 @@ const UpdateProfile = () => {
       try {
         const data = { avatar: images[0] }
         const res = await UserAPI.edit(data, store.user.user.token)
-        console.log("hoho", JSON.stringify(res.data, 0, 2))
+        // console.log("hoho", JSON.stringify(res.data, 0, 2))
         setProfileIMGURI(fileURL + res.data.data.avatar.fileName)
         // setCoverIMGURI(fileURL+res.data.data.cover_image.fileName)
       } catch (error) {
@@ -147,7 +147,7 @@ const UpdateProfile = () => {
       try {
         const data = { cover_image: images[0] }
         const res = await UserAPI.edit(data, store.user.user.token)
-        console.log("hoho", JSON.stringify(res.data, 0, 2))
+        // console.log("hoho", JSON.stringify(res.data, 0, 2))
         // setProfileIMGURI(fileURL + res.data.data.avatar.fileName)
         setCoverIMGURI(fileURL+res.data.data.cover_image.fileName)
       } catch (error) {

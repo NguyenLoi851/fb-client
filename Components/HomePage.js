@@ -140,7 +140,7 @@ const BottomDivider = styled.View`
 
 const HomePage = () => {
   const store = useSelector((state) => state);
-  console.log("Homepage", JSON.stringify(store, 0, 2))
+  // console.log("Homepage", JSON.stringify(store, 0, 2))
   const [post, setPost] = useState([])
   const token = store.user.user.token;
   const [profileIMGURI, setProfileIMGURI] = useState("")
@@ -163,8 +163,8 @@ const HomePage = () => {
   const getPost = async () => {
     try {
       const res = await upPostApi.get(token)
-      console.log("other post", res.data)
-      console.log("post", JSON.stringify(res.data.data, 0, 2))
+      // console.log("other post", res.data)
+      // console.log("post", JSON.stringify(res.data.data, 0, 2))
       setPost(res.data.data.reverse())
     } catch (error) {
       console.log(error)

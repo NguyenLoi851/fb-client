@@ -5,9 +5,10 @@ import FacebookBannerImage from "../../assets/imgs/facebook-banner.jpg";
 import { navigation } from "../../rootNavigation";
 import { loginApi } from '../../apis/Auth/loginApi';
 import { useDispatch } from 'react-redux';
-import { addUser } from '../../store/user';
+import { addUser, setSocket } from '../../store/user';
 import { Icon, Input } from "react-native-elements";
 import { grey1 } from '../../common/color';
+import { chatBaseUrl } from '../../common/baseUrl';
 
 const HomeScreen = () => {
     const dispatch = useDispatch()
@@ -16,6 +17,7 @@ const HomeScreen = () => {
     const [hidePassword, setHidePassword] = useState(true)
     const [confirmPassword, setConfirmPassword] = useState("")
     const [errLogin, setErrLogin] = useState("")
+    // const [socket, setSocket] = useState(null)
 
     const checkHidePass = () => {
         return hidePassword ? (
@@ -46,8 +48,22 @@ const HomeScreen = () => {
             const res = await loginApi.login(data)
             if (res.data) {
                 dispatch(addUser(res.data))
+                // console.log("homescreenres", JSON.stringify(res.data, 0, 2))
                 navigation.navigate("facebook")
                 setErrLogin("")
+                const { io } = require("socket.io-client");
+                const socket = io(chatBaseUrl, {
+                    transportOptions: {
+                        polling: {
+                            extraHeaders: {
+                                token: res.data.token,
+                            },
+                        },
+                    },
+                });
+                // console.log("socket", socket)
+                // console.log("homescreensocket", JSON.stringify(socket, Realm.JsonSerializationReplacer))
+                dispatch(setSocket(socket));
             }
         } catch (error) {
             setErrLogin("Số điện thoại hoặc mật khẩu không đúng")
@@ -69,7 +85,7 @@ const HomeScreen = () => {
                         placeholder="Nhập số điện thoại hoặc email"
                         placeholderTextColor={grey1}
                         value={phonenumber}
-                        onChangeText={(text) => {setPhonenumber(text), setErrLogin("")}}
+                        onChangeText={(text) => { setPhonenumber(text), setErrLogin("") }}
                         keyboardType="numeric"
                     />
 
@@ -89,7 +105,7 @@ const HomeScreen = () => {
                             value={password}
                             // errorMessage={errPassword}
                             placeholderTextColor={grey1}
-                            onChangeText={(text) => {setPassword(text), setErrLogin("")}}
+                            onChangeText={(text) => { setPassword(text), setErrLogin("") }}
                             rightIcon={checkHidePass()}
                             secureTextEntry={hidePassword}
                         ></Input>

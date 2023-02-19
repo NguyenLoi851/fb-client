@@ -71,7 +71,7 @@ const Profile = () => {
   const getFriends = async () => {
     try {
       const res = await friendApi.getListFriends(token)
-      console.log("myfriend",JSON.stringify(res.data, 0, 2))
+      // console.log("myfriend",JSON.stringify(res.data, 0, 2))
       setFriends(res.data.data.friends)
     } catch (error) {
       console.log("myfriend",error)
@@ -82,8 +82,8 @@ const Profile = () => {
     try {
       const params = {userId: store.user.user.data.id}
       const res = await upPostApi.get(token, params)
-      console.log("other post", res.data)
-      console.log("post", JSON.stringify(res.data.data, 0, 2))
+      // console.log("other post", res.data)
+      // console.log("post", JSON.stringify(res.data.data, 0, 2))
       setPost(res.data.data.reverse())
     } catch (error) {
       console.log(error)
@@ -91,9 +91,9 @@ const Profile = () => {
   }
 
   const getData = async () => {
-    console.log("odaythangnuloi")
+    // console.log("odaythangnuloi")
 
-    console.log(JSON.stringify(store, 0, 2))
+    // console.log(JSON.stringify(store, 0, 2))
 
     var user = store.user.user.data
 
@@ -116,7 +116,7 @@ const Profile = () => {
   const getAvatarReload = async() => {
     try {
         const coverResReload = await UserAPI.show(token)
-        console.log("huhon", JSON.stringify(coverResReload.data, 0, 2))
+        // console.log("huhon", JSON.stringify(coverResReload.data, 0, 2))
         setProfileIMGURI(fileURL + coverResReload.data.data.avatar.fileName)
     } catch (error) {
         console.log(error)

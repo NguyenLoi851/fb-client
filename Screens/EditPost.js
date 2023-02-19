@@ -30,7 +30,7 @@ const MAX_VIDEO_DURATION = 10;
 const MIN_VIDEO_DURATION = 1;
 const EditPost = () => {
     const store = useSelector((state) => state)
-    console.log("editpost", JSON.stringify(store, 0, 2))
+    // console.log("editpost", JSON.stringify(store, 0, 2))
     const token = store.user.user.token;
     const [content, setContent] = useState(null);
     const [image, setImage] = useState([]);
@@ -50,7 +50,7 @@ const EditPost = () => {
     const getPostToEdit = async () => {
         try {
             const res = await upPostApi.show(token, postId)
-            console.log("editpostres", JSON.stringify(res.data, 0, 2))
+            // console.log("editpostres", JSON.stringify(res.data, 0, 2))
             setContent(res.data.data.described)
             setPostText(res.data.data.described)
             setImage(res.data.data.images.map(item => ({ ...item, uri: fileURL + item.fileName })))
@@ -86,9 +86,9 @@ const EditPost = () => {
                 // selectionLimit: 4,
             });
 
-            console.log("CLGT")
-            console.log(result);
-            console.log("CLGT")
+            // console.log("CLGT")
+            // console.log(result);
+            // console.log("CLGT")
             if (!result.cancelled) {
                 const fruits = [];
 
@@ -98,7 +98,7 @@ const EditPost = () => {
                 if (assets.length > 0) {
                     assets.map(item => fruits.push(item))
                 }
-                console.log("fruits", fruits)
+                // console.log("fruits", fruits)
                 if (fruits.length > 4) {
                     alert("chỉ dược up tối đa 4 ảnh")
                     return
@@ -125,7 +125,7 @@ const EditPost = () => {
             let result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: "Videos",
             });
-            console.log(result);
+            // console.log(result);
             setVideo(result);
             setSelectedVideo(result)
         }
@@ -172,10 +172,10 @@ const EditPost = () => {
         }
 
         try {
-            console.log(data)
-            console.log(data2)
+            // console.log(data)
+            // console.log(data2)
             const res = await upPostApi.post(data2, token)
-            console.log(res.data)
+            // console.log(res.data)
         } catch (error) {
             console.log(error)
         }
@@ -228,7 +228,7 @@ const EditPost = () => {
     };
 
     const requestSend = async () => {
-        console.log("isSent", isSent)
+        // console.log("isSent", isSent)
         if (!isSent) {
             setIsSent(true);
             if (postText.length > 500) {
@@ -240,7 +240,7 @@ const EditPost = () => {
                 return;
             }
             let images = [];
-            console.log(image.length)
+            // console.log(image.length)
             for (let i = 0; i < image.length; i++) {
                 var thisImage = image[i];
                 var uri = thisImage.uri;
@@ -256,7 +256,7 @@ const EditPost = () => {
                     encoding: "base64",
                 });
                 images.push("data:image;base64," + base64);
-                console.log(base64.length / 1024 / 1024);
+                // console.log(base64.length / 1024 / 1024);
             }
 
             //    for (let i = 0; i < selectedImage.length; i++) {
@@ -279,11 +279,11 @@ const EditPost = () => {
 
             if (selectedVideo != null) {
                 let info = await MediaLibrary.getAssetInfoAsync(selectedVideo.assets[0].assetId);
-                console.log("info", info)
+                // console.log("info", info)
                 // let info = await MediaLibrary.getAssetInfoAsync(selectedVideo);
                 // let info = selectedVideo.assets[0].uri
                 let fileInfo = await FileSystem.getInfoAsync(info.uri);
-                console.log("fileInfo", fileInfo)
+                // console.log("fileInfo", fileInfo)
                 // let fileInfo = await FileSystem.getInfoAsync(info.localUri);
                 if (fileInfo.size > MAX_VIDEO_SIZE) {
                     Alert.alert(
@@ -312,14 +312,14 @@ const EditPost = () => {
                     encoding: "base64",
                 });
                 videos.push("data:video;base64," + video);
-                console.log(videos[0].length);
+                // console.log(videos[0].length);
             }
 
             const onSend = (progressEvent) => {
                 var percentCompleted = Math.round(
                     (progressEvent.loaded * 100) / progressEvent.total
                 );
-                console.log(percentCompleted);
+                // console.log(percentCompleted);
             };
 
             await upPostApi.editPost(
@@ -331,16 +331,16 @@ const EditPost = () => {
                 postId
             )
                 .then((res) => {
-                    console.log(res.data);
-                    console.log(res.status);
-                    console.log("taday")
+                    // console.log(res.data);
+                    // console.log(res.status);
+                    // console.log("taday")
                     // context.setNeedUpdateProfile(true);
                     // context.setNeedUpdateTimeline(true);
                     Alert.alert("Thành công", "Đã cập nhật bài xong, kéo xuống để tải lại trang", [{ text: "OK" }]);
                     return;
                 })
                 .catch((e) => {
-                    console.log("taiday")
+                    // console.log("taiday")
 
                     // console.log(e.response.status);
                     // console.log(e.response);

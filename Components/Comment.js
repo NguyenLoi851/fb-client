@@ -15,7 +15,7 @@ import { fileURL } from "../common/baseUrl";
 import DefaultAvatar from "../assets/imgs/default_avatar.png"
 
 const PostComment = (prop) => {
-    console.log("prop in comment", JSON.stringify(prop, 0, 2))
+    // console.log("prop in comment", JSON.stringify(prop, 0, 2))
     const user = prop.children.user
     const username = user.username
     const avatar = user.avatar
@@ -27,7 +27,7 @@ const PostComment = (prop) => {
 
     const getAvatar = async () => {
         try {
-            console.log("avatar in comment", avatar)
+            // console.log("avatar in comment", avatar)
             const coverRes = await DocumentAPI.get(avatar._id)
             setProfileIMGURI(fileURL + coverRes.data.data.fileName)
         } catch (error) {

@@ -22,9 +22,9 @@ import { navigation } from "../../rootNavigation";
 const RequestTab = (prop) => {
     const [isHandle, setIsHandle] = useState(false)
     const store = useSelector((state) => state)
-    console.log("RequestTab", JSON.stringify(store, 0, 2))
+    // console.log("RequestTab", JSON.stringify(store, 0, 2))
     const token = store.user.user.token
-    console.log("Prop in request tab", JSON.stringify(prop, 0, 2))
+    // console.log("Prop in request tab", JSON.stringify(prop, 0, 2))
     const user = prop.children
     const [profileIMGURI, setProfileIMGURI] = useState("")
     useEffect(() => {
@@ -42,9 +42,9 @@ const RequestTab = (prop) => {
     const handleAcceptFriend = async () => {
         try {
             const data = { user_id: user._id, is_accept: 1 }
-            console.log("datainf", data)
+            // console.log("datainf", data)
             const res = await friendApi.acceptFriend(data, token)
-            console.log("handleAcceptFriend", JSON.stringify(res.data, 0, 2))
+            // console.log("handleAcceptFriend", JSON.stringify(res.data, 0, 2))
             setIsHandle(true)
         } catch (error) {
             console.log(error)
@@ -54,9 +54,9 @@ const RequestTab = (prop) => {
     const handleNotAcceptFriend = async () => {
         try {
             const data = { user_id: user._id, is_accept: 2 }
-            console.log("datainf", data)
+            // console.log("datainf", data)
             const res = await friendApi.notAcceptFriend(data, token)
-            console.log("handleNotAcceptFriend", JSON.stringify(res.data, 0, 2))
+            // console.log("handleNotAcceptFriend", JSON.stringify(res.data, 0, 2))
             setIsHandle(true)
         } catch (error) {
             console.log(error)

@@ -7,7 +7,7 @@ import NotFriendList from './NotFriendList'
 // import FriendRequestList from './FriendRequestList'
 
 const FriendScreen = () => {
-  console.log('FriendScreen is rendering !!!!')
+  // console.log('FriendScreen is rendering !!!!')
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async() => {
     setRefreshing(true);

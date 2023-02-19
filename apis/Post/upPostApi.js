@@ -8,7 +8,7 @@ export const upPostApi = {
   post: (data, token) => {
     const url = "/posts/create";
     // console.log("api");
-    console.log("data", data)
+    // console.log("data", data)
     return axiosClient.post(url, data, {
       headers: {
         // "Content-Type": "multipart/form-data",
@@ -59,7 +59,7 @@ export const upPostApi = {
 
   get: async(token, params) => {
     const url = "/posts/list";
-    console.log("paramsget",params)
+    // console.log("paramsget",params)
     return await axiosClient.get(url, {
       headers: {
         Authorization: "Bearer " + token
@@ -82,7 +82,7 @@ export const upPostApi = {
   // }
 
   like: async(token, postId) => {
-    console.log("postId",postId)
+    // console.log("postId",postId)
     // const url = "/postLike/action/"+{postId};
     const url = `/postLike/action/${postId}`;
     // const url = "/postLike/action"+postId

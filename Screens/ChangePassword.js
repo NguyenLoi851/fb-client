@@ -23,7 +23,7 @@ const ChangePassword=() => {
     }
     try {
       const res = await changePasswordApi.changePassword(data, token)
-      console.log(res.data)
+      // console.log(res.data)
       // dispatch(changeToken(res.data.token))
       dispatch(addUser(res.data))
       navigation.navigate("setting")

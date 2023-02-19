@@ -21,7 +21,7 @@ const NotFriendList = () => {
     try {
       // const res = await UserAPI.list()
       const res = await friendApi.getListNot(token)
-      console.log("all users in not list", JSON.stringify(res.data, 0, 2))
+      // console.log("all users in not list", JSON.stringify(res.data, 0, 2))
       setAllUsers(res.data.data.friends)
     } catch (error) {
       console.log("all users in not list",error)
@@ -30,9 +30,9 @@ const NotFriendList = () => {
 
   const getRequestFriends = async()=>{
     try {
-      console.log("HelloFriend", token)
+      // console.log("HelloFriend", token)
       const res = await friendApi.getRequestFriend(token)
-      console.log("requestFriend",JSON.stringify(res.data.data.friends,0,2))
+      // console.log("requestFriend",JSON.stringify(res.data.data.friends,0,2))
       setRequestFriends(res.data.data.friends)
     } catch (error) {
       console.log("requestFriend",error)

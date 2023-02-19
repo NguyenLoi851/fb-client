@@ -15,7 +15,7 @@ const MessageList = () => {
     const getFriends = async () => {
         try {
             const res = await friendApi.getListFriends(token)
-            console.log("myfriendmessenger", JSON.stringify(res.data, 0, 2))
+            // console.log("myfriendmessenger", JSON.stringify(res.data, 0, 2))
             setFriends(res.data.data.friends)
         } catch (error) {
             console.log("myfriend", error)

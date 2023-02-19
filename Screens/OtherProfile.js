@@ -51,7 +51,7 @@ const Separator = styled.View`
 const OtherProfile = () => {
   const store = useSelector((state) => state);
   const [post, setPost] = useState([])
-    console.log("otherprofile", JSON.stringify(store, 0, 2))
+    // console.log("otherprofile", JSON.stringify(store, 0, 2))
     const otherUser = store.user.otherUser
   const [coverIMGURI, setCoverIMGURI] = useState(fileURL+otherUser.cover_image.fileName)
 // const coverIMGURI = 
@@ -77,10 +77,10 @@ const token = otherUser.token
   const getFriends = async () => {
     try {
       const res = await friendApi.getListFriends(token)
-      console.log("myfriend",JSON.stringify(res.data, 0, 2))
+      // console.log("myfriend",JSON.stringify(res.data, 0, 2))
       setFriends(res.data.data.friends)
     } catch (error) {
-      console.log("myfriend",error)
+      // console.log("myfriend",error)
     }
   }
 
@@ -88,8 +88,8 @@ const token = otherUser.token
     try {
       const params = {userId: otherUser._id}
       const res = await upPostApi.get(token, params)
-      console.log("other post", res.data)
-      console.log("post", JSON.stringify(res.data.data, 0, 2))
+      // console.log("other post", res.data)
+      // console.log("post", JSON.stringify(res.data.data, 0, 2))
       setPost(res.data.data.reverse())
     } catch (error) {
       console.log(error)
@@ -122,7 +122,7 @@ const token = otherUser.token
   const getAvatarReload = async() => {
     try {
         const coverResReload = await UserAPI.show(token)
-        console.log("huhon", JSON.stringify(coverResReload.data, 0, 2))
+        // console.log("huhon", JSON.stringify(coverResReload.data, 0, 2))
         setProfileIMGURI(fileURL + coverResReload.data.data.avatar.fileName)
     } catch (error) {
         console.log(error)

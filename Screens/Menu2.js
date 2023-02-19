@@ -27,8 +27,10 @@ const Menu2 = () => {
     const [random, setRandom] = useState(0)
     const [profileIMGURI, setProfileIMGURI] = useState("")
     const avatarId = store.user.user.data.avatar
-    console.log("Menu", JSON.stringify(store, 0, 2))
+    // console.log("Menu", JSON.stringify(store, 0, 2))
     const token = store.user.user.token
+    // console.log("menu2", JSON.stringify(store,0,2))
+    const socket = store.user.socket
 
     useEffect(() => {
         getAvatar()
@@ -38,7 +40,7 @@ const Menu2 = () => {
         try {
             const coverRes = await DocumentAPI.get(avatarId)
             setProfileIMGURI(fileURL + coverRes.data.data.fileName)
-            console.log("avatar in menu", coverRes.data.data.fileName)
+            // console.log("avatar in menu", coverRes.data.data.fileName)
         } catch (error) {
             console.log(error)
         }
@@ -47,7 +49,7 @@ const Menu2 = () => {
     const getAvatarReload = async() => {
         try {
             const coverResReload = await UserAPI.show(token)
-            console.log("huhon", JSON.stringify(coverResReload.data, 0, 2))
+            // console.log("huhon", JSON.stringify(coverResReload.data, 0, 2))
             setProfileIMGURI(fileURL + coverResReload.data.data.avatar.fileName)
         } catch (error) {
             console.log(error)
@@ -60,6 +62,7 @@ const Menu2 = () => {
             // await logoutApi.logout(data);
             // await SecureStore.deleteItemAsync("access_token");
             // await SecureStore.deleteItemAsync("refresh_token");
+            socket.disconnect();
             navigation.navigate('login');
         }
         catch (err) {
