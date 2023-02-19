@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, SafeAreaView, RefreshControl } from "react-native";
+import { StyleSheet, Text, View, ScrollView, SafeAreaView, RefreshControl, FlatList, Dimensions } from "react-native";
 import Post from "./Post";
 import React, { useState, useEffect } from "react";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
@@ -145,16 +145,30 @@ const HomePage = () => {
   const token = store.user.user.token;
   const [profileIMGURI, setProfileIMGURI] = useState("")
   const avatarId = store.user.user.data.avatar
-
+  const SCREEN_HEIGHT = Math.round(Dimensions.get('window').height);
+  console.log("SCREEN_HEIGHT", SCREEN_HEIGHT)
   useEffect(() => {
     getAvatar()
     getPost()
+    // getHalfPost()
   }, [])
 
   const getAvatar = async () => {
     try {
       const coverRes = await DocumentAPI.get(avatarId)
       setProfileIMGURI(fileURL + coverRes.data.data.fileName)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const getHalfPost = async () => {
+    try {
+      const res = await upPostApi.get(token)
+      // console.log("other post", res.data)
+      // console.log("post", JSON.stringify(res.data.data, 0, 2))
+      const tmpRes = res.data.data.reverse()
+      setPost(tmpRes.slice(0, tmpRes.length / 2))
     } catch (error) {
       console.log(error)
     }
@@ -180,6 +194,16 @@ const HomePage = () => {
       setRefreshing(false);
     }, 1000);
   };
+
+  async function wait() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => resolve(), 3000)
+    })
+  }
+  const handleLoadMore = async () => {
+    await wait();
+    await getPost();
+  }
   return (
     <>
       <View>
@@ -282,8 +306,20 @@ const HomePage = () => {
         <Post />
         <Post />
         <Post /> */}
-          {post.length > 0 && post.map(item => (<Post key={item} prop={item} fc={onRefresh} />))}
-
+          {/* {post.length > 0 && post.map(item => (<Post key={item} prop={item} fc={onRefresh} />))} */}
+          <FlatList
+            bounces={false}
+            style={{ backgroundColor: '#cacad2', height: SCREEN_HEIGHT -195}}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            data={post}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (<Post key={item} prop={item} fc={onRefresh} />)}
+            initialNumToRender={2}
+            onEndReachedThreshold={2}
+            onEndReached={() => handleLoadMore()}
+          >
+          </FlatList>
         </ScrollView>
       </View>
     </>
