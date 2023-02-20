@@ -9,9 +9,13 @@ const userSlice = createSlice({
     post:"",
     otherUser: {},
     otherMessageUser: {},
-    socket: null
+    socket: null,
+    listBlockMe: []
   },
   reducers: {
+    setListBlockMe(state, action) {
+      state.socket = action.payload
+    },
     setSocket(state, action) {
       state.socket = action.payload
     },
@@ -64,5 +68,5 @@ const userSlice = createSlice({
 // })
 
 export default userSlice.reducer;
-export const {setOtherUser, setSocket, setOtherMessageUser, editPost, addUser, addDate, addName, addEmail, addPhone, navigate, changeToken } = userSlice.actions;
+export const {setOtherUser, setListBlockMe, setSocket, setOtherMessageUser, editPost, addUser, addDate, addName, addEmail, addPhone, navigate, changeToken } = userSlice.actions;
 // export const { addDate, addName } = registerInfoSlice.actions;

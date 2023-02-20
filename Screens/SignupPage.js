@@ -102,7 +102,7 @@ const LoginPage = () => {
       // console.log(data);
       try {
         const res = await signupApi.post(data);
-        console.log("res:", res.data);
+        // console.log("res:", res.data);
         navigation.navigate("login");
       } catch (error) {
         setActiveSignup(false);

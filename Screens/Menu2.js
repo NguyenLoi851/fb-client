@@ -67,6 +67,7 @@ const Menu2 = () => {
         }
         catch (err) {
             console.log(err)
+            navigation.navigate('login');
         }
     }
     const [refreshing, setRefreshing] = useState(false);

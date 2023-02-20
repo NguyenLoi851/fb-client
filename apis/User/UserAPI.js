@@ -25,5 +25,13 @@ export const UserAPI = {
         Authorization: "Bearer " + token
       }
     })
-  }
+  },
+  showByUserId: async(token, userId) => {
+    const url = `/users/show/${userId}`
+    return await axiosClient.get(url, {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    })
+  },
 };

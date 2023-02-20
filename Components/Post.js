@@ -31,7 +31,7 @@ const Post = (prop) => {
   const [BASE_URI, setBaseURI] = useState([])
   const [likes, setLikes] = useState(0);
   const [comments, setComments] = useState(0);
-  // console.log("prop", JSON.stringify(prop.prop, 0, 2))
+  // console.log("proppost", JSON.stringify(prop.prop, 0, 2))
   const store = useSelector((state) => state)
   // console.log("Store in post", JSON.stringify(store, 0, 2))
   const token = store.user.user.token;
@@ -46,6 +46,8 @@ const Post = (prop) => {
   // const avatarId = store.user.user.data.avatar
   const avatarId = prop.prop.author.avatar._id
   const [videoUrl, setVideoUrl] = useState(null)
+  // const listBlockMe = store.user.listBlockMe
+  // console.log("listBlockMe", JSON.stringify(listBlockMe))
 
   // console.log("store.user.user.data.id == prop.prop.author._id", store.user.user.data.id, prop.prop.author._id)
   const getAvatar = async () => {

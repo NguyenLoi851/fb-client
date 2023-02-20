@@ -5,6 +5,7 @@ import { UserAPI } from "../../apis/User/UserAPI";
 import { friendApi } from "../../apis/Friends/FriendApi";
 import { useSelector } from "react-redux";
 import RequestTab from "./RequestTab";
+import { blockApi } from "../../apis/Block/blockApi";
 
 const NotFriendList = () => {
   const [allUsers, setAllUsers] = useState([])
@@ -15,14 +16,31 @@ const NotFriendList = () => {
   useEffect(() => {
     getAllUsers()
     getRequestFriends()
+    // getListBlockMe()
   }, [])
+
+  const getListBlockMe = async()=>{
+    try {
+      const res = await blockApi.getListBlockMe(token)
+      // console.log("blockme", JSON.stringify(res.data, 0, 2))
+      return res.data.data
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const getAllUsers = async () => {
     try {
       // const res = await UserAPI.list()
       const res = await friendApi.getListNot(token)
       // console.log("all users in not list", JSON.stringify(res.data, 0, 2))
-      setAllUsers(res.data.data.friends)
+      const allListNot = res.data.data.friends
+      const listBlockMe = await getListBlockMe()
+      // console.log("listBlockMe", listBlockMe)
+      const listBlockMe2 = listBlockMe.map(item=>item.sender)
+      const rs = allListNot.filter(item => !listBlockMe2.includes(item._id))
+      // console.log("rs", rs)
+      setAllUsers(rs)
     } catch (error) {
       console.log("all users in not list",error)
     }

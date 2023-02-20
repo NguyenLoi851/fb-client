@@ -18,6 +18,7 @@ import {
 import { upPostApi } from "../apis/Post/upPostApi";
 import { friendApi } from "../apis/Friends/FriendApi";
 import { UserAPI } from "../apis/User/UserAPI";
+import { blockApi } from "../apis/Block/blockApi";
 
 const Divider = styled.View`
 	width: 100%;
@@ -51,16 +52,17 @@ const Separator = styled.View`
 const OtherProfile = () => {
   const store = useSelector((state) => state);
   const [post, setPost] = useState([])
-    // console.log("otherprofile", JSON.stringify(store, 0, 2))
-    const otherUser = store.user.otherUser
-  const [coverIMGURI, setCoverIMGURI] = useState(fileURL+otherUser.cover_image.fileName)
-// const coverIMGURI = 
-  const [profileIMGURI, setProfileIMGURI] = useState(fileURL+otherUser.avatar.fileName)
-// const profileIMGURI = 
+  // console.log("otherprofile", JSON.stringify(store, 0, 2))
+  const otherUser = store.user.otherUser
+  const [coverIMGURI, setCoverIMGURI] = useState(fileURL + otherUser.cover_image.fileName)
+  // const coverIMGURI = 
+  const [profileIMGURI, setProfileIMGURI] = useState(fileURL + otherUser.avatar.fileName)
+  // const profileIMGURI = 
   const [friends, setFriends] = useState([])
-
-//   const token = store.user.user.token;
-const token = otherUser.token
+  //   const token = store.user.user.token;
+  const token = otherUser.token
+  const [blockStatus, setBlockStatus] = useState('0')
+  const [blocked, setBlocked] = useState(false)
 
   useEffect(() => {
 
@@ -71,8 +73,18 @@ const token = otherUser.token
     setCoverIMGURI(otherUser.cover_image.fileName)
     setProfileIMGURI(otherUser.avatar.fileName)
     // var newURI = fileURL+
-
+    getBlockStatus()
   }, [])
+
+  const getBlockStatus = async () => {
+    try {
+      const res = await blockApi.show(store.user.user.token, otherUser._id)
+      // console.log("blockstatusres", JSON.stringify(res.data, 0, 2))
+      setBlockStatus(res.data.data.status)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const getFriends = async () => {
     try {
@@ -86,7 +98,7 @@ const token = otherUser.token
 
   const getPost = async () => {
     try {
-      const params = {userId: otherUser._id}
+      const params = { userId: otherUser._id }
       const res = await upPostApi.get(token, params)
       // console.log("other post", res.data)
       // console.log("post", JSON.stringify(res.data.data, 0, 2))
@@ -96,41 +108,41 @@ const token = otherUser.token
     }
   }
 
-//   const getData = async () => {
-//     console.log("odaythangnuloi")
+  //   const getData = async () => {
+  //     console.log("odaythangnuloi")
 
-//     console.log(JSON.stringify(store, 0, 2))
+  //     console.log(JSON.stringify(store, 0, 2))
 
-//     var user = store.user.user.data
+  //     var user = store.user.user.data
 
-//     const coverID = user.cover_image
-//     const profileID = user.avatar
-//     try {
-//       const coverRes = await DocumentAPI.get(coverID)
-//       setCoverIMGURI(fileURL + coverRes.data.data.fileName)
-//     } catch (error) {
-//       console.log(error)
-//     }
-//     try {
-//       const profileRes = await DocumentAPI.get(profileID)
-//       setProfileIMGURI(fileURL + profileRes.data.data.fileName)
-//     } catch (error) {
-//       console.log(error)
-//     }
-//   }
+  //     const coverID = user.cover_image
+  //     const profileID = user.avatar
+  //     try {
+  //       const coverRes = await DocumentAPI.get(coverID)
+  //       setCoverIMGURI(fileURL + coverRes.data.data.fileName)
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
+  //     try {
+  //       const profileRes = await DocumentAPI.get(profileID)
+  //       setProfileIMGURI(fileURL + profileRes.data.data.fileName)
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
+  //   }
 
-  const getAvatarReload = async() => {
+  const getAvatarReload = async () => {
     try {
-        const coverResReload = await UserAPI.show(token)
-        // console.log("huhon", JSON.stringify(coverResReload.data, 0, 2))
-        setProfileIMGURI(fileURL + coverResReload.data.data.avatar.fileName)
+      const coverResReload = await UserAPI.show(token)
+      // console.log("huhon", JSON.stringify(coverResReload.data, 0, 2))
+      setProfileIMGURI(fileURL + coverResReload.data.data.avatar.fileName)
     } catch (error) {
-        console.log(error)
+      console.log(error)
     }
-}
-
+  }
+  const [onSetting, setOnSetting] = useState(false)
   const [refreshing, setRefreshing] = useState(false);
-  const onRefresh = async() => {
+  const onRefresh = async () => {
     setRefreshing(true);
     setPost([])
     setFriends([])
@@ -141,20 +153,38 @@ const token = otherUser.token
       setRefreshing(false);
     }, 1000);
   };
+  const handleBlock = async () => {
+    try {
+      setOnSetting(!onSetting)
+      if(blockStatus != '1'){
+        const res = await blockApi.block(store.user.user.token, { user_id: otherUser._id })
+      // console.log("blockres", JSON.stringify(res.data, 0, 2))
+      setBlockStatus(res.data.data.status)
+      }else{
+        const res = await blockApi.unblock(store.user.user.token, { user_id: otherUser._id })
+      // console.log("blockres", JSON.stringify(res.data, 0, 2))
+      setBlockStatus(res.data.data.status)
+      }
+      
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <View style={{ paddingVertical: 10 }}>
       <ScrollView refreshControl={
-          <RefreshControl refreshing={refreshing}
-            onRefresh={onRefresh} />
-        }
-          // horizontal={false}
-          // style={{ display: "flex", flexDirection: "column" }}
-        >
+        <RefreshControl refreshing={refreshing}
+          onRefresh={onRefresh} />
+      }
+      // horizontal={false}
+      // style={{ display: "flex", flexDirection: "column" }}
+      >
         <View style={{ position: "relative", backgroundColor: "#fff" }}>
           <View>
             <Image
               style={{ height: 230, width: "100%" }}
-            //   source={{ uri: coverIMGURI }}
+              //   source={{ uri: coverIMGURI }}
               source={{ uri: fileURL + otherUser.cover_image.fileName }}
             ></Image>
           </View>
@@ -177,7 +207,7 @@ const token = otherUser.token
                 width: 140,
                 borderRadius: 100,
               }}
-            //   source={{ uri: profileIMGURI }}
+              //   source={{ uri: profileIMGURI }}
               source={{ uri: fileURL + otherUser.avatar.fileName }}
             ></Image>
           </View>
@@ -210,9 +240,50 @@ const token = otherUser.token
                 backgroundColor: "#3982E4",
               }}
             > */}
-              {/* <Icon name="edit" type="material" color="#fff"></Icon> */}
+            {/* <Icon name="edit" type="material" color="#fff"></Icon> */}
             {/* </TouchableOpacity> */}
           </View>
+        </View>
+        <View>
+          <View style={{ flexDirection: "row", marginTop: 5 }}>
+            <View style={{ flexDirection: "row", paddingVertical: 5, backgroundColor: "#7BA0E8", borderRadius: 10, marginLeft: 10, width: "75%", justifyContent: "center" }}>
+              <View>
+                <Icon type="ionicon" name="chatbubble-ellipses-outline" style={{ marginHorizontal: 5 }} />
+              </View>
+              <Text style={{ fontSize: 18 }}>
+                Nhắn tin
+              </Text>
+            </View>
+            <View>
+              <Icon type="ionicon" name="call-outline" style={{ marginHorizontal: 5, paddingVertical: 5 }} />
+            </View>
+
+            <View>
+              <TouchableOpacity
+                onPress={() => { setOnSetting(!onSetting) }}
+              >
+                <Icon type="ionicon" name="ellipsis-horizontal-outline" style={{ marginHorizontal: 10, paddingVertical: 5 }} />
+              </TouchableOpacity>
+            </View>
+          </View>
+          {onSetting && <>
+            <TouchableOpacity
+              onPress={handleBlock}
+            >
+              <View style={{ alignItems: "flex-end", marginRight: 15, marginTop: 10 }}>
+                {
+                  blockStatus == "1" ?
+                    <Text style={{ fontSize: 18 }}>
+                      Bỏ chặn
+                    </Text>
+                    :
+                    <Text style={{ fontSize: 18 }}>
+                      Chặn
+                    </Text>}
+              </View>
+            </TouchableOpacity>
+
+          </>}
         </View>
         <View
           style={{
@@ -275,7 +346,7 @@ const token = otherUser.token
                   borderRadius: 8,
                   backgroundColor: "#e4e4e4",
                 }}
-                onPress={()=>navigation.navigate("all-friend-profile")}
+                onPress={() => navigation.navigate("all-friend-profile")}
               >
                 <Text
                   style={{

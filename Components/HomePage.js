@@ -5,7 +5,7 @@ import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { navigation } from "../rootNavigation";
 import { Image } from "react-native";
 import { Icon } from "react-native-elements";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DefaultAvatar from "../assets/imgs/default_avatar.png"
 import { upPostApi } from "../apis/Post/upPostApi";
 
@@ -101,6 +101,8 @@ import {
 import styled from 'styled-components/native'
 import { fileURL } from "../common/baseUrl";
 import { DocumentAPI } from "../apis/Documents/DocumentAPI";
+import { blockApi } from "../apis/Block/blockApi";
+import { setListBlockMe } from "../store/user";
 
 
 const Row = styled.View`
@@ -146,12 +148,25 @@ const HomePage = () => {
   const [profileIMGURI, setProfileIMGURI] = useState("")
   const avatarId = store.user.user.data.avatar
   const SCREEN_HEIGHT = Math.round(Dimensions.get('window').height);
-  console.log("SCREEN_HEIGHT", SCREEN_HEIGHT)
+  // console.log("SCREEN_HEIGHT", SCREEN_HEIGHT)
   useEffect(() => {
     getAvatar()
     getPost()
     // getHalfPost()
+    getListBlockMe()
   }, [])
+  const dispatch = useDispatch()
+  const getListBlockMe = async () => {
+    try {
+        const res = await blockApi.getListBlockMe(token)
+        // console.log("blockme", JSON.stringify(res.data, 0, 2))
+        // console.log("homepage", JSON.stringify(res.data, 0, 2))
+        // dispatch(setListBlockMe(res.data.data))
+        return res.data.data
+    } catch (error) {
+        console.log(error)
+    }
+}
 
   const getAvatar = async () => {
     try {
@@ -178,8 +193,12 @@ const HomePage = () => {
     try {
       const res = await upPostApi.get(token)
       // console.log("other post", res.data)
-      // console.log("post", JSON.stringify(res.data.data, 0, 2))
-      setPost(res.data.data.reverse())
+      // console.log("getpost", JSON.stringify(res.data.data, 0, 2))
+      const allPost = res.data.data.reverse()
+      const listBlockMe = await getListBlockMe()
+      const listBlockMe2 = listBlockMe.map(item=>item.sender)
+      const rs = allPost.filter(item => !listBlockMe2.includes(item.author._id))
+      setPost(rs)
     } catch (error) {
       console.log(error)
     }

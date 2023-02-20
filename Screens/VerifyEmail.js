@@ -44,7 +44,7 @@ const VerifyEmail = () => {
       const res = verifyApi.post(data);
       res
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           alert("verify success, please login");
           navigation.navigate("login");
         })

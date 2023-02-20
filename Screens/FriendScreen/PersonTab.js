@@ -30,10 +30,25 @@ const PersonTab = (prop) => {
 
     const [isHandleAddFriend, setIsHandleAddFriend] = useState(false)
     const [isRemove, setIsRemove] = useState(false)
+    const [isSent, setIsSent] = useState(false)
 
     useEffect(() => {
         getAvatar()
+        getFriendStatus()
     }, [])
+
+    const getFriendStatus = async() => {
+        try {
+            const res = await friendApi.getFriendStatus(token, user._id)
+            // console.log("friendstatus", JSON.stringify(res.data, 0, 2))
+            if(res.data.data.status == "sent"){
+                setIsSent(true)
+                setIsHandleAddFriend(true)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
     const getAvatar = async () => {
         try {
             const coverRes = await DocumentAPI.get(user.avatar._id)
@@ -69,43 +84,43 @@ const PersonTab = (prop) => {
         <View>
             {
                 isRemove ? <></> : <View style={{ flexDirection: "row" }}>
-                    <TouchableOpacity onPress={()=>{
-                    dispatch(setOtherUser(user))
-                    navigation.navigate("other-profile")
-                }}>
-<View style={{ margin: 10 }}>
-                        {
-                            profileIMGURI != "" ?
-                                <Image
-                                    source={{ uri: profileIMGURI }}
-                                    style={{
-                                        width: 40,
-                                        height: 40,
-                                        borderRadius: 100,
-                                        marginRight: 10,
-                                    }}
-                                ></Image> :
+                    <TouchableOpacity onPress={() => {
+                        dispatch(setOtherUser(user))
+                        navigation.navigate("other-profile")
+                    }}>
+                        <View style={{ margin: 10 }}>
+                            {
+                                profileIMGURI != "" ?
+                                    <Image
+                                        source={{ uri: profileIMGURI }}
+                                        style={{
+                                            width: 40,
+                                            height: 40,
+                                            borderRadius: 100,
+                                            marginRight: 10,
+                                        }}
+                                    ></Image> :
 
-                                <Image
-                                    source={
-                                        //   {
-                                        //   // uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU",
-                                        //   uri: "../assets/imgs/default_avatar.png"
-                                        // }
-                                        DefaultAvatar
-                                    }
-                                    style={{
-                                        width: 40,
-                                        height: 40,
-                                        borderRadius: 100,
-                                        marginRight: 10,
-                                    }}
-                                ></Image>
+                                    <Image
+                                        source={
+                                            //   {
+                                            //   // uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHMbNbn5XcHIXV3PoLxkmsKdTQIbNffNpyuQ&usqp=CAU",
+                                            //   uri: "../assets/imgs/default_avatar.png"
+                                            // }
+                                            DefaultAvatar
+                                        }
+                                        style={{
+                                            width: 40,
+                                            height: 40,
+                                            borderRadius: 100,
+                                            marginRight: 10,
+                                        }}
+                                    ></Image>
 
-                        }
-                    </View>
+                            }
+                        </View>
                     </TouchableOpacity>
-                    
+
 
                     {
                         isHandleAddFriend ?

@@ -40,6 +40,15 @@ export const friendApi = {
         })
     },
 
+    getFriendStatus: async(token, id) => {
+        const url = `/friends/status/${id}`
+        return await axiosClient.get(url, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        })
+    },
+
     notAcceptFriend: async(data, token) => {
         const url = '/friends/set-accept'
         return await axiosClient.post(url, data, {

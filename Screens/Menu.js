@@ -43,7 +43,7 @@ const Shortcut = (props) => {
 
 const Menu = () => {
   const store = useSelector((state)=>state)
-  console.log("store", store)
+  // console.log("store", store)
   const username = store.user.user.data.username;
   const handleLogOut = async () => {
     try {

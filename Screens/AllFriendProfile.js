@@ -5,6 +5,7 @@ import { friendApi } from "../apis/Friends/FriendApi";
 import PersonTab from "./FriendScreen/PersonTab";
 import FriendTab from "./FriendScreen/FriendTab";
 import { Icon, Input } from "react-native-elements";
+import { blockApi } from "../apis/Block/blockApi";
 
 const AllFriendProfile = () => {
     const [friends, setFriends] = useState([])
@@ -13,11 +14,26 @@ const AllFriendProfile = () => {
     useEffect(() => {
         getFriends()
     }, [])
+
+    const getListBlockMe = async () => {
+        try {
+            const res = await blockApi.getListBlockMe(token)
+            // console.log("blockme", JSON.stringify(res.data, 0, 2))
+            return res.data.data
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const getFriends = async () => {
         try {
             const res = await friendApi.getListFriends(token)
             // console.log("myfriend", JSON.stringify(res.data, 0, 2))
-            setFriends(res.data.data.friends)
+            const allFriends = res.data.data.friends
+            const listBlockMe = await getListBlockMe()
+            const listBlockMe2 = listBlockMe.map(item => item.sender)
+            const rs = allFriends.filter(item => !listBlockMe2.includes(item._id))
+            setFriends(rs)
         } catch (error) {
             console.log("myfriend", error)
         }
@@ -41,7 +57,7 @@ const AllFriendProfile = () => {
                 </TouchableOpacity>
 
             </View>
-            <View style={{margin: 15}}>
+            <View style={{ margin: 15 }}>
                 <Input
                     placeholder="Tìm kiếm bạn bè">
                 </Input>
