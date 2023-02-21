@@ -22,6 +22,10 @@ const MessageDetail = () => {
 
     useEffect(() => {
         getChatHistory()
+        socket.on("message", getChatHistory)
+        return () => {
+            socket.removeListener("message", getChatHistory)
+        }
     }, [])
 
 
